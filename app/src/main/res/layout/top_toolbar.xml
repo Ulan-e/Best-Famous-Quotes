@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<androidx.appcompat.widget.Toolbar android:id="@+id/toolbarTop"
+<androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbarTop"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
@@ -9,4 +9,5 @@
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    </androidx.appcompat.widget.Toolbar>
+
+</androidx.appcompat.widget.Toolbar>

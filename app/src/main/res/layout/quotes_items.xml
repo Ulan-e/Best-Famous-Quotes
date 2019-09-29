@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/quote_image"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/quote_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/quote_image"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/quote_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="16sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_below="@+id/quote_text"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/id_liked_clicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="is Liked"
+        android:layout_below="@+id/quote_author"/>
+
+
+</RelativeLayout>
