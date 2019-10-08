@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/clear_table_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear Table"/>
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_choosed"
+        android:id="@+id/recycler_view_liked"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </androidx.recyclerview.widget.RecyclerView>
 
-
     <TextView
-        android:id="@+id/text_nochoosed_quotes"
+        android:id="@+id/text_liked_quotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone">
     </TextView>
 
-</LinearLayout>
+</RelativeLayout>

@@ -28,7 +28,7 @@ public class QuotesAPIModule {
     @AppScope
     @Named("quotesApi")
     @Provides
-    public Retrofit retrofit( @Named("token") OkHttpClient client,
+    public Retrofit retrofit(@Named("token") OkHttpClient client,
                              @Named("quote_gson") Gson gson){
         return new Retrofit.Builder()
                 .baseUrl(Constants.FAVQS_URL)

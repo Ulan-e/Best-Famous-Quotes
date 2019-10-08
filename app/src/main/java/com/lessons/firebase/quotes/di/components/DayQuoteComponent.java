@@ -1,6 +1,7 @@
 package com.lessons.firebase.quotes.di.components;
 
-import com.lessons.firebase.quotes.data.database.model.DaoQuotes;
+import com.lessons.firebase.quotes.data.database.DaoQuotes;
+import com.lessons.firebase.quotes.di.scopes.AppScope;
 import com.lessons.firebase.quotes.di.scopes.DayQuoteScope;
 import com.lessons.firebase.quotes.di.modules.ContextModule;
 import com.lessons.firebase.quotes.ui.base.BaseFragment;

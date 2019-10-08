@@ -5,7 +5,7 @@
     <item
         android:id="@+id/star"
         android:icon="@drawable/ic_star_black_24dp"
-        android:title="Choosed"
+        android:title="Liked"
         app:showAsAction="always"/>
 
     <item
@@ -15,9 +15,9 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/add"
-        android:icon="@drawable/ic_add_circle_black_24dp"
-        android:title="Add"
+        android:id="@+id/one"
+        android:icon="@drawable/ic_looks_one_black_24dp"
+        android:title="Quote"
         app:showAsAction="always"/>
 
 

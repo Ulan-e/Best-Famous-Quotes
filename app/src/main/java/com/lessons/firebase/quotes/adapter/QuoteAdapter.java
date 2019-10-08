@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -39,6 +41,9 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
         QuoteData quote = mQuotesList.get(position);
         holder.mBodyText.setText(quote.getQuote());
         holder.mAuthorText.setText(quote.getAuthor());
+        if(quote.getIsLiked() == 1){
+            holder.misLiked.setImageResource(R.drawable.ic_delete_black_24dp);
+        }
         Picasso.get()
                 .load(quote.getUrlImage())
                 .into(holder.mImageQuote);
@@ -49,4 +54,20 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
         return mQuotesList.size();
     }
 
+    public void deleteI(int position){
+        mQuotesList.remove(position);
+        notifyItemRemoved(position);
+        notifyDataSetChanged();
+    }
+
+    public void deleteAllI(){
+        mQuotesList.clear();
+        notifyItemRangeChanged(0, mQuotesList.size());
+    }
+
+    public void addI(QuoteData quoteData){
+        mQuotesList.add(quoteData);
+        notifyItemInserted(mQuotesList.size() - 1);
+        notifyDataSetChanged();
+    }
 }

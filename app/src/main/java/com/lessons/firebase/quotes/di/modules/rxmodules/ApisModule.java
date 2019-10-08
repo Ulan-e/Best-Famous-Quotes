@@ -1,15 +1,12 @@
 package com.lessons.firebase.quotes.di.modules.rxmodules;
 
-import com.lessons.firebase.quotes.data.QuoteData;
-import com.lessons.firebase.quotes.data.database.model.DaoLikedQuotes;
-import com.lessons.firebase.quotes.data.database.model.DaoQuotes;
+import com.lessons.firebase.quotes.data.database.DaoQuotes;
 import com.lessons.firebase.quotes.data.database.QuoteEntity;
 import com.lessons.firebase.quotes.data.network.FavQsApi;
 import com.lessons.firebase.quotes.data.network.PixabayApi;
 import com.lessons.firebase.quotes.data.network.pojo.PhotosResponse;
 import com.lessons.firebase.quotes.data.network.pojo.QuotesResponse;
 import com.lessons.firebase.quotes.di.scopes.AppScope;
-import com.lessons.firebase.quotes.di.qualifires.LikedQuotes;
 import com.lessons.firebase.quotes.di.modules.source.ImagesAPIModule;
 import com.lessons.firebase.quotes.di.modules.source.QuotesAPIModule;
 import com.lessons.firebase.quotes.di.modules.source.RoomModule;
@@ -51,16 +48,6 @@ public class ApisModule{
         });
     }
 
-    @LikedQuotes
-    @AppScope
-    @Provides
-    public Observable<List<QuoteData>> provideChoosedQuotes(DaoLikedQuotes daoChoosedQuotes){
-        return Observable.fromCallable(new Callable<List<QuoteData>>() {
-            @Override
-            public List<QuoteData> call() throws Exception {
-                return daoChoosedQuotes.getLikedQuotes();
-            }
-        });
-    }
+
 
 }

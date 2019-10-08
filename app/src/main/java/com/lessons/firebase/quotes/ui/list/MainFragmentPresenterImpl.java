@@ -31,7 +31,6 @@ public class MainFragmentPresenterImpl implements MainFragmentPresenter {
 
     @Override
     public void loadQuotes() {
-        mView.showProgress();
             quoteDatObser
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -43,14 +42,14 @@ public class MainFragmentPresenterImpl implements MainFragmentPresenter {
 
                         @Override
                         public void onNext(List<QuoteData> quoteData) {
-                            Log.d(TAG_OTHER, "onNext: " + quoteData.size());
+                            Log.d(TAG_OTHER, "onNext: Main Fragment " + quoteData.size());
                             mView.showQuotes(quoteData);
                             mView.hideProgress();
                         }
 
                         @Override
                         public void onError(Throwable error) {
-                            Log.d(TAG_OTHER, "onError: " + error.getMessage());
+                            Log.d(TAG_OTHER, "onError: Main Fragment " + error.getMessage());
                             mView.showQuotesError(error);
                         }
 

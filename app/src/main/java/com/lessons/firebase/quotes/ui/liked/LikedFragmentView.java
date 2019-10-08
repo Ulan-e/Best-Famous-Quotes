@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface LikedFragmentView {
 
-    void showChoosedQuotes(List<QuoteData> quoteList);
-    void showNoChoosedQuotes();
+    void showLikedQuotes(List<QuoteData> quoteList);
+    void showNoLikedQuotes();
     void removeFromChoosedQuotes();
 
 }

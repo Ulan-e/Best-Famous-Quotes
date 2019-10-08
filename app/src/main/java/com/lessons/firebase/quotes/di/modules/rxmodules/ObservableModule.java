@@ -1,5 +1,7 @@
 package com.lessons.firebase.quotes.di.modules.rxmodules;
 
+import android.util.Log;
+
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.data.database.QuoteEntity;
 import com.lessons.firebase.quotes.data.network.pojo.Photo;
@@ -17,6 +19,7 @@ import dagger.Provides;
 import io.reactivex.Observable;
 import io.reactivex.functions.Function3;
 
+import static com.lessons.firebase.quotes.utils.Constants.TAG_OTHER;
 import static com.lessons.firebase.quotes.utils.StringUtils.exchangeSrtings;
 
 @AppScope
@@ -38,6 +41,7 @@ public class ObservableModule {
                         List<Photo> photosListAPI = photoS.getHits();
                         List<QuoteData> mergedList = mergeQuotes(quoteListAPI, databaseFlow);
                         List<QuoteData> res = addPhotoToQuotes(photosListAPI, mergedList);
+                        Log.d(TAG_OTHER, " Observable module: zipMultiplyObsevable " + res);
                         return res;
                     }
                 });
@@ -48,6 +52,8 @@ public class ObservableModule {
     @Provides
     public List<QuoteData> mergeQuotes(List<Quote> quotesAPI, List<QuoteEntity> quotesDatabase){
         int size = 25;
+        Log.d(TAG_OTHER, " from API" + String.valueOf(quotesAPI.size()));
+        Log.d(TAG_OTHER, " from Database" + String.valueOf(quotesAPI.size()));
         List<QuoteData> resultList = new ArrayList<>(2*size+1);
         for(int i=0; i < size; i++){
             QuoteData quoteFromAPI = new QuoteData();
@@ -76,6 +82,7 @@ public class ObservableModule {
             QuoteData quoteData = listOfQuoteData.get(i);
             quoteData.setUrlImage(photosList.get(i).getWebformatURL());
         }
+        Log.d(TAG_OTHER, " quotes api + quotes databse" + String.valueOf(listOfQuoteData.size()));
         return  listOfQuoteData;
     }
 }

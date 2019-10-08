@@ -1,7 +1,7 @@
 package com.lessons.firebase.quotes.adapter;
 
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,11 +15,12 @@ import java.lang.ref.WeakReference;
 
 public class QuoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-     ImageView mImageQuote;
-  TextView mBodyText;
+    ImageView mImageQuote;
+    TextView mBodyText;
     TextView mAuthorText;
-    Button misLiked;
-   WeakReference<LClickListener> lClickListenerWeakReference;
+    ImageButton misLiked;
+    WeakReference<LClickListener> lClickListenerWeakReference;
+    boolean isChecked =true;
 
     public QuoteViewHolder(@NonNull View itemView, LClickListener lClickListener) {
         super(itemView);
@@ -34,12 +35,13 @@ public class QuoteViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == misLiked.getId()){
-            misLiked.setEnabled(false);
-            Toast.makeText(view.getContext(), "IsLiked CLiked " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(view.getContext(), "Not Ne clicked " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
-        }
+            if(view.getId() == misLiked.getId()){
+                misLiked.setImageResource(R.drawable.ic_star_black_24dp);
+                misLiked.setEnabled(false);
+            }else {
+                Toast.makeText(view.getContext(), "Error to added to Liked List", Toast.LENGTH_SHORT).show();
+            }
+
         lClickListenerWeakReference.get().onPositionClicked(getAdapterPosition());
     }
 }
