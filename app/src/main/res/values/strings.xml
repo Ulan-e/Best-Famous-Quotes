@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Quotes</string>
+    <string name="liked">Liked</string>
+    <string name="home">Home</string>
+    <string name="quote">Quote</string>
+    <string name="clear">Clear</string>
+    <string name="refresh">Refresh</string>
 </resources>

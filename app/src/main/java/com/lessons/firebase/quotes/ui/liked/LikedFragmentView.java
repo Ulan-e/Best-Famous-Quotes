@@ -8,6 +8,6 @@ public interface LikedFragmentView {
 
     void showLikedQuotes(List<QuoteData> quoteList);
     void showNoLikedQuotes();
-    void removeFromChoosedQuotes();
+    void removeFromLikedQuotes();
 
 }

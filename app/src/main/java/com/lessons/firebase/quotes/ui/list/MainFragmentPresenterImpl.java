@@ -9,6 +9,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -17,20 +18,14 @@ import static com.lessons.firebase.quotes.utils.Constants.TAG_OTHER;
 public class MainFragmentPresenterImpl implements MainFragmentPresenter {
 
     private MainFragmentView mView;
-    private Observable<List<QuoteData>> quoteDatObser;
+    private Observable<List<QuoteData>> listObservable;
 
-    public MainFragmentPresenterImpl(MainFragmentView mView, Observable<List<QuoteData>> quoteDatObser) {
+    public MainFragmentPresenterImpl(MainFragmentView mView) {
         this.mView = mView;
-        this.quoteDatObser = quoteDatObser;
     }
 
     @Override
-    public void gotoDetailsFragment() {
-        Log.d(TAG_OTHER, "gotoDetailsFragment: ---------------->>>>>>>> ");
-    }
-
-    @Override
-    public void loadQuotes() {
+    public void loadQuotes(Observable<List<QuoteData>> quoteDatObser) {
             quoteDatObser
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -58,6 +53,8 @@ public class MainFragmentPresenterImpl implements MainFragmentPresenter {
                             Log.d(TAG_OTHER, "onComplete: ");
                         }
                     });
-
     }
+
+
+
 }

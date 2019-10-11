@@ -1,6 +1,6 @@
 package com.lessons.firebase.quotes.ui.liked;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ import com.lessons.firebase.quotes.adapter.QuoteAdapter;
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
 import com.lessons.firebase.quotes.di.components.LikedComponent;
+import com.lessons.firebase.quotes.di.modules.source.SharedPrefModule;
 import com.lessons.firebase.quotes.di.modules.uimodules.LikedModule;
 import com.lessons.firebase.quotes.ui.base.BaseFragment;
 import com.lessons.firebase.quotes.ui.list.MainFragment;
@@ -49,7 +51,6 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
 
     private DaoLikedQuotes daoLikedQuotes;
     private LikedPresenterImpl presenter;
-
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -57,11 +58,12 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
         super.onCreate(savedInstanceState);
         getMainComponent();
         setHasOptionsMenu(true);
+
         daoLikedQuotes = likedComponent.getDaoQuotes();
         presenter = likedComponent.getPresenter();
-        presenter.loadSQuotes();
+        sharedPreferences = likedComponent.getSharedPreferences();
 
-        sharedPreferences = getActivity().getSharedPreferences("ulan", Context.MODE_PRIVATE);
+        presenter.loadLikedQuotes();
 
     }
 
@@ -75,7 +77,12 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.clear_list:
-                clearList();
+                int size = daoLikedQuotes.getLikedQuotes().size();
+                if(size > 0){
+                    clearList();
+                }else {
+                    Toast.makeText(getActivity(), "List is Empty", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             default:
                 break;
@@ -86,23 +93,38 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
     private void getMainComponent() {
         likedComponent = getAppComponent().listComponentBuilder()
                 .likedModule(new LikedModule(this))
+                .sharedModule(new SharedPrefModule(getActivity()))
                 .build();
         likedComponent.inject(this);
     }
 
-    public void clearList() {
+    private void clearList() {
         if (adapter != null) {
-            daoLikedQuotes.deleteAll();
-            Toast.makeText(getActivity(), " List is Cleared ", Toast.LENGTH_SHORT).show();
-            adapter.deleteAllI();
-            adapter.notifyDataSetChanged();
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+            dialogBuilder.setTitle("Are sure clear all liked list")
+                    .setIcon(R.drawable.ic_clear_all_black_24dp)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            daoLikedQuotes.deleteAll();
+                            adapter.deleteAllI();
+                            Toast.makeText(getActivity(), " List is Cleared ", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+            dialogBuilder.show();
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.choosed_layout, container, false);
+        View view = inflater.inflate(R.layout.liked_fragment_layout, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_liked);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
@@ -113,17 +135,17 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
 
     @Override
     public void showLikedQuotes(List<QuoteData> quoteList) {
-            adapter = new QuoteAdapter(getActivity(), quoteList, new LClickListener() {
+        adapter = new QuoteAdapter(getActivity(), new LClickListener() {
                 @Override
                 public void onPositionClicked(int position) {
                     QuoteData quoteData = quoteList.get(position);
                     daoLikedQuotes.deleteQuote(quoteData);
                     adapter.deleteI(position);
                     adapter.notifyDataSetChanged();
-
                     Toast.makeText(getActivity(), "Item is Removed", Toast.LENGTH_SHORT).show();
                 }
             });
+        adapter.setList(quoteList);
         recyclerView.setAdapter(adapter);
 
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
@@ -152,25 +174,31 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
         });
     }
 
-    public void setDataShared(List<QuoteData> list){
-        QuoteData quoteData = new QuoteData();
-        quoteData.setQuote(sharedPreferences.getString("quote", "q"));
-        quoteData.setAuthor(sharedPreferences.getString("author", "a"));
-        quoteData.setUrlImage(sharedPreferences.getString("image", "i"));
-        quoteData.setId(sharedPreferences.getInt("id", -1));
-        quoteData.setIsLiked(sharedPreferences.getInt("liked", -1));
-        quoteData.setIsLiked(1);
-        daoLikedQuotes.setToTable(quoteData);
-        adapter.addI(quoteData);
+    public void setDataShared(){
+        if(adapter != null) {
+            QuoteData quoteData = new QuoteData();
+            quoteData.setQuote(sharedPreferences.getString("quote", "q"));
+            quoteData.setAuthor(sharedPreferences.getString("author", "a"));
+            quoteData.setUrlImage(sharedPreferences.getString("image", "i"));
+            quoteData.setId(sharedPreferences.getInt("id", -1));
+            quoteData.setIsLiked(sharedPreferences.getInt("liked", -1));
+            quoteData.setIsLiked(1);
+            Log.d(TAG_OTHER, "setDataShared: ----------------- " + quoteData.getIsLiked() + "\n" +
+                    quoteData.getId() + "\n" + quoteData.getQuote() + "\n") ;
+            daoLikedQuotes.setToTable(quoteData);
+            adapter.addI(quoteData);
+        }
     }
 
     @Override
     public void showNoLikedQuotes() {
-        textNoQuotes.setText("No Choosed Quotes");
+        recyclerView.setVisibility(GONE);
+        textNoQuotes.setVisibility(View.VISIBLE);
+        textNoQuotes.setText(" No Liked list ");
     }
 
     @Override
-    public void removeFromChoosedQuotes() {
+    public void removeFromLikedQuotes() {
 
     }
 
@@ -187,9 +215,4 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
         Log.d(TAG_OTHER, "onResumeFragment: Liked Fragment" );
     }
 
-
-    @Override
-    public String toString() {
-        return "LikedFragment{}";
-    }
 }

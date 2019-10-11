@@ -2,7 +2,12 @@ package com.lessons.firebase.quotes.di.modules.source;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.lessons.firebase.quotes.data.network.PixabayApi;
+import com.lessons.firebase.quotes.data.network.PhotosApi;
+import com.lessons.firebase.quotes.di.qualifires.HttpInterceptor;
+import com.lessons.firebase.quotes.di.qualifires.PhotoGson;
+import com.lessons.firebase.quotes.di.qualifires.Photos;
+import com.lessons.firebase.quotes.di.qualifires.PhotosGson;
+import com.lessons.firebase.quotes.di.qualifires.PhotosOkHttp;
 import com.lessons.firebase.quotes.di.scopes.AppScope;
 import com.lessons.firebase.quotes.utils.Constants;
 
@@ -17,19 +22,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @AppScope
 @Module(includes = {OkHttpModule.class})
-public class ImagesAPIModule {
+public class PhotosModule {
 
     @AppScope
     @Provides
-    public PixabayApi pixabayPhotoApi(@Named("photosApi") Retrofit retrofit){
-        return retrofit.create(PixabayApi.class);
+    public PhotosApi photoApi(@Photos Retrofit retrofit){
+        return retrofit.create(PhotosApi.class);
     }
 
     @AppScope
-    @Named("photosApi")
+    @Photos
     @Provides
-    public Retrofit retrofit(@Named("http") OkHttpClient client,
-                             @Named("image_gson") Gson gson){
+    public Retrofit retrofit(@PhotosOkHttp OkHttpClient client,
+                             @Named("photos_gson") Gson gson){
         return new Retrofit.Builder()
                 .baseUrl(Constants.PIXABAY_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -39,7 +44,7 @@ public class ImagesAPIModule {
     }
 
     @AppScope
-    @Named("image_gson")
+    @Named("photos_gson")
     @Provides
     public Gson gson(){
         GsonBuilder gsonBuilder = new GsonBuilder();

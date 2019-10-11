@@ -20,7 +20,8 @@ public class RoomModule {
     @AppScope
     @Provides
     public QuotesDatabase database(Context context){
-        return Room.databaseBuilder(context, QuotesDatabase.class, "quotes.db")
+        return Room.databaseBuilder(context, QuotesDatabase.class, "data.db")
+                .createFromAsset("data.db")
                 .allowMainThreadQueries()
                 .build();
     }
@@ -34,7 +35,7 @@ public class RoomModule {
 
     @AppScope
     @Provides
-    public DaoLikedQuotes daoQuotesChoosed(QuotesDatabase database){
+    public DaoLikedQuotes daoQuotesLiked(QuotesDatabase database){
         return database.getLikedQuotes();
     }
 }

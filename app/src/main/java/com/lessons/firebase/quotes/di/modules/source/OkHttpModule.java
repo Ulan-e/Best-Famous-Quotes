@@ -4,7 +4,11 @@ import android.content.Context;
 import android.util.Log;
 
 import com.lessons.firebase.quotes.di.modules.AppModule;
+import com.lessons.firebase.quotes.di.qualifires.HttpInterceptor;
+import com.lessons.firebase.quotes.di.qualifires.PhotosOkHttp;
+import com.lessons.firebase.quotes.di.qualifires.TokenInterceptor;
 import com.lessons.firebase.quotes.di.scopes.AppScope;
+import com.lessons.firebase.quotes.utils.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,9 +37,9 @@ import static com.lessons.firebase.quotes.utils.Constants.TAG_HTTP;
 public class OkHttpModule {
 
     @AppScope
-    @Named("http")
+    @PhotosOkHttp
     @Provides
-    public OkHttpClient okHttpClientPhoto(Cache cache, @Named("http_interceptor")HttpLoggingInterceptor httpInterceptor){
+    public OkHttpClient okHttpClientPhoto(Cache cache, @HttpInterceptor HttpLoggingInterceptor httpInterceptor){
         return new OkHttpClient.Builder()
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                 .addInterceptor(httpInterceptor)
@@ -46,9 +50,9 @@ public class OkHttpModule {
     }
 
     @AppScope
-    @Named("token")
+    @TokenInterceptor
     @Provides
-    public OkHttpClient okHttpClientQuote(Cache cache,  @Named("token_interceptor") Interceptor interceptor){
+    public OkHttpClient okHttpClientQuote(Cache cache,  @TokenInterceptor Interceptor interceptor){
         return new OkHttpClient.Builder()
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                 .addInterceptor(interceptor)
@@ -66,13 +70,13 @@ public class OkHttpModule {
     @AppScope
     @Provides
     public File file( Context context){
-        File file = new File(context.getCacheDir(), "httpCache");
+        File file = new File(context.getCacheDir(), Constants.CACHE_FILES);
         file.mkdirs();
         return file;
     }
 
     @AppScope
-    @Named("http_interceptor")
+    @HttpInterceptor
     @Provides
     public HttpLoggingInterceptor httpLoggingInterceptor(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
@@ -87,7 +91,7 @@ public class OkHttpModule {
 
 
     @AppScope
-    @Named("token_interceptor")
+    @TokenInterceptor
     @Provides
     public Interceptor tokenInterceptor(){
         Interceptor interceptor = new Interceptor() {

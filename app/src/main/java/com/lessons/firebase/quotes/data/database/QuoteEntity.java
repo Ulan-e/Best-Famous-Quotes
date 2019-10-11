@@ -8,47 +8,47 @@ import androidx.room.PrimaryKey;
 public class QuoteEntity {
 
     @PrimaryKey
-    @ColumnInfo(name = "Quote_ID")
-    public int Quote_ID;
+    @ColumnInfo(name = "quote_id")
+    public int quoteId;
 
-    @ColumnInfo(name = "Name")
-    public String Name;
+    @ColumnInfo(name = "author")
+    public String author;
 
-    @ColumnInfo(name = "Quote_Category")
-    public String Quote_Category;
+    @ColumnInfo(name = "category")
+    public String category;
 
-    @ColumnInfo(name = "Quote")
-    public String Quote;
+    @ColumnInfo(name = "quote")
+    public String quote;
 
-    public int getQuote_ID() {
-        return Quote_ID;
+    public int getQuoteId() {
+        return quoteId;
     }
 
-    public void setQuote_ID(int quote_ID) {
-        Quote_ID = quote_ID;
+    public void setQuoteId(int quoteId) {
+        this.quoteId = quoteId;
     }
 
-    public String getName() {
-        return Name;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public String getQuote_Category() {
-        return Quote_Category;
+    public String getCategory() {
+        return category;
     }
 
-    public void setQuote_Category(String quote_Category) {
-        Quote_Category = quote_Category;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getQuote() {
-        return Quote;
+        return quote;
     }
 
     public void setQuote(String quote) {
-        Quote = quote;
+        this.quote = quote;
     }
 }

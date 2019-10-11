@@ -3,6 +3,9 @@ package com.lessons.firebase.quotes.di.modules.source;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.lessons.firebase.quotes.data.network.FavQsApi;
+import com.lessons.firebase.quotes.di.qualifires.QuoteGson;
+import com.lessons.firebase.quotes.di.qualifires.Quotes;
+import com.lessons.firebase.quotes.di.qualifires.TokenInterceptor;
 import com.lessons.firebase.quotes.di.scopes.AppScope;
 import com.lessons.firebase.quotes.utils.Constants;
 
@@ -17,19 +20,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @AppScope
 @Module(includes = {OkHttpModule.class})
-public class QuotesAPIModule {
+public class QuotesModule {
 
     @AppScope
     @Provides
-    public FavQsApi favQsApi(@Named("quotesApi") Retrofit retrofit){
+    public FavQsApi favQsApi(@Quotes Retrofit retrofit){
         return retrofit.create(FavQsApi.class);
     }
 
     @AppScope
-    @Named("quotesApi")
+    @Quotes
     @Provides
-    public Retrofit retrofit(@Named("token") OkHttpClient client,
-                             @Named("quote_gson") Gson gson){
+    public Retrofit retrofit(@TokenInterceptor OkHttpClient client,
+                             @Named("quotes_gson") Gson gson){
         return new Retrofit.Builder()
                 .baseUrl(Constants.FAVQS_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -39,7 +42,7 @@ public class QuotesAPIModule {
     }
 
     @AppScope
-    @Named("quote_gson")
+    @Named("quotes_gson")
     @Provides
     public Gson gson(){
         GsonBuilder gsonBuilder = new GsonBuilder();

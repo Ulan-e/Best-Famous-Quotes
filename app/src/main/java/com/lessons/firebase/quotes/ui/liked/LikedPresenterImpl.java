@@ -1,12 +1,8 @@
 package com.lessons.firebase.quotes.ui.liked;
 
-import android.util.Log;
-
 import com.lessons.firebase.quotes.data.QuoteData;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -14,21 +10,20 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.lessons.firebase.quotes.utils.Constants.TAG_OTHER;
 
 public class LikedPresenterImpl implements LikedPresenter {
 
-    public LikedFragmentView mView;
-    public Observable<List<QuoteData>> listObservable;
+    private LikedFragmentView mView;
+    private Observable<List<QuoteData>> mListQuoteData;
 
-    public LikedPresenterImpl(LikedFragmentView mView, Observable<List<QuoteData>> listObservable) {
-        this.mView = mView;
-        this.listObservable = listObservable;
+    public LikedPresenterImpl(LikedFragmentView view, Observable<List<QuoteData>> listObservable) {
+        this.mView = view;
+        this.mListQuoteData = listObservable;
     }
 
     @Override
-    public void loadSQuotes(){
-        listObservable
+    public void loadLikedQuotes(){
+        mListQuoteData
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<QuoteData>>() {
@@ -39,13 +34,16 @@ public class LikedPresenterImpl implements LikedPresenter {
 
                     @Override
                     public void onNext(List<QuoteData> quoteData) {
-                        Log.d(TAG_OTHER, "onNext: >>>>>>>> " + quoteData.size());
-                        mView.showLikedQuotes(quoteData);
+                        int size = quoteData.size();
+                        if(size > 0) {
+                            mView.showLikedQuotes(quoteData);
+                        }else{
+                            mView.showNoLikedQuotes();
+                        }
                     }
 
                     @Override
                     public void onError(Throwable error) {
-                        Log.d(TAG_OTHER, "onError: >>>>>>>>" + error.getMessage());
                         mView.showNoLikedQuotes();
                     }
 
@@ -54,10 +52,5 @@ public class LikedPresenterImpl implements LikedPresenter {
 
                     }
                 });
-    }
-
-    @Override
-    public void gotoDetailFragment() {
-
     }
 }

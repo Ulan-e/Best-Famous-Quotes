@@ -2,6 +2,7 @@ package com.lessons.firebase.quotes.di.modules.uimodules;
 
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
+import com.lessons.firebase.quotes.di.modules.source.RoomModule;
 import com.lessons.firebase.quotes.di.qualifires.LikedQuotes;
 import com.lessons.firebase.quotes.di.scopes.LikedScope;
 import com.lessons.firebase.quotes.ui.liked.LikedFragmentView;

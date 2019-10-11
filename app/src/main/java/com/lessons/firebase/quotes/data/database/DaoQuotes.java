@@ -20,5 +20,6 @@ public interface DaoQuotes {
     List<QuoteEntity> getAllQuotes();
 
     @Query("SELECT * FROM quotes1 ORDER BY RANDOM() LIMIT 1")
-    Single<QuoteEntity> getQuote();
+    QuoteEntity getQuote();
+
 }

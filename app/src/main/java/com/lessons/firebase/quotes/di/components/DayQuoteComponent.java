@@ -18,9 +18,7 @@ public interface DayQuoteComponent {
 
     @Subcomponent.Builder
     interface DQBuilder{
-
         DQBuilder contextModule(ContextModule contextModule);
         DayQuoteComponent build();
     }
-
 }

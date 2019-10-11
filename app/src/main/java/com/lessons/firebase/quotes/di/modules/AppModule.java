@@ -2,6 +2,7 @@ package com.lessons.firebase.quotes.di.modules;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.lessons.firebase.quotes.di.scopes.AppScope;
 
@@ -23,4 +24,6 @@ public class AppModule {
     public Context provideContext(){
         return mApplication;
     }
+
+
 }

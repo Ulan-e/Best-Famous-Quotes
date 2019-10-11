@@ -6,15 +6,10 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.lessons.firebase.quotes.data.QuoteData;
 
 import java.util.List;
-
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.Single;
 
 @Dao
 public interface DaoLikedQuotes {
@@ -30,8 +25,4 @@ public interface DaoLikedQuotes {
 
     @Query("DELETE FROM liked_quotes")
     void deleteAll();
-
-    @Update
-    void updateAll(List<QuoteData> quoteData);
-
 }

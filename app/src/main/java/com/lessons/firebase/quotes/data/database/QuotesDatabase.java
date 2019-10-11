@@ -2,6 +2,8 @@ package com.lessons.firebase.quotes.data.database;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.lessons.firebase.quotes.data.QuoteData;
 
@@ -9,4 +11,5 @@ import com.lessons.firebase.quotes.data.QuoteData;
 public abstract class QuotesDatabase extends RoomDatabase {
     public abstract DaoQuotes getQuotesDao();
     public abstract DaoLikedQuotes getLikedQuotes();
+
 }

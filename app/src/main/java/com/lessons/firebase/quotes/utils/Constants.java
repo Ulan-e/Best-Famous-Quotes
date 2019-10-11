@@ -11,5 +11,8 @@ public class Constants {
 
     public static final String FAVQS_URL = "https://favqs.com/";
     public static final String FAVQS_API_KEY = "0b861e9b659335521203aa145fd106e9";
+    public static final String CACHE_FILES = "httpCache";
+
+
 
 }

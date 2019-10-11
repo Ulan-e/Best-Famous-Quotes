@@ -11,7 +11,7 @@ import retrofit2.http.Query;
  *
  */
 
-public interface PixabayApi {
+public interface PhotosApi {
 
     @GET("api/")
     Observable<PhotosResponse> getPhotos(

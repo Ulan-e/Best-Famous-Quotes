@@ -1,6 +1,5 @@
 package com.lessons.firebase.quotes.ui.list;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,14 +27,25 @@ import com.lessons.firebase.quotes.adapter.LClickListener;
 import com.lessons.firebase.quotes.adapter.QuoteAdapter;
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
+import com.lessons.firebase.quotes.data.database.DaoQuotes;
+import com.lessons.firebase.quotes.data.network.pojo.Quote;
 import com.lessons.firebase.quotes.di.components.ListComponent;
+import com.lessons.firebase.quotes.di.modules.source.SharedPrefModule;
 import com.lessons.firebase.quotes.di.modules.uimodules.MainModule;
 import com.lessons.firebase.quotes.ui.base.BaseFragment;
 import com.lessons.firebase.quotes.ui.liked.LikedFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 import static android.view.View.GONE;
+import static com.lessons.firebase.quotes.utils.Constants.TAG_OTHER;
 import static com.lessons.firebase.quotes.utils.Constants.TAG_STATE;
 
 public class MainFragment extends BaseFragment implements MainFragmentView, FragmentLifecycle {
@@ -44,12 +54,13 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
     private ProgressBar progressBar;
     private ListComponent listComponent;
     private MainFragmentPresenterImpl presenter;
-    private DaoLikedQuotes daoLikedQuotes;
+    private DaoQuotes daoLikedQuotes;
     private QuoteAdapter adapter;
     private LinearLayoutManager mLinearLayoutManager;
     private SharedPreferences sharedPreferences;
+    private LikedFragment likedFragment;
 
-    LikedFragment likedFragment;
+    private Observable<List<QuoteData>> observableList;
 
 
     @Override
@@ -57,13 +68,14 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        sharedPreferences = getActivity().getSharedPreferences("ulan", Context.MODE_PRIVATE);
-
         getMainComponent();
         presenter = listComponent.getPresenter();
-        presenter.loadQuotes();
         daoLikedQuotes = listComponent.getDaoLikedQuotes();
+        sharedPreferences = listComponent.getSharedPreference();
 
+        observableList = listComponent.getObservableList();
+
+        presenter.loadQuotes(observableList);
     }
 
     @Override
@@ -76,7 +88,7 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
     public boolean onOptionsItemSelected(MenuItem item)  {
         switch (item.getItemId()){
             case R.id.filter:
-                Toast.makeText(getActivity(), "Filter", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Clicked -> " + String.valueOf(daoLikedQuotes.getAllQuotes().size()), Toast.LENGTH_SHORT).show();
                 return true;
                 default:
                     break;
@@ -84,9 +96,10 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
         return false;
     }
 
-    public void getMainComponent(){
+    private void getMainComponent(){
         listComponent = getAppComponent().mainActivityComponentBuilder()
                 .mainModule(new MainModule(this))
+                .sharedModule(new SharedPrefModule(getActivity()))
                 .build();
         listComponent.inject(this);
     }
@@ -94,9 +107,8 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_fragment, container, false);
+        View view = inflater.inflate(R.layout.list_fragment_layout, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_quotes);
-
 
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
         Animation animationHide = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_hide_anim);
@@ -128,17 +140,18 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
 
     @Override
     public void showQuotes(List<QuoteData> listQuotes) {
-        adapter = new QuoteAdapter(getActivity(), listQuotes, new LClickListener() {
+        adapter = new QuoteAdapter(getActivity(), new LClickListener() {
              @Override
              public void onPositionClicked(int position) {
                  QuoteData quoteData = listQuotes.get(position);
                  sendData(quoteData);
                 if (likedFragment != null){
-                    likedFragment.setDataShared(listQuotes);
+                    likedFragment.setDataShared();
                 }
-                Toast.makeText(getActivity(), "Quote added to Liked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "quote added to Liked", Toast.LENGTH_SHORT).show();
              }
          });
+        adapter.setList(listQuotes);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLinearLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -151,7 +164,7 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
         editor.putString("author", quoteData.getAuthor());
         editor.putInt("id", quoteData.getId());
         editor.putInt("liked", quoteData.getIsLiked());
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -184,8 +197,4 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
         Log.d(TAG_STATE, "onResumeFragment: MainFragment ");
     }
 
-    @Override
-    public String toString() {
-        return "MainFragment{}";
-    }
 }
