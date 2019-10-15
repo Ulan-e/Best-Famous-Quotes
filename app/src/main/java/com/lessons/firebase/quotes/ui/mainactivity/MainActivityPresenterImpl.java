@@ -10,6 +10,6 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
 
     @Override
     public void setTitleToolbar() {
-        mView.showToolbar("Quotes");
+
     }
 }

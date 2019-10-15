@@ -1,4 +1,4 @@
-package com.lessons.firebase.quotes.ui;
+package com.lessons.firebase.quotes;
 
 import android.app.Application;
 

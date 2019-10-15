@@ -3,7 +3,6 @@ package com.lessons.firebase.quotes.di.modules.source;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.lessons.firebase.quotes.data.network.FavQsApi;
-import com.lessons.firebase.quotes.di.qualifires.QuoteGson;
 import com.lessons.firebase.quotes.di.qualifires.Quotes;
 import com.lessons.firebase.quotes.di.qualifires.TokenInterceptor;
 import com.lessons.firebase.quotes.di.scopes.AppScope;

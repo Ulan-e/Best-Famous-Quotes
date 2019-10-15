@@ -1,4 +1,4 @@
-package com.lessons.firebase.quotes;
+package com.lessons.firebase.quotes.utils.listeners;
 
 import androidx.fragment.app.Fragment;
 

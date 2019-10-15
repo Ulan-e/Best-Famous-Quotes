@@ -35,11 +35,8 @@ public class LikedPresenterImpl implements LikedPresenter {
                     @Override
                     public void onNext(List<QuoteData> quoteData) {
                         int size = quoteData.size();
-                        if(size > 0) {
-                            mView.showLikedQuotes(quoteData);
-                        }else{
-                            mView.showNoLikedQuotes();
-                        }
+                        mView.showLikedQuotes(quoteData);
+
                     }
 
                     @Override

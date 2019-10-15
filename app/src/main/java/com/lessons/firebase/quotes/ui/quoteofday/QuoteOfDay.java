@@ -14,41 +14,40 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.lessons.firebase.quotes.FragmentLifecycle;
 import com.lessons.firebase.quotes.R;
-import com.lessons.firebase.quotes.data.database.DaoQuotes;
 import com.lessons.firebase.quotes.di.components.DayQuoteComponent;
-import com.lessons.firebase.quotes.di.modules.ContextModule;
+import com.lessons.firebase.quotes.di.modules.uimodules.QuoteDayModule;
 import com.lessons.firebase.quotes.ui.base.BaseFragment;
-import com.lessons.firebase.quotes.utils.StringUtils;
+import com.lessons.firebase.quotes.utils.listeners.FragmentLifecycle;
 
 import static com.lessons.firebase.quotes.utils.Constants.TAG_STATE;
 
-public class QuoteOfDay extends BaseFragment implements FragmentLifecycle {
+public class QuoteOfDay extends BaseFragment implements QuoteDayView, FragmentLifecycle{
 
-    private DaoQuotes mDaoQuotes;
     private TextView mQuoteText;
     private TextView mAuthorText;
+    private QuoteDayPresenterImpl mPresenter;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mDaoQuotes = getDayComponent().getDaoQuotes();
+        getDayComponent();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.quote_day, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.quote_day_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.refresh:
-                setQuote();
+                mPresenter.getQuote();
                 return true;
                 default:
                     break;
@@ -56,11 +55,12 @@ public class QuoteOfDay extends BaseFragment implements FragmentLifecycle {
         return false;
     }
 
-    public DayQuoteComponent getDayComponent(){
+    private DayQuoteComponent getDayComponent(){
         DayQuoteComponent component = getAppComponent().dayQuoteComponentBuilder()
-                .contextModule(new ContextModule(getActivity()))
+                .quoteDayModule(new QuoteDayModule(this))
                 .build();
         component.inject(this);
+        mPresenter = component.getPresenter();
         return component;
     }
 
@@ -70,15 +70,8 @@ public class QuoteOfDay extends BaseFragment implements FragmentLifecycle {
         View view = inflater.inflate(R.layout.quote_day_fragment, container, false);
         mQuoteText = view.findViewById(R.id.quote_day);
         mAuthorText = view.findViewById(R.id.quote_author);
-        setQuote();
+        mPresenter.getQuote();
         return view;
-    }
-
-    private void setQuote(){
-        mQuoteText.setText(mDaoQuotes.getQuote().getQuote());
-        String beforeAuthor = mDaoQuotes.getQuote().getAuthor();
-        String afterAuthor = StringUtils.exchangeSrtings(beforeAuthor);
-        mAuthorText.setText(afterAuthor);
     }
 
     @Override
@@ -91,4 +84,9 @@ public class QuoteOfDay extends BaseFragment implements FragmentLifecycle {
         Log.d(TAG_STATE, "onResumeFragment: QuoteOfDay ");
     }
 
+    @Override
+    public void showQuote(String quote, String author) {
+        mQuoteText.setText(quote);
+        mAuthorText.setText(author);
+    }
 }

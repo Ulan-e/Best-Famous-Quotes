@@ -23,9 +23,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.lessons.firebase.quotes.FragmentLifecycle;
+import com.lessons.firebase.quotes.utils.listeners.FragmentLifecycle;
 import com.lessons.firebase.quotes.R;
-import com.lessons.firebase.quotes.adapter.LClickListener;
+import com.lessons.firebase.quotes.utils.listeners.OnPositionClickListener;
 import com.lessons.firebase.quotes.adapter.QuoteAdapter;
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
@@ -58,7 +58,6 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
         super.onCreate(savedInstanceState);
         getMainComponent();
         setHasOptionsMenu(true);
-
         daoLikedQuotes = likedComponent.getDaoQuotes();
         presenter = likedComponent.getPresenter();
         sharedPreferences = likedComponent.getSharedPreferences();
@@ -69,8 +68,10 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.liked_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.liked_menu, menu);
+
     }
 
     @Override
@@ -124,7 +125,7 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.liked_fragment_layout, container, false);
+        View view = inflater.inflate(R.layout.liked_fragment, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_liked);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
@@ -135,7 +136,7 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
 
     @Override
     public void showLikedQuotes(List<QuoteData> quoteList) {
-        adapter = new QuoteAdapter(getActivity(), new LClickListener() {
+        adapter = new QuoteAdapter(getActivity(), new OnPositionClickListener() {
                 @Override
                 public void onPositionClicked(int position) {
                     QuoteData quoteData = quoteList.get(position);

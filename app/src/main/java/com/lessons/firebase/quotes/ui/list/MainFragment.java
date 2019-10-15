@@ -4,14 +4,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,82 +17,56 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.lessons.firebase.quotes.FragmentLifecycle;
+import com.lessons.firebase.quotes.utils.listeners.FragmentLifecycle;
 import com.lessons.firebase.quotes.R;
-import com.lessons.firebase.quotes.adapter.LClickListener;
+import com.lessons.firebase.quotes.utils.listeners.ShareObservableListener;
+import com.lessons.firebase.quotes.utils.listeners.OnPositionClickListener;
 import com.lessons.firebase.quotes.adapter.QuoteAdapter;
 import com.lessons.firebase.quotes.data.QuoteData;
-import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
-import com.lessons.firebase.quotes.data.database.DaoQuotes;
-import com.lessons.firebase.quotes.data.network.pojo.Quote;
 import com.lessons.firebase.quotes.di.components.ListComponent;
 import com.lessons.firebase.quotes.di.modules.source.SharedPrefModule;
 import com.lessons.firebase.quotes.di.modules.uimodules.MainModule;
 import com.lessons.firebase.quotes.ui.base.BaseFragment;
 import com.lessons.firebase.quotes.ui.liked.LikedFragment;
+import com.lessons.firebase.quotes.ui.mainactivity.MainActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.GONE;
 import static com.lessons.firebase.quotes.utils.Constants.TAG_OTHER;
 import static com.lessons.firebase.quotes.utils.Constants.TAG_STATE;
 
-public class MainFragment extends BaseFragment implements MainFragmentView, FragmentLifecycle {
+public class MainFragment extends BaseFragment implements MainFragmentView, FragmentLifecycle, ShareObservableListener {
 
-    private RecyclerView recyclerView;
-    private ProgressBar progressBar;
     private ListComponent listComponent;
     private MainFragmentPresenterImpl presenter;
-    private DaoQuotes daoLikedQuotes;
-    private QuoteAdapter adapter;
-    private LinearLayoutManager mLinearLayoutManager;
     private SharedPreferences sharedPreferences;
     private LikedFragment likedFragment;
-
     private Observable<List<QuoteData>> observableList;
-
+    private RecyclerView recyclerView;
+    private QuoteAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        ((MainActivity)getActivity()).setOnSendListener(this);
 
-        getMainComponent();
-        presenter = listComponent.getPresenter();
-        daoLikedQuotes = listComponent.getDaoLikedQuotes();
-        sharedPreferences = listComponent.getSharedPreference();
-
-        observableList = listComponent.getObservableList();
+        initListComponent();
+        initDataFromMainComponent();
 
         presenter.loadQuotes(observableList);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.list_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    private void initDataFromMainComponent() {
+        presenter = listComponent.getPresenter();
+        sharedPreferences = listComponent.getSharedPreference();
+        observableList = listComponent.getObservableList();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)  {
-        switch (item.getItemId()){
-            case R.id.filter:
-                Toast.makeText(getActivity(), "Clicked -> " + String.valueOf(daoLikedQuotes.getAllQuotes().size()), Toast.LENGTH_SHORT).show();
-                return true;
-                default:
-                    break;
-        }
-        return false;
-    }
-
-    private void getMainComponent(){
+    private void initListComponent(){
         listComponent = getAppComponent().mainActivityComponentBuilder()
                 .mainModule(new MainModule(this))
                 .sharedModule(new SharedPrefModule(getActivity()))
@@ -107,19 +77,19 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_fragment_layout, container, false);
-        recyclerView = view.findViewById(R.id.recycler_view_quotes);
+        View view = inflater.inflate(R.layout.list_fragment, container, false);
 
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
-        Animation animationHide = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_hide_anim);
-        Animation animationShow = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_show_anim);
+        Animation animationBottomHide = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_hide_anim);
+        Animation animationBottomShow = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_show_anim);
 
+        recyclerView = view.findViewById(R.id.recycler_view_quotes);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 if(newState == RecyclerView.SCROLL_STATE_IDLE){
-                    bottomNavigationView.setVisibility(View.VISIBLE);
-                    bottomNavigationView.startAnimation(animationShow);
+                /*    bottomNavigationView.setVisibility(View.VISIBLE);
+                    bottomNavigationView.startAnimation(animationBottomShow);*/
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
@@ -128,33 +98,15 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 if(dy > 0 && bottomNavigationView.isShown()){
                     bottomNavigationView.setVisibility(GONE);
-                    bottomNavigationView.startAnimation(animationHide);
+                    bottomNavigationView.startAnimation(animationBottomHide);
+
                 } else if(dy < 0 && !bottomNavigationView.isShown()){
                     bottomNavigationView.setVisibility(View.VISIBLE);
-                    bottomNavigationView.startAnimation(animationShow);
+                    bottomNavigationView.startAnimation(animationBottomShow);
                 }
             }
         });
         return view;
-    }
-
-    @Override
-    public void showQuotes(List<QuoteData> listQuotes) {
-        adapter = new QuoteAdapter(getActivity(), new LClickListener() {
-             @Override
-             public void onPositionClicked(int position) {
-                 QuoteData quoteData = listQuotes.get(position);
-                 sendData(quoteData);
-                if (likedFragment != null){
-                    likedFragment.setDataShared();
-                }
-                Toast.makeText(getActivity(), "quote added to Liked", Toast.LENGTH_SHORT).show();
-             }
-         });
-        adapter.setList(listQuotes);
-        mLinearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(mLinearLayoutManager);
-        recyclerView.setAdapter(adapter);
     }
 
     private void sendData(QuoteData quoteData) {
@@ -168,17 +120,27 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
     }
 
     @Override
-    public void showProgress() {
-    }
-
-    @Override
-    public void hideProgress() {
-
+    public void showQuotes(List<QuoteData> listQuotes) {
+        adapter = new QuoteAdapter(getActivity(), new OnPositionClickListener() {
+             @Override
+             public void onPositionClicked(int position) {
+                 QuoteData quoteData = listQuotes.get(position);
+                 sendData(quoteData);
+                if (likedFragment != null){
+                    likedFragment.setDataShared();
+                }
+                Toast.makeText(getActivity(), "quote added to Liked", Toast.LENGTH_SHORT).show();
+             }
+         });
+        adapter.setList(listQuotes);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void showQuotesError(Throwable e) {
-        /*Log.d(TAG_OTHER, "showQuotesError: " + e.getMessage());*/
+        Log.d(TAG_OTHER, "showQuotesError: " + e.getMessage());
     }
 
     @Override
@@ -197,4 +159,11 @@ public class MainFragment extends BaseFragment implements MainFragmentView, Frag
         Log.d(TAG_STATE, "onResumeFragment: MainFragment ");
     }
 
+    @Override
+    public void passObservable(Observable<List<QuoteData>> listObservable) {
+        if (listObservable == null){
+            Log.d(TAG_OTHER, "passObservable: Observable<List<QuoteData>> is null object" );
+        }
+        presenter.loadQuotes(listObservable);
+    }
 }

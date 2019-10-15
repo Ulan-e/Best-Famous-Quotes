@@ -1,32 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarTop"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    </androidx.appcompat.widget.Toolbar>
+        android:layout_height="match_parent">
 
-    <com.lessons.firebase.quotes.CustomViewPager
-        android:id="@+id/containerPager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbarTop"/>
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/coll_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <LinearLayout
+                    android:id="@+id/filter_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="0dp"
+                    android:orientation="vertical"
+                    android:padding="0dp"
+                    android:visibility="gone"
+                    app:layout_collapseMode="parallax">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/love"
+                            style="?android:attr/buttonBarButtonStyle"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="7dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:text="@string/love"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/funny"
+                            style="?android:attr/buttonBarButtonStyle"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="7dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:text="@string/funny"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/live"
+                            style="?android:attr/buttonBarButtonStyle"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="7dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:text="@string/live"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/motivation"
+                            style="?android:attr/buttonBarButtonStyle"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="7dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:text="@string/motivation"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/happiness"
+                            style="?android:attr/buttonBarButtonStyle"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="7dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:text="@string/happy"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="@color/colorPrimary"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.lessons.firebase.quotes.CustomViewPager
+            android:id="@+id/containerPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        app:menu="@menu/bottom_navigation_menu"
-        app:labelVisibilityMode="unlabeled">
+        app:labelVisibilityMode="unlabeled"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:menu="@menu/bottom_navigation_menu">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

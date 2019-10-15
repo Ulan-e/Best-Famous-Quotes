@@ -3,7 +3,7 @@ package com.lessons.firebase.quotes.ui.base;
 import androidx.fragment.app.Fragment;
 
 import com.lessons.firebase.quotes.di.components.AppComponent;
-import com.lessons.firebase.quotes.ui.MainApplication;
+import com.lessons.firebase.quotes.MainApplication;
 
 public abstract class BaseFragment extends Fragment {
 

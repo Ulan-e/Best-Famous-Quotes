@@ -1,24 +1,23 @@
 package com.lessons.firebase.quotes.di.components;
 
-import com.lessons.firebase.quotes.data.database.DaoQuotes;
-import com.lessons.firebase.quotes.di.scopes.AppScope;
+import com.lessons.firebase.quotes.di.modules.uimodules.QuoteDayModule;
 import com.lessons.firebase.quotes.di.scopes.DayQuoteScope;
-import com.lessons.firebase.quotes.di.modules.ContextModule;
+import com.lessons.firebase.quotes.di.scopes.QuoteDayScope;
 import com.lessons.firebase.quotes.ui.base.BaseFragment;
+import com.lessons.firebase.quotes.ui.quoteofday.QuoteDayPresenterImpl;
 
 import dagger.Subcomponent;
 
-@DayQuoteScope
-@Subcomponent(modules = {ContextModule.class})
+@QuoteDayScope
+@Subcomponent(modules = {QuoteDayModule.class})
 public interface DayQuoteComponent {
 
-    DaoQuotes getDaoQuotes();
-
+    QuoteDayPresenterImpl getPresenter();
     void inject(BaseFragment mainFragment);
 
     @Subcomponent.Builder
     interface DQBuilder{
-        DQBuilder contextModule(ContextModule contextModule);
+        DQBuilder quoteDayModule(QuoteDayModule quoteDayModule);
         DayQuoteComponent build();
     }
 }

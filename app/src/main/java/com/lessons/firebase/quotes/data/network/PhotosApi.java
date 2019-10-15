@@ -18,5 +18,5 @@ public interface PhotosApi {
             @Query("key") String key,
             @Query("image_type") String imageType,
             @Query("per_page") int page,
-            @Query("order") String order);
+            @Query("q") String q);
 }

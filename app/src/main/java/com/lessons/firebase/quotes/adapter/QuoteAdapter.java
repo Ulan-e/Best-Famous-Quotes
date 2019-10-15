@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.R;
+import com.lessons.firebase.quotes.utils.listeners.OnPositionClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -17,11 +18,11 @@ import java.util.List;
 
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
 
-    private LClickListener lClickListener;
+    private OnPositionClickListener lClickListener;
     private Context mContext;
     private List<QuoteData> mQuotesList;
 
-    public QuoteAdapter(Context mContext, LClickListener lClickListener) {
+    public QuoteAdapter(Context mContext, OnPositionClickListener lClickListener) {
         this.mContext = mContext;
         this.lClickListener = lClickListener;
     }

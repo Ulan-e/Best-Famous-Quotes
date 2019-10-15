@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lessons.firebase.quotes.R;
+import com.lessons.firebase.quotes.utils.listeners.OnPositionClickListener;
 
 import java.lang.ref.WeakReference;
 
@@ -19,10 +20,10 @@ public class QuoteViewHolder extends RecyclerView.ViewHolder implements View.OnC
     TextView mBodyText;
     TextView mAuthorText;
     ImageButton misLiked;
-    WeakReference<LClickListener> lClickListenerWeakReference;
+    WeakReference<OnPositionClickListener> lClickListenerWeakReference;
     boolean isChecked =true;
 
-    public QuoteViewHolder(@NonNull View itemView, LClickListener lClickListener) {
+    public QuoteViewHolder(@NonNull View itemView, OnPositionClickListener lClickListener) {
         super(itemView);
         lClickListenerWeakReference = new WeakReference<>(lClickListener);
         mBodyText = itemView.findViewById(R.id.quote_text);

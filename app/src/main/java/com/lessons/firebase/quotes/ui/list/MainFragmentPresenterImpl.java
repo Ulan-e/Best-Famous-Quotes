@@ -39,7 +39,6 @@ public class MainFragmentPresenterImpl implements MainFragmentPresenter {
                         public void onNext(List<QuoteData> quoteData) {
                             Log.d(TAG_OTHER, "onNext: Main Fragment " + quoteData.size());
                             mView.showQuotes(quoteData);
-                            mView.hideProgress();
                         }
 
                         @Override
