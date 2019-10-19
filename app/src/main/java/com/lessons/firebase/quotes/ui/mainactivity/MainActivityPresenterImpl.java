@@ -1,15 +1,31 @@
 package com.lessons.firebase.quotes.ui.mainactivity;
 
+import com.lessons.firebase.quotes.data.QuoteData;
+import com.lessons.firebase.quotes.data.network.pojo.Quote;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import io.reactivex.Observable;
+
+
 public class MainActivityPresenterImpl implements MainActivityPresenter {
 
-    MainActivityView mView;
+    private MainActivityView mView;
+    private Observable<List<QuoteData>> mListObservable;
 
-    public MainActivityPresenterImpl(MainActivityView mView) {
-        this.mView = mView;
+    @Inject
+    public MainActivityPresenterImpl(MainActivityView view) {
+        this.mView = view;
+    }
+
+    public void setListObservable(Observable<List<QuoteData>> listObservable ){
+        mListObservable = listObservable;
     }
 
     @Override
-    public void setTitleToolbar() {
-
+    public void loadObservable() {
+        mView.setListOfQuotes(mListObservable);
     }
 }

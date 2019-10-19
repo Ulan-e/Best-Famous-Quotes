@@ -3,6 +3,7 @@ package com.lessons.firebase.quotes.di.modules.filter;
 import com.lessons.firebase.quotes.data.network.FavQsApi;
 import com.lessons.firebase.quotes.data.network.pojo.QuotesResponse;
 import com.lessons.firebase.quotes.di.modules.source.QuotesModule;
+import com.lessons.firebase.quotes.di.qualifires.filters.FilterFunny;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterHappy;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterLive;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterLove;
@@ -51,5 +52,12 @@ public class QuoteCalls {
     @Provides
     public Observable<QuotesResponse> motifQuotes(FavQsApi favQsApi){
         return favQsApi.getMotivationalQuotes();
+    }
+
+    @FilterFunny
+    @AppScope
+    @Provides
+    public Observable<QuotesResponse> funnyQuotes(FavQsApi favQsApi){
+        return favQsApi.getFunnyQuotes();
     }
 }

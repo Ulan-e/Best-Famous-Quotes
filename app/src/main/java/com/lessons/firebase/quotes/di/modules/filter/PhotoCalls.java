@@ -3,6 +3,7 @@ package com.lessons.firebase.quotes.di.modules.filter;
 import com.lessons.firebase.quotes.data.network.PhotosApi;
 import com.lessons.firebase.quotes.data.network.pojo.PhotosResponse;
 import com.lessons.firebase.quotes.di.modules.source.PhotosModule;
+import com.lessons.firebase.quotes.di.qualifires.filters.FilterFunny;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterHappy;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterLive;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterLove;
@@ -53,6 +54,13 @@ public class PhotoCalls {
     @Provides
     public Observable<PhotosResponse> motivationPhotos(PhotosApi pixabayApi){
         return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25, "motivation");
+    }
+
+    @FilterFunny
+    @AppScope
+    @Provides
+    public Observable<PhotosResponse> funnyPhotos(PhotosApi pixabayApi){
+        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25, "funny");
     }
 
 

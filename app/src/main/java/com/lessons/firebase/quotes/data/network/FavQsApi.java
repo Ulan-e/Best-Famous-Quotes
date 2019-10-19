@@ -21,4 +21,7 @@ public interface FavQsApi {
 
     @GET("api/quotes/?filter=happy")
     Observable<QuotesResponse> getHappyQuotes();
+
+    @GET("api/quotes/?filter=funny")
+    Observable<QuotesResponse> getFunnyQuotes();
 }

@@ -9,11 +9,11 @@ import dagger.Provides;
 
 @ListScope
 @Module
-public class MainModule {
+public class ListModule {
 
     MainFragmentView view;
 
-    public MainModule(MainFragmentView view) {
+    public ListModule(MainFragmentView view) {
         this.view = view;
     }
 

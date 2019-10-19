@@ -5,6 +5,8 @@ import android.app.Application;
 import com.lessons.firebase.quotes.di.components.AppComponent;
 import com.lessons.firebase.quotes.di.components.DaggerAppComponent;
 import com.lessons.firebase.quotes.di.modules.AppModule;
+import com.lessons.firebase.quotes.di.modules.RxModule;
+import com.lessons.firebase.quotes.di.modules.source.RoomModule;
 
 public class MainApplication extends Application {
 
@@ -16,9 +18,10 @@ public class MainApplication extends Application {
         super.onCreate();
         instance = this;
         mAppComponent = DaggerAppComponent.builder()
+                .roomModule(new RoomModule())
                 .appModule(new AppModule(this))
+                .rxModule(new RxModule())
                 .build();
-
     }
 
     public static MainApplication getInstance(){

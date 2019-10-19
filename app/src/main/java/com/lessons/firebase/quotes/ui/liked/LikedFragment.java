@@ -92,7 +92,7 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
     }
 
     private void getMainComponent() {
-        likedComponent = getAppComponent().listComponentBuilder()
+        likedComponent = getAppComponent().likedComponentBuilder()
                 .likedModule(new LikedModule(this))
                 .sharedModule(new SharedPrefModule(getActivity()))
                 .build();
@@ -140,14 +140,19 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
                 @Override
                 public void onPositionClicked(int position) {
                     QuoteData quoteData = quoteList.get(position);
-                    daoLikedQuotes.deleteQuote(quoteData);
-                    adapter.deleteI(position);
+                    if(quoteData != null){
+                        daoLikedQuotes.deleteQuote(quoteData);
+                        adapter.deleteI(position);
+                        recyclerView.removeViewAt(position);
+                    }
+
                     adapter.notifyDataSetChanged();
                     Toast.makeText(getActivity(), "Item is Removed", Toast.LENGTH_SHORT).show();
                 }
             });
         adapter.setList(quoteList);
         recyclerView.setAdapter(adapter);
+        recyclerView.invalidate();
 
         BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
         Animation animationHide = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_hide_anim);
@@ -184,8 +189,6 @@ public class LikedFragment extends BaseFragment implements LikedFragmentView, Fr
             quoteData.setId(sharedPreferences.getInt("id", -1));
             quoteData.setIsLiked(sharedPreferences.getInt("liked", -1));
             quoteData.setIsLiked(1);
-            Log.d(TAG_OTHER, "setDataShared: ----------------- " + quoteData.getIsLiked() + "\n" +
-                    quoteData.getId() + "\n" + quoteData.getQuote() + "\n") ;
             daoLikedQuotes.setToTable(quoteData);
             adapter.addI(quoteData);
         }

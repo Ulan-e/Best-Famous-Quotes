@@ -1,11 +1,16 @@
 package com.lessons.firebase.quotes.adapter;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lessons.firebase.quotes.data.QuoteData;
@@ -41,13 +46,15 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
         return new QuoteViewHolder(view, lClickListener);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(@NonNull QuoteViewHolder holder, int position) {
         QuoteData quote = mQuotesList.get(position);
         holder.mBodyText.setText(quote.getQuote());
         holder.mAuthorText.setText(quote.getAuthor());
         if(quote.getIsLiked() == 1){
-            holder.misLiked.setImageResource(R.drawable.ic_delete_black_24dp);
+           holder.misLiked.setImageResource(R.drawable.ic_delete_black_24dp);
         }
         Picasso.get()
                 .load(quote.getUrlImage())
@@ -62,7 +69,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
     public void deleteI(int position){
         mQuotesList.remove(position);
         notifyItemRemoved(position);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(position, mQuotesList.size());
     }
 
     public void deleteAllI(){
@@ -73,13 +80,6 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
 
     public void addI(QuoteData quoteData){
         mQuotesList.add(quoteData);
-        notifyItemInserted(mQuotesList.size() - 1);
-        notifyDataSetChanged();
-    }
-
-    public void swapList(List<QuoteData> list){
-        mQuotesList.clear();
-        mQuotesList.addAll(list);
         notifyDataSetChanged();
     }
 
