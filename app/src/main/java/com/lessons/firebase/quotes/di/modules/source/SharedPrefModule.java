@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.lessons.firebase.quotes.di.scopes.AppScope;
+import com.lessons.firebase.quotes.utils.Constants;
 
 import dagger.Module;
 import dagger.Provides;
@@ -21,6 +22,6 @@ public class SharedPrefModule {
     @AppScope
     @Provides
     public SharedPreferences sharedPreferences(Context application){
-        return application.getSharedPreferences("ulan", Context.MODE_PRIVATE);
+        return application.getSharedPreferences(Constants.TAG_SHARED_DATA, Context.MODE_PRIVATE);
     }
 }

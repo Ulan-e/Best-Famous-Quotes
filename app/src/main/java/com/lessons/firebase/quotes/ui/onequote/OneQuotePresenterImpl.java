@@ -1,18 +1,17 @@
-package com.lessons.firebase.quotes.ui.quoteofday;
+package com.lessons.firebase.quotes.ui.onequote;
 
 import com.lessons.firebase.quotes.data.database.DaoQuotes;
 import com.lessons.firebase.quotes.utils.StringUtils;
 
-public class QuoteDayPresenterImpl implements QuoteDayPresenter {
+public class OneQuotePresenterImpl implements OneQuotePresenter {
 
-    private QuoteDayView mView;
+    private OneQuoteView mView;
     private DaoQuotes mDaoQuotes;
 
-    public QuoteDayPresenterImpl(QuoteDayView mView, DaoQuotes mDaoQuotes) {
+    public OneQuotePresenterImpl(OneQuoteView mView, DaoQuotes mDaoQuotes) {
         this.mView = mView;
         this.mDaoQuotes = mDaoQuotes;
     }
-
 
     @Override
     public void getQuote() {

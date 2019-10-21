@@ -17,12 +17,15 @@ import java.util.List;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private final SparseArray<WeakReference<Fragment>> instantietedFragments = new SparseArray<>();
-    private final List<Fragment> mFragmentList = new ArrayList<>();
-    private final List<String> list =  new ArrayList();
+    private final SparseArray<WeakReference<Fragment>> mInstantiatedFragments;
+    private final List<Fragment> mFragmentList;
+    private final List<String> mTitleList;
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
+        mInstantiatedFragments = new SparseArray<>();
+        mTitleList =  new ArrayList();
+        mFragmentList = new ArrayList<>();
     }
 
     @Override
@@ -37,25 +40,26 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     public void addFragment(BaseFragment fragment, String title){
         mFragmentList.add(fragment);
-        list.add(title);
+        mTitleList.add(title);
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         final BaseFragment fragment = (BaseFragment) super.instantiateItem(container, position);
-        instantietedFragments.put(position, new WeakReference<>(fragment));
+        mInstantiatedFragments.put(position, new WeakReference<>(fragment));
         return fragment;
     }
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        instantietedFragments.remove(position);
+        mInstantiatedFragments.remove(position);
         super.destroyItem(container, position, object);
     }
 
+    // Get fragment by position
     public Fragment getFragment(final int position){
-        final WeakReference<Fragment> weakReference = instantietedFragments.get(position);
+        final WeakReference<Fragment> weakReference = mInstantiatedFragments.get(position);
         if(weakReference != null){
             return weakReference.get();
         } else {
@@ -66,6 +70,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return list.get(position);
+        return mTitleList.get(position);
     }
 }

@@ -3,9 +3,9 @@ package com.lessons.firebase.quotes.di.modules.uimodules;
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
 import com.lessons.firebase.quotes.di.qualifires.LikedQuotes;
-import com.lessons.firebase.quotes.di.scopes.LikedScope;
-import com.lessons.firebase.quotes.ui.liked.LikedFragmentView;
-import com.lessons.firebase.quotes.ui.liked.LikedPresenterImpl;
+import com.lessons.firebase.quotes.di.scopes.StarredScope;
+import com.lessons.firebase.quotes.ui.starred.StarredFragmentView;
+import com.lessons.firebase.quotes.ui.starred.StarredPresenterImpl;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -14,23 +14,23 @@ import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Observable;
 
-@LikedScope
+@StarredScope
 @Module
-public class LikedModule {
+public class StarredModule {
 
-    private LikedFragmentView view;
+    public StarredFragmentView view;
 
-    public LikedModule(LikedFragmentView view) {
+    public StarredModule(StarredFragmentView view) {
         this.view = view;
     }
 
-    @LikedScope
+    @StarredScope
     @Provides
-    public LikedFragmentView provideView(){
+    public StarredFragmentView provideView(){
         return view;
     }
 
-    @LikedScope
+    @StarredScope
     @LikedQuotes
     @Provides
     public Observable<List<QuoteData>> listObservable(DaoLikedQuotes daoQuotes){
@@ -42,10 +42,10 @@ public class LikedModule {
             });
     }
 
-    @LikedScope
+    @StarredScope
     @Provides
-    public LikedPresenterImpl likedPresenter(LikedFragmentView view, @LikedQuotes Observable<List<QuoteData>> listObservable){
-        return new LikedPresenterImpl(view, listObservable);
+    public StarredPresenterImpl likedPresenter(StarredFragmentView view, @LikedQuotes Observable<List<QuoteData>> listObservable){
+        return new StarredPresenterImpl(view, listObservable);
     }
 
 

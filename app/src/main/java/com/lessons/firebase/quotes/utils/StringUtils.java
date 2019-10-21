@@ -3,12 +3,10 @@ package com.lessons.firebase.quotes.utils;
 import android.util.Log;
 
 import com.lessons.firebase.quotes.data.QuoteData;
-import com.lessons.firebase.quotes.data.database.QuoteEntity;
 import com.lessons.firebase.quotes.data.network.pojo.Photo;
 import com.lessons.firebase.quotes.data.network.pojo.Quote;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.lessons.firebase.quotes.utils.Constants.TAG_OTHER;
@@ -50,6 +48,4 @@ public class StringUtils {
         Log.d(TAG_OTHER, "populateQuotes: List of Quotes " + String.valueOf(resultList.size()) );
         return resultList;
     }
-
-
 }

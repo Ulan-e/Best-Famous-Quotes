@@ -5,7 +5,9 @@ import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Scope;
 
+import dagger.Subcomponent;
+
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface QuoteDayScope {
+public @interface OneQuoteScope {
 }

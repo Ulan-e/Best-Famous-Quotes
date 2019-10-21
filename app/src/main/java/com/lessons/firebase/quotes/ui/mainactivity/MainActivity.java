@@ -21,11 +21,11 @@ import com.lessons.firebase.quotes.R;
 import com.lessons.firebase.quotes.adapter.ViewPagerAdapter;
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.di.components.MainActivityComponent;
-import com.lessons.firebase.quotes.di.modules.uimodules.MainModulee;
+import com.lessons.firebase.quotes.di.modules.uimodules.MainModule;
 import com.lessons.firebase.quotes.ui.base.BaseActivity;
-import com.lessons.firebase.quotes.ui.liked.LikedFragment;
-import com.lessons.firebase.quotes.ui.list.MainFragment;
-import com.lessons.firebase.quotes.ui.quoteofday.QuoteOfDay;
+import com.lessons.firebase.quotes.ui.starred.StarredFragment;
+import com.lessons.firebase.quotes.ui.home.HomeFragment;
+import com.lessons.firebase.quotes.ui.onequote.OneQuoteFragment;
 import com.lessons.firebase.quotes.utils.listeners.FragmentLifecycle;
 import com.lessons.firebase.quotes.utils.listeners.ShareObservableListener;
 
@@ -37,19 +37,19 @@ import io.reactivex.Observable;
 
 public class MainActivity extends BaseActivity implements MainActivityView, View.OnClickListener {
 
-    private MainActivityComponent appComponent;
-    private ShareObservableListener sendListener;
+    private MainActivityComponent mActivityComponent;
+    private ShareObservableListener mShareObservableListener;
     private BottomNavigationView mBottomNavigation;
-    private CustomViewPager customViewPager;
-    private ViewPagerAdapter viewPagerAdapter;
+    private CustomViewPager mCustomViewPager;
+    private ViewPagerAdapter mViewPagerAdapter;
 
-    private LinearLayout linearLayout;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
-    private AppBarLayout appBarLayout;
-    private MenuItem prevMenuItem;
+    private LinearLayout mLinearLayout;
+    private CollapsingToolbarLayout mCollapsingToolbar;
+    private AppBarLayout mAppBarLayout;
+    private MenuItem mBottomMenuItem;
 
     @Inject
-    public MainActivityPresenterImpl presenter;
+    public MainActivityPresenterImpl mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState){
@@ -64,10 +64,10 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     }
 
     public void getMainComponent(){
-        appComponent = getAppComponent().activityBuilder()
-                .mainModule(new MainModulee(this))
+        mActivityComponent = getAppComponent().activityBuilder()
+                .mainModule(new MainModule(this))
                 .build();
-        appComponent.inject(this);
+        mActivityComponent.inject(this);
     }
 
     private void initFilterButtons() {
@@ -89,25 +89,25 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
-        appBarLayout.setExpanded(false);
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.coll_toolbar);
-        collapsingToolbarLayout.setTitle("Quotes");
-        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
-        linearLayout = (LinearLayout) findViewById(R.id.filter_layout);
-        appBarLayout.addOnOffsetChangedListener(appBarChangeListener);
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
+        mAppBarLayout.setExpanded(false);
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.coll_toolbar);
+        mCollapsingToolbar.setTitle("Quotes");
+        mCollapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+        mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.transparent));
+        mLinearLayout = (LinearLayout) findViewById(R.id.filter_layout);
+        mAppBarLayout.addOnOffsetChangedListener(appBarChangeListener);
     }
 
     private void initViewPager() {
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        customViewPager = findViewById(R.id.containerPager);
-        viewPagerAdapter.addFragment(new LikedFragment(), "title");
-        viewPagerAdapter.addFragment(new MainFragment(), "title");
-        viewPagerAdapter.addFragment(new QuoteOfDay(), "title");
-        customViewPager.setOffscreenPageLimit(2);
-        customViewPager.setAdapter(viewPagerAdapter);
-        customViewPager.setOnPageChangeListener(pageChangeListener);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mCustomViewPager = findViewById(R.id.containerPager);
+        mViewPagerAdapter.addFragment(new StarredFragment(), "title");
+        mViewPagerAdapter.addFragment(new HomeFragment(), "title");
+        mViewPagerAdapter.addFragment(new OneQuoteFragment(), "title");
+        mCustomViewPager.setOffscreenPageLimit(2);
+        mCustomViewPager.setAdapter(mViewPagerAdapter);
+        mCustomViewPager.setOnPageChangeListener(pageChangeListener);
     }
 
     private void initBottomNav(){
@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     }
 
     public void setOnSendListener(ShareObservableListener sendListener){
-        this.sendListener = sendListener;
+        this.mShareObservableListener = sendListener;
     }
 
     @Override
@@ -131,10 +131,10 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.filter:
-               if(appBarLayout.getTop() < 0) {
-                    appBarLayout.setExpanded(true);
+               if(mAppBarLayout.getTop() < 0) {
+                    mAppBarLayout.setExpanded(true);
                 }else{
-                    appBarLayout.setExpanded(false);
+                    mAppBarLayout.setExpanded(false);
                 }
                 return true;
             default:
@@ -148,11 +148,11 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
                 @Override
                 public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
                     if(Math.abs(i) == appBarLayout.getTotalScrollRange()){
-                        linearLayout.setVisibility(View.GONE);
-                        collapsingToolbarLayout.setTitle("Quotes");
+                        mLinearLayout.setVisibility(View.GONE);
+                        mCollapsingToolbar.setTitle("Quotes");
                     }else if(i == 0){
-                        linearLayout.setVisibility(View.VISIBLE);
-                        collapsingToolbarLayout.setTitle("");
+                        mLinearLayout.setVisibility(View.VISIBLE);
+                        mCollapsingToolbar.setTitle("");
                     }
                 }
             };
@@ -163,20 +163,21 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     switch (menuItem.getItemId()){
                         case R.id.star:
-                            customViewPager.setCurrentItem(0);
+                            mCustomViewPager.setCurrentItem(0);
                             return true;
                         case R.id.home:
-                            customViewPager.setCurrentItem(1);
+                            mCustomViewPager.setCurrentItem(1);
                             return true;
                         case R.id.one:
-                            customViewPager.setCurrentItem(2);
+                            mCustomViewPager.setCurrentItem(2);
                             return true;
                     }
                     return false;
                 }
             };
 
-    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+    private ViewPager.OnPageChangeListener pageChangeListener =
+            new ViewPager.OnPageChangeListener() {
         int currentPosition = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -185,21 +186,21 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
 
         @Override
         public void onPageSelected(int position) {
-            if(prevMenuItem != null){
-                prevMenuItem.setChecked(false);
-                appBarLayout.setExpanded(false);
+            if(mBottomMenuItem != null){
+                mBottomMenuItem.setChecked(false);
+                mAppBarLayout.setExpanded(false);
             }else {
                 mBottomNavigation.getMenu().getItem(position);
             }
 
             mBottomNavigation.getMenu().getItem(position).setChecked(true);
-            prevMenuItem = mBottomNavigation.getMenu().getItem(position);
+            mBottomMenuItem = mBottomNavigation.getMenu().getItem(position);
 
-            FragmentLifecycle fragmentToShow = (FragmentLifecycle) viewPagerAdapter.getItem(position);
+            FragmentLifecycle fragmentToShow = (FragmentLifecycle) mViewPagerAdapter.getItem(position);
             fragmentToShow.onResumeFragment();
 
-            FragmentLifecycle fragmentToHide = (FragmentLifecycle) viewPagerAdapter.getItem(currentPosition);
-            Fragment fragment = viewPagerAdapter.getItem(customViewPager.getCurrentItem());
+            FragmentLifecycle fragmentToHide = (FragmentLifecycle) mViewPagerAdapter.getItem(currentPosition);
+            Fragment fragment = mViewPagerAdapter.getItem(mCustomViewPager.getCurrentItem());
             fragmentToHide.onPauseFragment(fragment);
 
             currentPosition = position;
@@ -213,31 +214,31 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
 
     @Override
     public void setListOfQuotes(Observable<List<QuoteData>> listOfQuotes) {
-        sendListener.passObservable(listOfQuotes);
+        mShareObservableListener.passObservable(listOfQuotes);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.love:
-                presenter.setListObservable(appComponent.getObservableListLove());
-                presenter.loadObservable();
+                mPresenter.setListObservable(mActivityComponent.getObservableListLove());
+                mPresenter.loadObservable();
                 break;
             case R.id.funny:
-                presenter.setListObservable(appComponent.getObservableListFunny());
-                presenter.loadObservable();
+                mPresenter.setListObservable(mActivityComponent.getObservableListFunny());
+                mPresenter.loadObservable();
                 break;
             case R.id.live:
-                presenter.setListObservable(appComponent.getObservableListLive());
-                presenter.loadObservable();
+                mPresenter.setListObservable(mActivityComponent.getObservableListLive());
+                mPresenter.loadObservable();
                 break;
             case R.id.motivation:
-                presenter.setListObservable(appComponent.getObservableListMotif());
-                presenter.loadObservable();
+                mPresenter.setListObservable(mActivityComponent.getObservableListMotif());
+                mPresenter.loadObservable();
                 break;
             case R.id.happiness:
-                presenter.setListObservable(appComponent.getObservableListHappy());
-                presenter.loadObservable();
+                mPresenter.setListObservable(mActivityComponent.getObservableListHappy());
+                mPresenter.loadObservable();
                 break;
             default:
                 break;

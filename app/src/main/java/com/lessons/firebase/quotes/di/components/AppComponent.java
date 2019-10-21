@@ -17,8 +17,8 @@ public interface AppComponent {
     void inject(Application application);
 
     MainActivityComponent.ActivityBuilder activityBuilder();
-    ListComponent.MABuilder listComponentBuilder();
-    DayQuoteComponent.DQBuilder dayQuoteComponentBuilder();
-    LikedComponent.LCBuilder likedComponentBuilder();
+    HomeComponent.ListBuilder listBuilder();
+    OneQuoteComponent.DayBuilder dayBuilder();
+    StarredComponent.LikedBuilder likedBuilder();
 }
 

@@ -22,16 +22,23 @@
                 android:id="@+id/quote_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="25dp"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/textColor"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"/>
 
             <TextView
                 android:id="@+id/quote_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="25dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
                 android:textSize="16sp"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/dark_blue" />
 
         </LinearLayout>
 

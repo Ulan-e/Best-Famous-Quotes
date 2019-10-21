@@ -34,19 +34,21 @@
                         android:id="@+id/quote_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="19sp"
+                        android:text="21sp"
                         android:layout_marginTop="4dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_marginBottom="10dp"/>
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/textColor"/>
 
                     <TextView
                         android:id="@+id/quote_author"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="17sp"
+                        android:text="19sp"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginTop="7dp"/>
+                        android:layout_marginTop="7dp"
+                        android:textColor="@color/dark_blue" />
 
                 </LinearLayout>
 
@@ -54,18 +56,6 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
-              <!--      <Button
-                        android:id="@+id/id_liked_clicker"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:textAllCaps="true"
-                        android:drawableBottom="@drawable/ic_star_border_black_24dp"
-                        android:src="@drawable/ic_star_border_black_24dp"
-                        android:background="@android:color/transparent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginBottom="7dp"/>-->
 
                     <ImageButton
                         android:id="@+id/id_liked_clicker"

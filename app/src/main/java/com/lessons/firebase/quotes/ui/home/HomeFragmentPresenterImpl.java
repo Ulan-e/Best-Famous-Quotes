@@ -1,4 +1,4 @@
-package com.lessons.firebase.quotes.ui.list;
+package com.lessons.firebase.quotes.ui.home;
 
 import android.util.Log;
 
@@ -9,18 +9,17 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.lessons.firebase.quotes.utils.Constants.TAG_OTHER;
 
-public class MainFragmentPresenterImpl implements MainFragmentPresenter {
+public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
 
-    private MainFragmentView mView;
+    private HomeFragmentView mView;
     private Observable<List<QuoteData>> listObservable;
 
-    public MainFragmentPresenterImpl(MainFragmentView mView) {
+    public HomeFragmentPresenterImpl(HomeFragmentView mView) {
         this.mView = mView;
     }
 

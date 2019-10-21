@@ -1,8 +1,6 @@
 package com.lessons.firebase.quotes.adapter;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,11 +20,11 @@ public class QuoteViewHolder extends RecyclerView.ViewHolder implements View.OnC
     TextView mBodyText;
     TextView mAuthorText;
     ImageButton misLiked;
-    WeakReference<OnPositionClickListener> lClickListenerWeakReference;
+    WeakReference<OnPositionClickListener> mClickListenerWeakReference;
 
     public QuoteViewHolder(@NonNull View itemView, OnPositionClickListener lClickListener) {
         super(itemView);
-        lClickListenerWeakReference = new WeakReference<>(lClickListener);
+        mClickListenerWeakReference = new WeakReference<>(lClickListener);
         mBodyText = itemView.findViewById(R.id.quote_text);
         mImageQuote = itemView.findViewById(R.id.quote_image);
         mAuthorText = itemView.findViewById(R.id.quote_author);
@@ -34,16 +32,14 @@ public class QuoteViewHolder extends RecyclerView.ViewHolder implements View.OnC
         misLiked.setOnClickListener(this);
     }
 
-
+    // Click "star-button"
     @Override
     public void onClick(View view) {
-            if(view.getId() == misLiked.getId()){
-                misLiked.setImageResource(R.drawable.ic_star_black_24dp);
-            }else {
-                Toast.makeText(view.getContext(), "Error to added to Liked List", Toast.LENGTH_SHORT).show();
-            }
+        if (view.getId() == misLiked.getId()) {
+            misLiked.setImageResource(R.drawable.ic_star_liked_24dp);
             misLiked.setEnabled(false);
+        }
 
-        lClickListenerWeakReference.get().onPositionClicked(getAdapterPosition());
+        mClickListenerWeakReference.get().onPositionClicked(getAdapterPosition());
     }
 }

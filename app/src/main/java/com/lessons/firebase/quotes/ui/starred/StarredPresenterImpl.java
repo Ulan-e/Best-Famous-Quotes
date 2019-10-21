@@ -1,6 +1,8 @@
-package com.lessons.firebase.quotes.ui.liked;
+package com.lessons.firebase.quotes.ui.starred;
 
+import com.lessons.firebase.quotes.adapter.QuoteAdapter;
 import com.lessons.firebase.quotes.data.QuoteData;
+import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
 
 import java.util.List;
 
@@ -11,12 +13,12 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class LikedPresenterImpl implements LikedPresenter {
+public class StarredPresenterImpl implements StarredPresenter {
 
-    private LikedFragmentView mView;
+    private StarredFragmentView mView;
     private Observable<List<QuoteData>> mListQuoteData;
 
-    public LikedPresenterImpl(LikedFragmentView view, Observable<List<QuoteData>> listObservable) {
+    public StarredPresenterImpl(StarredFragmentView view, Observable<List<QuoteData>> listObservable) {
         this.mView = view;
         this.mListQuoteData = listObservable;
     }
@@ -33,21 +35,14 @@ public class LikedPresenterImpl implements LikedPresenter {
                     }
 
                     @Override
-                    public void onNext(List<QuoteData> quoteData) {
-                     /*   int size = quoteData.size();
-                        if(size == 0){
-                            mView.showNoLikedQuotes();
-                        }else {
-                            mView.showLikedQuotes(quoteData);
-                        }*/
-                     mView.showLikedQuotes(quoteData);
+                    public void onNext(List<QuoteData> quoteDatas) {
+                        mView.showLikedQuotes(quoteDatas);
 
                     }
 
                     @Override
                     public void onError(Throwable error) {
                         mView.showNoLikedQuotes();
-
                     }
 
                     @Override
@@ -55,5 +50,12 @@ public class LikedPresenterImpl implements LikedPresenter {
 
                     }
                 });
+    }
+
+    @Override
+    public void getInfoClearList(QuoteAdapter adapter, DaoLikedQuotes daoLikedQuotes) {
+        if (adapter != null && daoLikedQuotes != null) {
+            mView.clearAllQuotes();
+        }
     }
 }

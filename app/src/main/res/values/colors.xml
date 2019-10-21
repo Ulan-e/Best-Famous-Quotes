@@ -6,7 +6,10 @@
     <color name="white">#ffffff</color>
     <color name="transparent">#00000000</color>
     <color name="grey">#00747171</color>
-    <color name="toolbar_color">#018596</color>
+    <color name="textColor">#696969</color>
+    <color name="toolbar_color_sec">#028090</color>
+    <color name="toolbar_color">#018495</color>
     <color name="background">#F2F7F7</color>
     <color name="tint_color_deselected">#979998</color>
+    <color name="dark_blue">#2E6970</color>
 </resources>

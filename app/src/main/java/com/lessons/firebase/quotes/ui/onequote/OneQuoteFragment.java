@@ -1,4 +1,4 @@
-package com.lessons.firebase.quotes.ui.quoteofday;
+package com.lessons.firebase.quotes.ui.onequote;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,18 +15,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.lessons.firebase.quotes.R;
-import com.lessons.firebase.quotes.di.components.DayQuoteComponent;
-import com.lessons.firebase.quotes.di.modules.uimodules.QuoteDayModule;
+import com.lessons.firebase.quotes.di.components.OneQuoteComponent;
+import com.lessons.firebase.quotes.di.modules.uimodules.OneQuoteModule;
 import com.lessons.firebase.quotes.ui.base.BaseFragment;
 import com.lessons.firebase.quotes.utils.listeners.FragmentLifecycle;
 
 import static com.lessons.firebase.quotes.utils.Constants.TAG_STATE;
 
-public class QuoteOfDay extends BaseFragment implements QuoteDayView, FragmentLifecycle{
+public class OneQuoteFragment extends BaseFragment implements OneQuoteView, FragmentLifecycle{
 
     private TextView mQuoteText;
     private TextView mAuthorText;
-    private QuoteDayPresenterImpl mPresenter;
+    private OneQuotePresenterImpl mPresenter;
 
 
     @Override
@@ -55,9 +55,9 @@ public class QuoteOfDay extends BaseFragment implements QuoteDayView, FragmentLi
         return false;
     }
 
-    private DayQuoteComponent getDayComponent(){
-        DayQuoteComponent component = getAppComponent().dayQuoteComponentBuilder()
-                .quoteDayModule(new QuoteDayModule(this))
+    private OneQuoteComponent getDayComponent(){
+        OneQuoteComponent component = getAppComponent().dayBuilder()
+                .quoteDayModule(new OneQuoteModule(this))
                 .build();
         component.inject(this);
         mPresenter = component.getPresenter();
@@ -76,12 +76,12 @@ public class QuoteOfDay extends BaseFragment implements QuoteDayView, FragmentLi
 
     @Override
     public void onPauseFragment(Fragment fragment) {
-        Log.d(TAG_STATE, "onPauseFragment: QuoteOfDay ");
+        Log.d(TAG_STATE, "onPauseFragment: OneQuoteFragment ");
     }
 
     @Override
     public void onResumeFragment() {
-        Log.d(TAG_STATE, "onResumeFragment: QuoteOfDay ");
+        Log.d(TAG_STATE, "onResumeFragment: OneQuoteFragment ");
     }
 
     @Override

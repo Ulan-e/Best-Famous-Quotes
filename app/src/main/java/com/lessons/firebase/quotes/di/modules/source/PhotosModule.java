@@ -34,7 +34,7 @@ public class PhotosModule {
     @Photos
     @Provides
     public Retrofit retrofit(@PhotosOkHttp OkHttpClient client,
-                             @Named("photos_gson") Gson gson){
+                             @PhotosGson Gson gson){
         return new Retrofit.Builder()
                 .baseUrl(Constants.PIXABAY_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -44,7 +44,7 @@ public class PhotosModule {
     }
 
     @AppScope
-    @Named("photos_gson")
+    @PhotosGson
     @Provides
     public Gson gson(){
         GsonBuilder gsonBuilder = new GsonBuilder();

@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Named;
-
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -89,7 +87,6 @@ public class OkHttpModule {
         return interceptor;
     }
 
-
     @AppScope
     @TokenInterceptor
     @Provides
@@ -106,6 +103,5 @@ public class OkHttpModule {
         };
         return interceptor;
     }
-
 
 }

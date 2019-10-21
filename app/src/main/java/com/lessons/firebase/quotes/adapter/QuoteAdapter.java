@@ -1,41 +1,31 @@
 package com.lessons.firebase.quotes.adapter;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.R;
+import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.utils.listeners.OnPositionClickListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
 
-    private OnPositionClickListener lClickListener;
+    private OnPositionClickListener mOnPositionClickListener;
     private Context mContext;
     private List<QuoteData> mQuotesList;
 
-    public QuoteAdapter(Context mContext, OnPositionClickListener lClickListener) {
-        this.mContext = mContext;
-        this.lClickListener = lClickListener;
-    }
-
-    public void setList(List<QuoteData> quotesList){
-        this.mQuotesList = new ArrayList<>();
-        this.mQuotesList.addAll(quotesList);
-        notifyDataSetChanged();
+    public QuoteAdapter(Context context, List<QuoteData> quotesList,
+                        OnPositionClickListener clickListener) {
+        this.mContext = context;
+        this.mOnPositionClickListener = clickListener;
+        this.mQuotesList = quotesList;
     }
 
     @NonNull
@@ -43,17 +33,16 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
     public QuoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.quote_items, parent, false);
-        return new QuoteViewHolder(view, lClickListener);
+        return new QuoteViewHolder(view, mOnPositionClickListener);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onBindViewHolder(@NonNull QuoteViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull QuoteViewHolder holder, int position){
         QuoteData quote = mQuotesList.get(position);
         holder.mBodyText.setText(quote.getQuote());
         holder.mAuthorText.setText(quote.getAuthor());
         if(quote.getIsLiked() == 1){
+            holder.misLiked.setEnabled(true);
            holder.misLiked.setImageResource(R.drawable.ic_delete_black_24dp);
         }
         Picasso.get()
@@ -66,21 +55,17 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
         return mQuotesList.size();
     }
 
-    public void deleteI(int position){
-        mQuotesList.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, mQuotesList.size());
-    }
-
-    public void deleteAllI(){
+    // Delete all quotes from StarredFragment List
+    public void deleteLikedQuotes(){
         mQuotesList.clear();
         notifyItemRangeChanged(0, mQuotesList.size());
         notifyDataSetChanged();
     }
 
-    public void addI(QuoteData quoteData){
+    // Add quote to StarredFragment List
+    public void addQuote(QuoteData quoteData){
         mQuotesList.add(quoteData);
-        notifyDataSetChanged();
+        notifyItemInserted(mQuotesList.size() - 1);
     }
 
 }
