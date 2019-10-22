@@ -25,7 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lessons.firebase.quotes.R;
 import com.lessons.firebase.quotes.adapter.QuoteAdapter;
 import com.lessons.firebase.quotes.data.QuoteData;
-import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
+import com.lessons.firebase.quotes.data.database.DaoStarredQuotes;
 import com.lessons.firebase.quotes.di.components.StarredComponent;
 import com.lessons.firebase.quotes.di.modules.source.SharedPrefModule;
 import com.lessons.firebase.quotes.di.modules.uimodules.StarredModule;
@@ -44,10 +44,10 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
 
     private RecyclerView mRecyclerView;
     private TextView mTextNoQuotes;
-    private StarredComponent mLikedComponent;
+    private StarredComponent mStarredComponent;
     private QuoteAdapter mAdapter;
 
-    private DaoLikedQuotes mDaoLikedQuotes;
+    private DaoStarredQuotes mDaoStarredQuotes;
     private StarredPresenterImpl mPresenter;
     private SharedPreferences mSharedPreferences;
 
@@ -61,15 +61,15 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
     }
 
     private void getMainComponent() {
-        mLikedComponent = getAppComponent().likedBuilder()
+        mStarredComponent = getAppComponent().likedBuilder()
                 .likedModule(new StarredModule(this))
                 .sharedModule(new SharedPrefModule(getActivity()))
                 .build();
-        mLikedComponent.inject(this);
+        mStarredComponent.inject(this);
 
-        mDaoLikedQuotes = mLikedComponent.getDaoQuotes();
-        mPresenter = mLikedComponent.getPresenter();
-        mSharedPreferences = mLikedComponent.getSharedPreferences();
+        mDaoStarredQuotes = mStarredComponent.getDaoQuotes();
+        mPresenter = mStarredComponent.getPresenter();
+        mSharedPreferences = mStarredComponent.getSharedPreferences();
     }
 
     public void setDataShared() {
@@ -81,7 +81,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
             quoteData.setId(mSharedPreferences.getInt("id", -1));
             quoteData.setIsLiked(mSharedPreferences.getInt("liked", -1));
             quoteData.setIsLiked(1);
-            mDaoLikedQuotes.setToTable(quoteData);
+            mDaoStarredQuotes.setToTable(quoteData);
             mAdapter.addQuote(quoteData);
             mAdapter.notifyDataSetChanged();
         }
@@ -98,9 +98,9 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.clear_list:
-                int size = mDaoLikedQuotes.getLikedQuotes().size();
+                int size = mDaoStarredQuotes.getLikedQuotes().size();
                 if (size > 0) {
-                    mPresenter.getInfoClearList(mAdapter, mDaoLikedQuotes);
+                    mPresenter.getInfoClearList(mAdapter, mDaoStarredQuotes);
                 } else {
                     Toast.makeText(getActivity(), "List is Empty", Toast.LENGTH_SHORT).show();
                 }
@@ -133,7 +133,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
             mAdapter.notifyItemRemoved(position);
             mAdapter.notifyDataSetChanged();
             mAdapter.notifyItemRangeChanged(position, quoteList.size());
-            mDaoLikedQuotes.deleteQuote(quoteData);
+            mDaoStarredQuotes.deleteQuote(quoteData);
 
             Toast.makeText(getActivity(), "Item is Removed", Toast.LENGTH_SHORT).show();
         });
@@ -169,7 +169,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
     public void showNoLikedQuotes() {
         mRecyclerView.setVisibility(GONE);
         mTextNoQuotes.setVisibility(View.VISIBLE);
-        mTextNoQuotes.setText(" No Liked list ");
+        mTextNoQuotes.setText(" Starred list is empty ");
     }
 
     @Override
@@ -179,7 +179,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
             dialogBuilder.setTitle("Are sure clear all liked list")
                     .setIcon(R.drawable.ic_clear_all_black_24dp)
                     .setPositiveButton("OK", (dialogInterface, i) -> {
-                        mDaoLikedQuotes.deleteAll();
+                        mDaoStarredQuotes.deleteAll();
                         mAdapter.deleteLikedQuotes();
                         Toast.makeText(getActivity(), " List is Cleared ", Toast.LENGTH_SHORT).show();
                     })
@@ -192,13 +192,13 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
     public void onPauseFragment(Fragment fragment) {
         if (fragment instanceof HomeFragment) {
             Log.d(TAG_STATE, "onPauseFragment: StarredFragment " + fragment);
-            HomeFragment mainFragment = (HomeFragment) fragment;
+            HomeFragment homeFragment = (HomeFragment) fragment;
         }
     }
 
     @Override
     public void onResumeFragment() {
-        Log.d(TAG_OTHER, "onResumeFragment: Liked Fragment");
+        Log.d(TAG_OTHER, "onResumeFragment: StarredFragment");
     }
 
 }

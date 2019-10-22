@@ -28,7 +28,6 @@ public class OneQuoteFragment extends BaseFragment implements OneQuoteView, Frag
     private TextView mAuthorText;
     private OneQuotePresenterImpl mPresenter;
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

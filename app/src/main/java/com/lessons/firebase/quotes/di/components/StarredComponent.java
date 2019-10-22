@@ -3,7 +3,7 @@ package com.lessons.firebase.quotes.di.components;
 
 import android.content.SharedPreferences;
 
-import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
+import com.lessons.firebase.quotes.data.database.DaoStarredQuotes;
 import com.lessons.firebase.quotes.di.modules.source.SharedPrefModule;
 import com.lessons.firebase.quotes.di.modules.uimodules.StarredModule;
 import com.lessons.firebase.quotes.di.scopes.StarredScope;
@@ -17,7 +17,7 @@ import dagger.Subcomponent;
 public interface StarredComponent {
 
     @StarredScope
-    DaoLikedQuotes getDaoQuotes();
+    DaoStarredQuotes getDaoQuotes();
 
     SharedPreferences getSharedPreferences();
 

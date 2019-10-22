@@ -17,7 +17,7 @@ public class OneQuotePresenterImpl implements OneQuotePresenter {
     public void getQuote() {
         String quote = mDaoQuotes.getQuote().getQuote();
         String beforeAuthor = mDaoQuotes.getQuote().getAuthor();
-        String afterAuthor = StringUtils.exchangeSrtings(beforeAuthor);
+        String afterAuthor = StringUtils.generateAuthorName(beforeAuthor);
         mView.showQuote(quote, afterAuthor);
     }
 }

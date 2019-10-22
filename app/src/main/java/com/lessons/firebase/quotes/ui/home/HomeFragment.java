@@ -40,19 +40,16 @@ import static com.lessons.firebase.quotes.utils.Constants.TAG_STATE;
 
 public class HomeFragment extends BaseFragment implements HomeFragmentView, FragmentLifecycle, ShareObservableListener {
 
-    private HomeComponent mListComponent;
+    private HomeComponent mHomeComponent;
     private HomeFragmentPresenterImpl mPresenter;
     private SharedPreferences mPreferences;
-    private StarredFragment mLikedFragment;
+    private StarredFragment mStarredFragment;
     private RecyclerView mRecyclerView;
     private QuoteAdapter mAdapter;
 
     private BottomNavigationView mBottomNavigationView;
     private Animation mAnimationBottomHide;
     private Animation mAnimationBottomShow;
-
-    CoordinatorLayout mCoordinatorLayout;
-
 
     private Observable<List<QuoteData>> mListObservable;
 
@@ -67,15 +64,15 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     }
 
     private void initListComponent() {
-        mListComponent = getAppComponent().listBuilder()
+        mHomeComponent = getAppComponent().listBuilder()
                 .mainModule(new HomeModule(this))
                 .sharedModule(new SharedPrefModule(getActivity()))
                 .build();
-        mListComponent.inject(this);
+        mHomeComponent.inject(this);
 
-        mPresenter = mListComponent.getPresenter();
-        mPreferences = mListComponent.getSharedPreference();
-        mListObservable = mListComponent.getObservableList();
+        mPresenter = mHomeComponent.getPresenter();
+        mPreferences = mHomeComponent.getSharedPreference();
+        mListObservable = mHomeComponent.getObservableList();
     }
 
     @Nullable
@@ -85,8 +82,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
         View view = inflater.inflate(R.layout.list_fragment, container, false);
 
         mBottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
-        mCoordinatorLayout = getActivity().findViewById(R.id.coordinator_layout);
-
         mAnimationBottomHide = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_hide_anim);
         mAnimationBottomShow = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_show_anim);
 
@@ -133,8 +128,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
         mAdapter = new QuoteAdapter(getActivity(), listQuotes, position -> {
             QuoteData quoteData = listQuotes.get(position);
             sendData(quoteData);
-            if (mLikedFragment != null) {
-                mLikedFragment.setDataShared();
+            if (mStarredFragment != null) {
+                mStarredFragment.setDataShared();
                Toast.makeText(getActivity(), "Quote added to Starred", Toast.LENGTH_SHORT).show();
             }
 
@@ -153,7 +148,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     @Override
     public void onPauseFragment(Fragment fragment) {
         if (fragment instanceof StarredFragment) {
-            mLikedFragment = (StarredFragment) fragment;
+            mStarredFragment = (StarredFragment) fragment;
             Log.d(TAG_STATE, "onPauseFragment: HomeFragment " + fragment);
         }
     }

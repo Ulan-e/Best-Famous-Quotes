@@ -13,7 +13,7 @@ import static com.lessons.firebase.quotes.utils.Constants.TAG_OTHER;
 
 public class StringUtils {
 
-    public static String exchangeSrtings(String data){
+    public static String generateAuthorName(String data){
         if(data.contains(",")){
             String[] author = data.split(",") ;
             String lastName = author[0];
@@ -24,14 +24,14 @@ public class StringUtils {
         }
     }
 
-    public static List<QuoteData> mergeQuotesPhotos(List<Photo> photosList, List<QuoteData> quotesList){
-        for(int i =0; i < photosList.size(); i++){
-            QuoteData quoteData = quotesList.get(i);
-            quoteData.setUrlImage(photosList.get(i).getWebformatURL());
+    public static List<QuoteData> mergeQuotesPhotos(List<Photo> photos, List<QuoteData> quotes){
+        for(int i =0; i < photos.size(); i++){
+            QuoteData quoteData = quotes.get(i);
+            quoteData.setUrlImage(photos.get(i).getWebformatURL());
         }
-        Log.d(TAG_OTHER, "mergeQuotesPhotos quotes " + String.valueOf(quotesList.size()));
-        Log.d(TAG_OTHER, "mergeQuotesPhotos photos " + String.valueOf(photosList.size()));
-        return  quotesList;
+        Log.d(TAG_OTHER, "mergeQuotesPhotos quotes " + String.valueOf(quotes.size()));
+        Log.d(TAG_OTHER, "mergeQuotesPhotos photos " + String.valueOf(photos.size()));
+        return  quotes;
     }
 
     public static List<QuoteData> populateQuotes(List<Quote> listOfQuotes){
@@ -48,4 +48,5 @@ public class StringUtils {
         Log.d(TAG_OTHER, "populateQuotes: List of Quotes " + String.valueOf(resultList.size()) );
         return resultList;
     }
+
 }

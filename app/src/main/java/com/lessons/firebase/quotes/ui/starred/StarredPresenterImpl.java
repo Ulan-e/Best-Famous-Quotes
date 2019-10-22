@@ -2,7 +2,7 @@ package com.lessons.firebase.quotes.ui.starred;
 
 import com.lessons.firebase.quotes.adapter.QuoteAdapter;
 import com.lessons.firebase.quotes.data.QuoteData;
-import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
+import com.lessons.firebase.quotes.data.database.DaoStarredQuotes;
 
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class StarredPresenterImpl implements StarredPresenter {
     }
 
     @Override
-    public void getInfoClearList(QuoteAdapter adapter, DaoLikedQuotes daoLikedQuotes) {
+    public void getInfoClearList(QuoteAdapter adapter, DaoStarredQuotes daoLikedQuotes) {
         if (adapter != null && daoLikedQuotes != null) {
             mView.clearAllQuotes();
         }

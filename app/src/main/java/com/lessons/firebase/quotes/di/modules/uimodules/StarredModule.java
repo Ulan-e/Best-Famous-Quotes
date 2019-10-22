@@ -1,7 +1,7 @@
 package com.lessons.firebase.quotes.di.modules.uimodules;
 
 import com.lessons.firebase.quotes.data.QuoteData;
-import com.lessons.firebase.quotes.data.database.DaoLikedQuotes;
+import com.lessons.firebase.quotes.data.database.DaoStarredQuotes;
 import com.lessons.firebase.quotes.di.qualifires.LikedQuotes;
 import com.lessons.firebase.quotes.di.scopes.StarredScope;
 import com.lessons.firebase.quotes.ui.starred.StarredFragmentView;
@@ -33,7 +33,7 @@ public class StarredModule {
     @StarredScope
     @LikedQuotes
     @Provides
-    public Observable<List<QuoteData>> listObservable(DaoLikedQuotes daoQuotes){
+    public Observable<List<QuoteData>> listObservable(DaoStarredQuotes daoQuotes){
             return Observable.fromCallable(new Callable<List<QuoteData>>() {
                 @Override
                 public List<QuoteData> call() throws Exception {
