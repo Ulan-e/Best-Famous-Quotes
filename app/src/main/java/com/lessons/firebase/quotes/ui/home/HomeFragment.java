@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,8 +24,8 @@ import com.lessons.firebase.quotes.di.components.HomeComponent;
 import com.lessons.firebase.quotes.di.modules.source.SharedPrefModule;
 import com.lessons.firebase.quotes.di.modules.uimodules.HomeModule;
 import com.lessons.firebase.quotes.ui.base.BaseFragment;
-import com.lessons.firebase.quotes.ui.starred.StarredFragment;
 import com.lessons.firebase.quotes.ui.mainactivity.MainActivity;
+import com.lessons.firebase.quotes.ui.starred.StarredFragment;
 import com.lessons.firebase.quotes.utils.listeners.FragmentLifecycle;
 import com.lessons.firebase.quotes.utils.listeners.ShareObservableListener;
 

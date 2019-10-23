@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@color/grey"
+    android:layout_margin="12dp">
+
+    <TextView
+        android:id="@+id/clear_list_title"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="  Do you want to clear starred list?"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
+        android:textSize="16sp"/>
+
+    <RelativeLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/ok_clear_button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:layout_margin="4dp"
+            android:background="@color/dark_blue"
+            android:textColor="@color/white"
+            android:padding="6dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:layout_alignParentLeft="true"/>
+
+        <Button
+            android:id="@+id/cancel_clear_button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:layout_margin="4dp"
+            android:background="@color/dark_blue"
+            android:textColor="@color/white"
+            android:padding="6dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

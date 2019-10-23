@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lessons.firebase.quotes.R;
 import com.lessons.firebase.quotes.data.QuoteData;
+import com.lessons.firebase.quotes.utils.StringUtils;
 import com.lessons.firebase.quotes.utils.listeners.OnPositionClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -41,6 +43,14 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
         QuoteData quote = mQuotesList.get(position);
         holder.mBodyText.setText(quote.getQuote());
         holder.mAuthorText.setText(quote.getAuthor());
+        String copiedText = quote.getQuote() + "\n" + quote.getAuthor();
+        holder.mCopyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StringUtils.copyToClipBoard(mContext, copiedText);
+                Toast.makeText(mContext, "Quote copied to Clipboard", Toast.LENGTH_SHORT).show();
+            }
+        });
         if(quote.getIsLiked() == 1){
             holder.misLiked.setEnabled(true);
            holder.misLiked.setImageResource(R.drawable.ic_delete_black_24dp);

@@ -18,5 +18,6 @@ public interface PhotosApi {
             @Query("key") String key,
             @Query("image_type") String imageType,
             @Query("per_page") int page,
-            @Query("q") String q);
+            @Query("q") String q,
+            @Query("editor_choice") boolean editorLike);
 }

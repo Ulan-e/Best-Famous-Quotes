@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,9 +24,9 @@ import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.di.components.MainActivityComponent;
 import com.lessons.firebase.quotes.di.modules.uimodules.MainModule;
 import com.lessons.firebase.quotes.ui.base.BaseActivity;
-import com.lessons.firebase.quotes.ui.starred.StarredFragment;
 import com.lessons.firebase.quotes.ui.home.HomeFragment;
 import com.lessons.firebase.quotes.ui.onequote.OneQuoteFragment;
+import com.lessons.firebase.quotes.ui.starred.StarredFragment;
 import com.lessons.firebase.quotes.utils.listeners.FragmentLifecycle;
 import com.lessons.firebase.quotes.utils.listeners.ShareObservableListener;
 
@@ -47,6 +48,11 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     private CollapsingToolbarLayout mCollapsingToolbar;
     private AppBarLayout mAppBarLayout;
     private MenuItem mBottomMenuItem;
+
+    private Button[] buttons = new Button[5];
+    private Button unfocused_button;
+    private int[] button_res = {R.id.love, R.id.funny, R.id.life, R.id.motivation, R.id.wisdom};
+    boolean isChecked = true;
 
     @Inject
     public MainActivityPresenterImpl mPresenter;
@@ -71,17 +77,12 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     }
 
     private void initFilterButtons() {
-        Button buttonMotif = findViewById(R.id.motivation);
-        Button buttonLove = findViewById(R.id.love);
-        Button buttonLive = findViewById(R.id.live);
-        Button buttonHappy = findViewById(R.id.happiness);
-        Button buttonFunny = findViewById(R.id.funny);
+        for(int i = 0; i < buttons.length; i++){
+            buttons[i] = findViewById(button_res[i]);
+            buttons[i].setOnClickListener(this);
+        }
 
-        buttonFunny.setOnClickListener(this);
-        buttonLove.setOnClickListener(this);
-        buttonLive.setOnClickListener(this);
-        buttonMotif.setOnClickListener(this);
-        buttonHappy.setOnClickListener(this);
+        unfocused_button = buttons[0];
     }
 
     private void initAppBar(){
@@ -161,12 +162,19 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
                     switch (menuItem.getItemId()){
                         case R.id.star:
                             mCustomViewPager.setCurrentItem(0);
                             return true;
                         case R.id.home:
-                            mCustomViewPager.setCurrentItem(1);
+                            if(isChecked){
+                                mCustomViewPager.setCurrentItem(1);
+                                isChecked = false;
+                            }else{
+                                mPresenter.setListObservable(mActivityComponent.getObservableList());
+                                mPresenter.loadObservable();
+                            }
                             return true;
                         case R.id.one:
                             mCustomViewPager.setCurrentItem(2);
@@ -221,27 +229,42 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.love:
+                setFocus(unfocused_button, buttons[0]);
                 mPresenter.setListObservable(mActivityComponent.getObservableListLove());
                 mPresenter.loadObservable();
                 break;
             case R.id.funny:
+                setFocus(unfocused_button, buttons[1]);
                 mPresenter.setListObservable(mActivityComponent.getObservableListFunny());
                 mPresenter.loadObservable();
                 break;
-            case R.id.live:
+            case R.id.life:
+                setFocus(unfocused_button, buttons[2]);
                 mPresenter.setListObservable(mActivityComponent.getObservableListLive());
                 mPresenter.loadObservable();
                 break;
             case R.id.motivation:
+                setFocus(unfocused_button, buttons[3]);
                 mPresenter.setListObservable(mActivityComponent.getObservableListMotif());
                 mPresenter.loadObservable();
+
                 break;
-            case R.id.happiness:
+            case R.id.wisdom:
+                setFocus(unfocused_button, buttons[4]);
                 mPresenter.setListObservable(mActivityComponent.getObservableListHappy());
                 mPresenter.loadObservable();
+
                 break;
             default:
+
                 break;
         }
     }
+
+    public void setFocus(Button unfocused, Button focus){
+        unfocused.setBackground(getResources().getDrawable(R.drawable.button_no_border));
+        focus.setBackground(getResources().getDrawable(R.drawable.buttun_with_border));
+        this.unfocused_button = focus;
+    }
+
 }

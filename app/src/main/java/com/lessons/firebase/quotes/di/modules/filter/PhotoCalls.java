@@ -10,6 +10,7 @@ import com.lessons.firebase.quotes.di.qualifires.filters.FilterLove;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterMotif;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterRandom;
 import com.lessons.firebase.quotes.di.scopes.AppScope;
+import com.lessons.firebase.quotes.utils.StringUtils;
 
 import dagger.Module;
 import dagger.Provides;
@@ -25,42 +26,48 @@ public class PhotoCalls {
     @AppScope
     @Provides
     public Observable<PhotosResponse> popularPhotos(PhotosApi pixabayApi){
-        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25, "nature");
+        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
+                "nature+" + StringUtils.getRandomWord(),StringUtils.getRandBoolean());
     }
 
     @FilterLive
     @AppScope
     @Provides
     public Observable<PhotosResponse> lifePhotos(PhotosApi pixabayApi){
-        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25, "life");
+        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
+                "life+"+ StringUtils.getLifeWord(), StringUtils.getRandBoolean());
     }
 
     @FilterHappy
     @AppScope
     @Provides
-    public Observable<PhotosResponse> happyPhotos(PhotosApi pixabayApi){
-        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25, "happiness");
+    public Observable<PhotosResponse> wisdomPhotos(PhotosApi pixabayApi){
+        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
+                "wisdom+"+StringUtils.getWisdomWord(), StringUtils.getRandBoolean());
     }
 
     @FilterLove
     @AppScope
     @Provides
     public Observable<PhotosResponse> lovePhotos(PhotosApi pixabayApi){
-        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25, "love");
+        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
+                "love+"+StringUtils.getLoveWord(), StringUtils.getRandBoolean());
     }
 
     @FilterMotif
     @AppScope
     @Provides
     public Observable<PhotosResponse> motivationPhotos(PhotosApi pixabayApi){
-        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25, "motivation");
+        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
+                "motivation+"+StringUtils.getMotivationalWord(), StringUtils.getRandBoolean());
     }
 
     @FilterFunny
     @AppScope
     @Provides
     public Observable<PhotosResponse> funnyPhotos(PhotosApi pixabayApi){
-        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25, "funny");
+        return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
+                "funny+"+StringUtils.getFunnyWord(), StringUtils.getRandBoolean());
     }
 
 

@@ -1,5 +1,6 @@
 package com.lessons.firebase.quotes.ui.starred;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,14 +10,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,7 +78,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
         if (mAdapter != null) {
             QuoteData quoteData = new QuoteData();
             quoteData.setQuote(mSharedPreferences.getString("quote", "q"));
-            quoteData.setAuthor(mSharedPreferences.getString("author", "a"));
+            quoteData.setAuthor(mSharedPreferences.getString("author", "buttun_with_border"));
             quoteData.setUrlImage(mSharedPreferences.getString("image", "i"));
             quoteData.setId(mSharedPreferences.getInt("id", -1));
             quoteData.setIsLiked(mSharedPreferences.getInt("liked", -1));
@@ -100,7 +102,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
             case R.id.clear_list:
                 int size = mDaoStarredQuotes.getLikedQuotes().size();
                 if (size > 0) {
-                    mPresenter.getInfoClearList(mAdapter, mDaoStarredQuotes);
+                    showDialog();
                 } else {
                     Toast.makeText(getActivity(), "List is Empty", Toast.LENGTH_SHORT).show();
                 }
@@ -172,20 +174,40 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
         mTextNoQuotes.setText(" Starred list is empty ");
     }
 
+
+    private void showDialog(){
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_clear_list);
+
+        TextView text = (TextView) dialog.findViewById(R.id.clear_list_title);
+
+        Button dialogBtn_cancel = (Button) dialog.findViewById(R.id.cancel_clear_button);
+        dialogBtn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        Button dialogBtn_okay = (Button) dialog.findViewById(R.id.ok_clear_button);
+        dialogBtn_okay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.getInfoClearList(mAdapter, mDaoStarredQuotes);
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+    }
+
     @Override
     public void clearAllQuotes() {
-        if (mAdapter != null) {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-            dialogBuilder.setTitle("Are sure clear all liked list")
-                    .setIcon(R.drawable.ic_clear_all_black_24dp)
-                    .setPositiveButton("OK", (dialogInterface, i) -> {
-                        mDaoStarredQuotes.deleteAll();
-                        mAdapter.deleteLikedQuotes();
-                        Toast.makeText(getActivity(), " List is Cleared ", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel());
-            dialogBuilder.show();
-        }
+        mDaoStarredQuotes.deleteAll();
+        mAdapter.deleteLikedQuotes();
+        Toast.makeText(getActivity(), " List is Cleared ", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

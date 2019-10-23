@@ -7,6 +7,7 @@ import com.lessons.firebase.quotes.di.qualifires.filters.FilterHappy;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterLive;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterLove;
 import com.lessons.firebase.quotes.di.qualifires.filters.FilterMotif;
+import com.lessons.firebase.quotes.di.qualifires.filters.FilterRandom;
 import com.lessons.firebase.quotes.di.scopes.MainScope;
 import com.lessons.firebase.quotes.ui.mainactivity.MainActivity;
 
@@ -18,6 +19,9 @@ import io.reactivex.Observable;
 @MainScope
 @Subcomponent(modules = {MainModule.class})
 public interface MainActivityComponent {
+
+    @FilterRandom
+    Observable<List<QuoteData>> getObservableList();
 
     @FilterMotif
     Observable<List<QuoteData>> getObservableListMotif();
