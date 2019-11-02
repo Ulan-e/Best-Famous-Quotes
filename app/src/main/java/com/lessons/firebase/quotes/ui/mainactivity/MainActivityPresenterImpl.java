@@ -1,7 +1,6 @@
 package com.lessons.firebase.quotes.ui.mainactivity;
 
 import com.lessons.firebase.quotes.data.QuoteData;
-import com.lessons.firebase.quotes.data.network.pojo.Quote;
 
 import java.util.List;
 

@@ -21,9 +21,14 @@ import dagger.Provides;
 import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
 
-import static com.lessons.firebase.quotes.utils.StringUtils.mergeQuotesPhotos;
-import static com.lessons.firebase.quotes.utils.StringUtils.populateQuotes;
+import static com.lessons.firebase.quotes.utils.ListDataHandler.mergeQuotesPhotos;
+import static com.lessons.firebase.quotes.utils.ListDataHandler.populateQuotes;
 
+/**
+ * Module RxModule zip observable of quotes with
+ * observable of photos then return new type
+ * observable if quotedata
+ */
 
 @Module(includes = {QuoteCalls.class, PhotoCalls.class})
 public class RxModule {
@@ -46,7 +51,7 @@ public class RxModule {
 
     @FilterHappy
     @Provides
-    public Observable<List<QuoteData>> zipObservablesHappy(
+    public Observable<List<QuoteData>> zipObservablesWisdom(
             @FilterHappy Observable<PhotosResponse> photosObservable,
             @FilterHappy Observable<QuotesResponse> quotesObservable){
         return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteData>>() {

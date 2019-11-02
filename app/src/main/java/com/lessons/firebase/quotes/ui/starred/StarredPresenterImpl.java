@@ -7,9 +7,9 @@ import com.lessons.firebase.quotes.data.database.DaoStarredQuotes;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -17,23 +17,20 @@ public class StarredPresenterImpl implements StarredPresenter {
 
     private StarredFragmentView mView;
     private Observable<List<QuoteData>> mListQuoteData;
+    private CompositeDisposable compositeDisposable;
 
     public StarredPresenterImpl(StarredFragmentView view, Observable<List<QuoteData>> listObservable) {
         this.mView = view;
         this.mListQuoteData = listObservable;
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
     public void loadLikedQuotes(){
-        mListQuoteData
+        compositeDisposable.add(mListQuoteData
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<QuoteData>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
+                .subscribeWith(new DisposableObserver<List<QuoteData>>() {
                     @Override
                     public void onNext(List<QuoteData> quoteDatas) {
                         mView.showLikedQuotes(quoteDatas);
@@ -49,7 +46,11 @@ public class StarredPresenterImpl implements StarredPresenter {
                     public void onComplete() {
 
                     }
-                });
+                }));
+    }
+
+    public void disposeObservable(){
+        compositeDisposable.dispose();
     }
 
     @Override

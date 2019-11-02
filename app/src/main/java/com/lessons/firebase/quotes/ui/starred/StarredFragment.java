@@ -174,14 +174,11 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
         mTextNoQuotes.setText(" Starred list is empty ");
     }
 
-
     private void showDialog(){
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_clear_list);
-
-        TextView text = (TextView) dialog.findViewById(R.id.clear_list_title);
 
         Button dialogBtn_cancel = (Button) dialog.findViewById(R.id.cancel_clear_button);
         dialogBtn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -223,4 +220,9 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
         Log.d(TAG_OTHER, "onResumeFragment: StarredFragment");
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.disposeObservable();
+    }
 }

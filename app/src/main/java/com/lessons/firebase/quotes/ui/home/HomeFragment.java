@@ -161,6 +161,12 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.disposeObservable();
+    }
+
+    @Override
     public void passObservable(Observable<List<QuoteData>> listObservable) {
         if (listObservable == null) {
             Log.d(TAG_OTHER, "passObservable: Observable<List<QuoteData>> is null object");

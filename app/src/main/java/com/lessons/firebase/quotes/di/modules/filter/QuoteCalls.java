@@ -15,6 +15,11 @@ import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Observable;
 
+/**
+ * Module QuotesCalls return different type of quotes
+ * Types: popular, life, wisdom, love, motivation, funny
+ */
+
 @AppScope
 @Module(includes = {QuotesModule.class})
 public class QuoteCalls {
@@ -29,8 +34,8 @@ public class QuoteCalls {
     @FilterHappy
     @AppScope
     @Provides
-    public Observable<QuotesResponse> happyQuotes(FavQsApi favQsApi){
-        return favQsApi.getHappyQuotes();
+    public Observable<QuotesResponse> wisdomQuotes(FavQsApi favQsApi){
+        return favQsApi.getWisdomQuotes();
     }
 
     @FilterLive

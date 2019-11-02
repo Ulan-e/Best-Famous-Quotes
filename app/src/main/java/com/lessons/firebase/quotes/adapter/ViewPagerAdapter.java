@@ -15,6 +15,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Fragment View Pager
+ */
+
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private final SparseArray<WeakReference<Fragment>> mInstantiatedFragments;

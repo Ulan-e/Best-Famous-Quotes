@@ -1,5 +1,6 @@
 package com.lessons.firebase.quotes.data.network;
 
+import com.lessons.firebase.quotes.data.network.pojo.Quote;
 import com.lessons.firebase.quotes.data.network.pojo.QuotesResponse;
 
 import io.reactivex.Observable;
@@ -19,8 +20,8 @@ public interface FavQsApi {
     @GET("api/quotes/?filter=love")
     Observable<QuotesResponse> getLoveQuotes();
 
-    @GET("api/quotes/?filter=happy")
-    Observable<QuotesResponse> getHappyQuotes();
+    @GET("api/quotes/?filter=wisdom")
+    Observable<QuotesResponse> getWisdomQuotes();
 
     @GET("api/quotes/?filter=funny")
     Observable<QuotesResponse> getFunnyQuotes();

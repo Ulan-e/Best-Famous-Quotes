@@ -1,5 +1,7 @@
 package com.lessons.firebase.quotes.adapter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lessons.firebase.quotes.R;
 import com.lessons.firebase.quotes.data.QuoteData;
-import com.lessons.firebase.quotes.utils.StringUtils;
 import com.lessons.firebase.quotes.utils.listeners.OnPositionClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+/**
+ * Class is main adapter to show
+ * quotes with photos
+ */
 
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
 
@@ -47,7 +53,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
         holder.mCopyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StringUtils.copyToClipBoard(mContext, copiedText);
+                copyToClipBoard(mContext, copiedText);
                 Toast.makeText(mContext, "Quote copied to Clipboard", Toast.LENGTH_SHORT).show();
             }
         });
@@ -76,6 +82,13 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
     public void addQuote(QuoteData quoteData){
         mQuotesList.add(quoteData);
         notifyItemInserted(mQuotesList.size() - 1);
+    }
+
+    // Copy quote text to ClipBoard
+    public void copyToClipBoard(Context context, String text){
+        ClipboardManager manager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText("copyText", text);
+        manager.setPrimaryClip(clipData);
     }
 
 }

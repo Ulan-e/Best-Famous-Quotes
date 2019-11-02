@@ -4,8 +4,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+/**
+ * Class can check internet connection
+ */
+
 public class CheckInternetConnection {
 
+    // get internet connection status
     public static String getConnectionStatusString(Context context){
         String status = "";
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

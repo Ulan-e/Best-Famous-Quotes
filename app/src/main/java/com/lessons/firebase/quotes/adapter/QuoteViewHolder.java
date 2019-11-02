@@ -14,6 +14,9 @@ import com.lessons.firebase.quotes.utils.listeners.OnPositionClickListener;
 
 import java.lang.ref.WeakReference;
 
+/**
+ * View Holder for QuoteAdapter
+ */
 public class QuoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     ImageView mImageQuote;

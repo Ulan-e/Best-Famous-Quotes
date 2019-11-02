@@ -37,14 +37,14 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.lessons.firebase.quotes.CustomViewPager
+        <com.lessons.firebase.quotes.ui.CustomViewPager
             android:id="@+id/containerPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/background"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        </com.lessons.firebase.quotes.CustomViewPager>
+        </com.lessons.firebase.quotes.ui.CustomViewPager>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

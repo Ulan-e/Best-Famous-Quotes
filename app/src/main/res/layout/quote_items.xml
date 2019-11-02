@@ -28,13 +28,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="1dp">
+                    android:padding="1dp"
+                    android:layout_marginBottom="3dp">
 
                     <TextView
                         android:id="@+id/quote_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="21sp"
+                        android:text="23sp"
                         android:layout_marginTop="4dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
@@ -45,17 +46,18 @@
                         android:id="@+id/quote_author"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="19sp"
+                        android:text="22sp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="7dp"
-                        android:textColor="@color/dark_blue" />
+                        android:textColor="@color/colorAuthor" />
 
                 </LinearLayout>
 
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp">
 
                     <ImageButton
                         android:id="@+id/id_copy_content"

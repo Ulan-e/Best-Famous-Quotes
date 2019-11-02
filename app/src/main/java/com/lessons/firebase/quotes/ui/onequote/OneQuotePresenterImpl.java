@@ -1,7 +1,9 @@
 package com.lessons.firebase.quotes.ui.onequote;
 
 import com.lessons.firebase.quotes.data.database.DaoQuotes;
-import com.lessons.firebase.quotes.utils.StringUtils;
+import com.lessons.firebase.quotes.utils.WordGenerator;
+
+import static com.lessons.firebase.quotes.utils.ListDataHandler.generateAuthorName;
 
 public class OneQuotePresenterImpl implements OneQuotePresenter {
 
@@ -17,7 +19,7 @@ public class OneQuotePresenterImpl implements OneQuotePresenter {
     public void getQuote() {
         String quote = mDaoQuotes.getQuote().getQuote();
         String beforeAuthor = mDaoQuotes.getQuote().getAuthor();
-        String afterAuthor = StringUtils.generateAuthorName(beforeAuthor);
+        String afterAuthor = generateAuthorName(beforeAuthor);
         mView.showQuote(quote, afterAuthor);
     }
 }

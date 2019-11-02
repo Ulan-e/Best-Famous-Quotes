@@ -1,12 +1,12 @@
 package com.lessons.firebase.quotes.ui.mainactivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,12 +17,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.lessons.firebase.quotes.CustomViewPager;
 import com.lessons.firebase.quotes.R;
 import com.lessons.firebase.quotes.adapter.ViewPagerAdapter;
 import com.lessons.firebase.quotes.data.QuoteData;
 import com.lessons.firebase.quotes.di.components.MainActivityComponent;
 import com.lessons.firebase.quotes.di.modules.uimodules.MainModule;
+import com.lessons.firebase.quotes.ui.CustomViewPager;
 import com.lessons.firebase.quotes.ui.base.BaseActivity;
 import com.lessons.firebase.quotes.ui.home.HomeFragment;
 import com.lessons.firebase.quotes.ui.onequote.OneQuoteFragment;
@@ -30,29 +30,37 @@ import com.lessons.firebase.quotes.ui.starred.StarredFragment;
 import com.lessons.firebase.quotes.utils.listeners.FragmentLifecycle;
 import com.lessons.firebase.quotes.utils.listeners.ShareObservableListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+import static com.lessons.firebase.quotes.utils.notification.NotificationHelper.setNotification;
+import static com.lessons.firebase.quotes.utils.Constants.TAG_OTHER;
+
 
 public class MainActivity extends BaseActivity implements MainActivityView, View.OnClickListener {
 
     private MainActivityComponent mActivityComponent;
     private ShareObservableListener mShareObservableListener;
-    private BottomNavigationView mBottomNavigation;
     private CustomViewPager mCustomViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
 
-    private LinearLayout mLinearLayout;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private AppBarLayout mAppBarLayout;
+    private LinearLayout mLinearLayout;
+    private BottomNavigationView mBottomNavigation;
     private MenuItem mBottomMenuItem;
 
-    private Button[] buttons = new Button[5];
-    private Button unfocused_button;
-    private int[] button_res = {R.id.love, R.id.funny, R.id.life, R.id.motivation, R.id.wisdom};
-    boolean isChecked = true;
+    private Button[] mListButtons = new Button[5];
+    private Button mUntouchedButton;
+    private int[] mButtonResources = {R.id.love, R.id.funny, R.id.life, R.id.motivation, R.id.wisdom};
 
     @Inject
     public MainActivityPresenterImpl mPresenter;
@@ -67,6 +75,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
         initAppBar();
         initBottomNav();
         initFilterButtons();
+        setFutureNotification();
     }
 
     public void getMainComponent(){
@@ -77,12 +86,11 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     }
 
     private void initFilterButtons() {
-        for(int i = 0; i < buttons.length; i++){
-            buttons[i] = findViewById(button_res[i]);
-            buttons[i].setOnClickListener(this);
+        for(int i = 0; i < mListButtons.length; i++){
+            mListButtons[i] = findViewById(mButtonResources[i]);
+            mListButtons[i].setOnClickListener(this);
         }
-
-        unfocused_button = buttons[0];
+        mUntouchedButton = mListButtons[0];
     }
 
     private void initAppBar(){
@@ -93,7 +101,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
         mAppBarLayout.setExpanded(false);
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.coll_toolbar);
-        mCollapsingToolbar.setTitle("Quotes");
+        mCollapsingToolbar.setTitle(getResources().getString(R.string.app_name));
         mCollapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.transparent));
         mLinearLayout = (LinearLayout) findViewById(R.id.filter_layout);
@@ -144,13 +152,90 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
         return false;
     }
 
+    @Override
+    public void setListOfQuotes(Observable<List<QuoteData>> listOfQuotes) {
+        mShareObservableListener.passObservable(listOfQuotes);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.love:
+                clickHandle(mUntouchedButton, mListButtons[0]);
+                mPresenter.setListObservable(mActivityComponent.getObservableListLove());
+                mPresenter.loadObservable();
+                break;
+            case R.id.funny:
+                clickHandle(mUntouchedButton, mListButtons[1]);
+                mPresenter.setListObservable(mActivityComponent.getObservableListFunny());
+                mPresenter.loadObservable();
+                break;
+            case R.id.life:
+                clickHandle(mUntouchedButton, mListButtons[2]);
+                mPresenter.setListObservable(mActivityComponent.getObservableListLive());
+                mPresenter.loadObservable();
+                break;
+            case R.id.motivation:
+                clickHandle(mUntouchedButton, mListButtons[3]);
+                mPresenter.setListObservable(mActivityComponent.getObservableListMotif());
+                mPresenter.loadObservable();
+
+                break;
+            case R.id.wisdom:
+                clickHandle(mUntouchedButton, mListButtons[4]);
+                mPresenter.setListObservable(mActivityComponent.getObservableListHappy());
+                mPresenter.loadObservable();
+
+                break;
+            default:
+
+                break;
+        }
+    }
+
+    public void clickHandle(Button untouched, Button touched){
+        untouched.setBackground(getResources().getDrawable(R.drawable.button_no_border));
+        touched.setBackground(getResources().getDrawable(R.drawable.buttun_with_border));
+        touched.setPressed(true);
+        this.mUntouchedButton = touched;
+    }
+
+    public void setFutureNotification(){
+        mActivityComponent.getObservableList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<QuoteData>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<QuoteData> quoteDataList) {
+                        List<QuoteData> list = new ArrayList<>();
+                        list.addAll(quoteDataList);
+                        setNotification(getApplicationContext(), list.get(0).getQuote());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG_OTHER, "onError: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     private AppBarLayout.OnOffsetChangedListener appBarChangeListener =
             new AppBarLayout.OnOffsetChangedListener() {
                 @Override
                 public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
                     if(Math.abs(i) == appBarLayout.getTotalScrollRange()){
                         mLinearLayout.setVisibility(View.GONE);
-                        mCollapsingToolbar.setTitle("Quotes");
+                        mCollapsingToolbar.setTitle(getResources().getString(R.string.app_name));
                     }else if(i == 0){
                         mLinearLayout.setVisibility(View.VISIBLE);
                         mCollapsingToolbar.setTitle("");
@@ -166,19 +251,13 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
                     switch (menuItem.getItemId()){
                         case R.id.star:
                             mCustomViewPager.setCurrentItem(0);
-                            return true;
+                            break;
                         case R.id.home:
-                            if(isChecked){
-                                mCustomViewPager.setCurrentItem(1);
-                                isChecked = false;
-                            }else{
-                                mPresenter.setListObservable(mActivityComponent.getObservableList());
-                                mPresenter.loadObservable();
-                            }
-                            return true;
+                            mCustomViewPager.setCurrentItem(1);
+                            break;
                         case R.id.one:
                             mCustomViewPager.setCurrentItem(2);
-                            return true;
+                            break;
                     }
                     return false;
                 }
@@ -186,85 +265,38 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
 
     private ViewPager.OnPageChangeListener pageChangeListener =
             new ViewPager.OnPageChangeListener() {
-        int currentPosition = 0;
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                int currentPosition = 0;
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        }
+                }
 
-        @Override
-        public void onPageSelected(int position) {
-            if(mBottomMenuItem != null){
-                mBottomMenuItem.setChecked(false);
-                mAppBarLayout.setExpanded(false);
-            }else {
-                mBottomNavigation.getMenu().getItem(position);
-            }
+                @Override
+                public void onPageSelected(int position) {
+                    if(mBottomMenuItem != null){
+                        mBottomMenuItem.setChecked(false);
+                        mAppBarLayout.setExpanded(false);
+                    }else {
+                        mBottomNavigation.getMenu().getItem(position);
+                    }
 
-            mBottomNavigation.getMenu().getItem(position).setChecked(true);
-            mBottomMenuItem = mBottomNavigation.getMenu().getItem(position);
+                    mBottomNavigation.getMenu().getItem(position).setChecked(true);
+                    mBottomMenuItem = mBottomNavigation.getMenu().getItem(position);
 
-            FragmentLifecycle fragmentToShow = (FragmentLifecycle) mViewPagerAdapter.getItem(position);
-            fragmentToShow.onResumeFragment();
+                    FragmentLifecycle fragmentToShow = (FragmentLifecycle) mViewPagerAdapter.getItem(position);
+                    fragmentToShow.onResumeFragment();
 
-            FragmentLifecycle fragmentToHide = (FragmentLifecycle) mViewPagerAdapter.getItem(currentPosition);
-            Fragment fragment = mViewPagerAdapter.getItem(mCustomViewPager.getCurrentItem());
-            fragmentToHide.onPauseFragment(fragment);
+                    FragmentLifecycle fragmentToHide = (FragmentLifecycle) mViewPagerAdapter.getItem(currentPosition);
+                    Fragment fragment = mViewPagerAdapter.getItem(mCustomViewPager.getCurrentItem());
+                    fragmentToHide.onPauseFragment(fragment);
 
-            currentPosition = position;
-        }
+                    currentPosition = position;
+                }
 
-        @Override
-        public void onPageScrollStateChanged(int state) {
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
-        }
-    };
-
-    @Override
-    public void setListOfQuotes(Observable<List<QuoteData>> listOfQuotes) {
-        mShareObservableListener.passObservable(listOfQuotes);
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.love:
-                setFocus(unfocused_button, buttons[0]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListLove());
-                mPresenter.loadObservable();
-                break;
-            case R.id.funny:
-                setFocus(unfocused_button, buttons[1]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListFunny());
-                mPresenter.loadObservable();
-                break;
-            case R.id.life:
-                setFocus(unfocused_button, buttons[2]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListLive());
-                mPresenter.loadObservable();
-                break;
-            case R.id.motivation:
-                setFocus(unfocused_button, buttons[3]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListMotif());
-                mPresenter.loadObservable();
-
-                break;
-            case R.id.wisdom:
-                setFocus(unfocused_button, buttons[4]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListHappy());
-                mPresenter.loadObservable();
-
-                break;
-            default:
-
-                break;
-        }
-    }
-
-    public void setFocus(Button unfocused, Button focus){
-        unfocused.setBackground(getResources().getDrawable(R.drawable.button_no_border));
-        focus.setBackground(getResources().getDrawable(R.drawable.buttun_with_border));
-        this.unfocused_button = focus;
-    }
+                }
+            };
 
 }
