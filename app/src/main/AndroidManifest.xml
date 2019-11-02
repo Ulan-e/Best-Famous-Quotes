@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lessons.firebase.quotes"
+    package="com.ulan.app.quotes"
     android:versionCode="2"
     android:versionName="2.1.1">
 
@@ -14,9 +14,9 @@
         android:roundIcon="@mipmap/main_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".MainApplication">
+        android:name="com.ulan.app.quotes.MainApplication">
 
-        <activity android:name =".ui.mainactivity.MainActivity"
+        <activity android:name ="com.ulan.app.quotes.ui.mainactivity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".utils.notification.AlarmReceiver"/>
+        <receiver android:name="com.ulan.app.quotes.utils.notification.AlarmReceiver"/>
     </application>
 
 </manifest>

@@ -5,9 +5,9 @@
     <string name="quote">Quote</string>
     <string name="clear">Clear</string>
     <string name="refresh">Refresh</string>
-    <string name="love">#love</string>
-    <string name="life">#life</string>
-    <string name="wisdom">#wisdom</string>
-    <string name="motivation">#motivation</string>
-    <string name="funny">#funny</string>
+    <string name="love">love</string>
+    <string name="life">life</string>
+    <string name="wisdom">wisdom</string>
+    <string name="motivation">motivation</string>
+    <string name="funny">funny</string>
 </resources>
