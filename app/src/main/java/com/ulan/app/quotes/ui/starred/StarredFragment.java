@@ -117,7 +117,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.liked_fragment, container, false);
+        View view = inflater.inflate(R.layout.starred_fragment, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view_liked);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);

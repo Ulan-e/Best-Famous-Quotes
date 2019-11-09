@@ -27,6 +27,7 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
     @Override
     public void loadQuotes(Observable<List<QuoteData>> listObservable) {
         compositeDisposable.add(listObservable
+                    .retry(1)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(new DisposableObserver<List<QuoteData>>() {
@@ -53,35 +54,4 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
         compositeDisposable.dispose();
     }
 
-
 }
-
-
-/*
-
-        listObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<QuoteData>>() {
-@Override
-public void onSubscribe(Disposable d) {
-
-        }
-
-@Override
-public void onNext(List<QuoteData> quoteData) {
-        Log.d(TAG_OTHER, "onNext: Main Fragment " + quoteData.size());
-        mView.showQuotes(quoteData);
-        }
-
-@Override
-public void onError(Throwable error) {
-        Log.d(TAG_OTHER, "onError: Main Fragment " + error.getMessage());
-        mView.showQuotesError(error);
-        }
-
-@Override
-public void onComplete() {
-        Log.d(TAG_OTHER, "onComplete: ");
-        }
-        });*/

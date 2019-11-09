@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,6 +51,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     private BottomNavigationView mBottomNavigationView;
     private Animation mAnimationBottomHide;
     private Animation mAnimationBottomShow;
+    private LinearLayout mLinearLayout;
 
     private Observable<List<QuoteData>> mListObservable;
 
@@ -78,7 +81,19 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_fragment, container, false);
+        View view = inflater.inflate(R.layout.home_fragment, container, false);
+        mLinearLayout = view.findViewById(R.id.error_layout);
+        Button retryButton = view.findViewById(R.id.retry_button);
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mListObservable != null) {
+                    mPresenter.loadQuotes(mListObservable);
+                }
+                mLinearLayout.setVisibility(GONE);
+            }
+        });
+
 
         mBottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
         mAnimationBottomHide = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_hide_anim);
@@ -131,7 +146,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
                 mStarredFragment.setDataShared();
                Toast.makeText(getActivity(), "Quote added to Starred", Toast.LENGTH_SHORT).show();
             }
-
+            mLinearLayout.setVisibility(GONE);
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
@@ -141,7 +156,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     @Override
     public void showQuotesError(Throwable e) {
         Log.d(TAG_OTHER, "showQuotesError: " + e.getMessage());
-        Toast.makeText(getActivity(), "Please connect your phone to internet", Toast.LENGTH_SHORT).show();
+        mLinearLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
