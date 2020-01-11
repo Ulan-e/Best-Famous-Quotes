@@ -1,6 +1,6 @@
 package com.ulan.app.quotes.ui.home;
 
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 
 import java.util.List;
 
@@ -8,5 +8,7 @@ import io.reactivex.Observable;
 
 public interface HomeFragmentPresenter {
 
-    void loadQuotes(Observable<List<QuoteData>> quoteDatObser);
+    void attachRxData(Observable<List<QuoteModel>> quoteDatObser);
+    void detachRxData();
+    void detachView();
 }

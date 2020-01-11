@@ -1,6 +1,6 @@
 package com.ulan.app.quotes.di.components;
 
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.di.modules.uimodules.MainModule;
 import com.ulan.app.quotes.di.qualifires.filters.FilterFunny;
 import com.ulan.app.quotes.di.qualifires.filters.FilterHappy;
@@ -21,22 +21,22 @@ import io.reactivex.Observable;
 public interface MainActivityComponent {
 
     @FilterRandom
-    Observable<List<QuoteData>> getObservableList();
+    Observable<List<QuoteModel>> getObservableList();
 
     @FilterMotif
-    Observable<List<QuoteData>> getObservableListMotif();
+    Observable<List<QuoteModel>> getObservableListMotif();
 
     @FilterLive
-    Observable<List<QuoteData>> getObservableListLive();
+    Observable<List<QuoteModel>> getObservableListLive();
 
     @FilterLove
-    Observable<List<QuoteData>> getObservableListLove();
+    Observable<List<QuoteModel>> getObservableListLove();
 
     @FilterHappy
-    Observable<List<QuoteData>> getObservableListHappy();
+    Observable<List<QuoteModel>> getObservableListHappy();
 
     @FilterFunny
-    Observable<List<QuoteData>> getObservableListFunny();
+    Observable<List<QuoteModel>> getObservableListFunny();
 
     void inject(MainActivity activity);
 

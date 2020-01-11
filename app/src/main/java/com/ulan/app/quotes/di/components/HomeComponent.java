@@ -2,7 +2,7 @@ package com.ulan.app.quotes.di.components;
 
 import android.content.SharedPreferences;
 
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.di.modules.source.SharedPrefModule;
 import com.ulan.app.quotes.di.modules.uimodules.HomeModule;
 import com.ulan.app.quotes.di.qualifires.filters.FilterRandom;
@@ -25,7 +25,7 @@ public interface HomeComponent {
     SharedPreferences getSharedPreference();
 
     @FilterRandom
-    Observable<List<QuoteData>> getObservableList();
+    Observable<List<QuoteModel>> getObservableList();
 
     void inject(BaseFragment mainFragment);
 

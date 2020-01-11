@@ -1,10 +1,10 @@
 package com.ulan.app.quotes.di.modules;
 
-import com.ulan.app.quotes.data.QuoteData;
-import com.ulan.app.quotes.data.network.pojo.Photo;
-import com.ulan.app.quotes.data.network.pojo.PhotosResponse;
-import com.ulan.app.quotes.data.network.pojo.Quote;
-import com.ulan.app.quotes.data.network.pojo.QuotesResponse;
+import com.ulan.app.quotes.data.QuoteModel;
+import com.ulan.app.quotes.data.network.model.Photo;
+import com.ulan.app.quotes.data.network.PhotosResponse;
+import com.ulan.app.quotes.data.network.model.Quote;
+import com.ulan.app.quotes.data.network.QuotesResponse;
 import com.ulan.app.quotes.di.modules.filter.PhotoCalls;
 import com.ulan.app.quotes.di.modules.filter.QuoteCalls;
 import com.ulan.app.quotes.di.qualifires.filters.FilterFunny;
@@ -35,15 +35,15 @@ public class RxModule {
 
     @FilterRandom
     @Provides
-    public Observable<List<QuoteData>> zipObservables(
+    public Observable<List<QuoteModel>> zipObservables(
             @FilterRandom Observable<PhotosResponse> photosObservable,
             @FilterRandom Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteData>>() {
+        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
-            public List<QuoteData> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
+            public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
-                List<QuoteData> quoteDataList = populateQuotes(quoteList);
+                List<QuoteModel> quoteDataList = populateQuotes(quoteList);
                 return mergeQuotesPhotos(photosList, quoteDataList);
             }
         });
@@ -51,15 +51,15 @@ public class RxModule {
 
     @FilterHappy
     @Provides
-    public Observable<List<QuoteData>> zipObservablesWisdom(
+    public Observable<List<QuoteModel>> zipObservablesWisdom(
             @FilterHappy Observable<PhotosResponse> photosObservable,
             @FilterHappy Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteData>>() {
+        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
-            public List<QuoteData> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
+            public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
-                List<QuoteData> quoteDataList = populateQuotes(quoteList);
+                List<QuoteModel> quoteDataList = populateQuotes(quoteList);
                 return mergeQuotesPhotos(photosList, quoteDataList);
             }
         });
@@ -67,15 +67,15 @@ public class RxModule {
 
     @FilterLove
     @Provides
-    public Observable<List<QuoteData>> zipObservablesLove(
+    public Observable<List<QuoteModel>> zipObservablesLove(
             @FilterLove Observable<PhotosResponse> photosObservable,
             @FilterLove Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteData>>() {
+        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
-            public List<QuoteData> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
+            public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
-                List<QuoteData> quoteDataList = populateQuotes(quoteList);
+                List<QuoteModel> quoteDataList = populateQuotes(quoteList);
                 return mergeQuotesPhotos(photosList, quoteDataList);
             }
         });
@@ -83,15 +83,15 @@ public class RxModule {
 
     @FilterLive
     @Provides
-    public Observable<List<QuoteData>> zipObservablesLife(
+    public Observable<List<QuoteModel>> zipObservablesLife(
             @FilterLive Observable<PhotosResponse> photosObservable,
             @FilterLive Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteData>>() {
+        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
-            public List<QuoteData> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
+            public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
-                List<QuoteData> quoteDataList = populateQuotes(quoteList);
+                List<QuoteModel> quoteDataList = populateQuotes(quoteList);
                 return mergeQuotesPhotos(photosList, quoteDataList);
             }
         });
@@ -99,15 +99,15 @@ public class RxModule {
 
     @FilterMotif
     @Provides
-    public Observable<List<QuoteData>> zipObservablesMotif(
+    public Observable<List<QuoteModel>> zipObservablesMotif(
             @FilterMotif Observable<PhotosResponse> photosObservable,
             @FilterMotif Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteData>>() {
+        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
-            public List<QuoteData> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
+            public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
-                List<QuoteData> quoteDataList = populateQuotes(quoteList);
+                List<QuoteModel> quoteDataList = populateQuotes(quoteList);
                 return mergeQuotesPhotos(photosList, quoteDataList);
             }
         });
@@ -115,15 +115,15 @@ public class RxModule {
 
     @FilterFunny
     @Provides
-    public Observable<List<QuoteData>> zipObservablesFunny(
+    public Observable<List<QuoteModel>> zipObservablesFunny(
             @FilterFunny Observable<PhotosResponse> photosObservable,
             @FilterFunny Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteData>>() {
+        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
-            public List<QuoteData> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
+            public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
-                List<QuoteData> quoteDataList = populateQuotes(quoteList);
+                List<QuoteModel> quoteDataList = populateQuotes(quoteList);
                 return mergeQuotesPhotos(photosList, quoteDataList);
             }
         });

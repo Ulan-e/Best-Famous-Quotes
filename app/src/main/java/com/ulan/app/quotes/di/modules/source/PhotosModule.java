@@ -2,7 +2,7 @@ package com.ulan.app.quotes.di.modules.source;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ulan.app.quotes.data.network.PhotosApi;
+import com.ulan.app.quotes.data.network.api.PhotosApi;
 import com.ulan.app.quotes.di.qualifires.Photos;
 import com.ulan.app.quotes.di.qualifires.PhotosGson;
 import com.ulan.app.quotes.di.qualifires.PhotosOkHttp;

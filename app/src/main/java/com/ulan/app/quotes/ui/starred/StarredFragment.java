@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.adapter.QuoteAdapter;
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.data.database.DaoStarredQuotes;
 import com.ulan.app.quotes.di.components.StarredComponent;
 import com.ulan.app.quotes.di.modules.source.SharedPrefModule;
@@ -76,7 +76,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
 
     public void setDataShared() {
         if (mAdapter != null) {
-            QuoteData quoteData = new QuoteData();
+            QuoteModel quoteData = new QuoteModel();
             quoteData.setQuote(mSharedPreferences.getString("quote", "q"));
             quoteData.setAuthor(mSharedPreferences.getString("author", "buttun_with_border"));
             quoteData.setUrlImage(mSharedPreferences.getString("image", "i"));
@@ -128,9 +128,9 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
     }
 
     @Override
-    public void showLikedQuotes(List<QuoteData> quoteList) {
+    public void showLikedQuotes(List<QuoteModel> quoteList) {
         mAdapter = new QuoteAdapter(getActivity(), quoteList, position -> {
-            QuoteData quoteData = quoteList.get(position);
+            QuoteModel quoteData = quoteList.get(position);
             quoteList.remove(position);
             mAdapter.notifyItemRemoved(position);
             mAdapter.notifyDataSetChanged();

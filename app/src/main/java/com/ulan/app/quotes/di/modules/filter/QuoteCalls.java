@@ -1,7 +1,7 @@
 package com.ulan.app.quotes.di.modules.filter;
 
-import com.ulan.app.quotes.data.network.FavQsApi;
-import com.ulan.app.quotes.data.network.pojo.QuotesResponse;
+import com.ulan.app.quotes.data.network.api.FavQsApi;
+import com.ulan.app.quotes.data.network.QuotesResponse;
 import com.ulan.app.quotes.di.modules.source.QuotesModule;
 import com.ulan.app.quotes.di.qualifires.filters.FilterFunny;
 import com.ulan.app.quotes.di.qualifires.filters.FilterHappy;

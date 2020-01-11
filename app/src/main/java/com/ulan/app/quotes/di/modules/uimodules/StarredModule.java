@@ -1,6 +1,6 @@
 package com.ulan.app.quotes.di.modules.uimodules;
 
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.data.database.DaoStarredQuotes;
 import com.ulan.app.quotes.di.qualifires.LikedQuotes;
 import com.ulan.app.quotes.di.scopes.StarredScope;
@@ -33,10 +33,10 @@ public class StarredModule {
     @StarredScope
     @LikedQuotes
     @Provides
-    public Observable<List<QuoteData>> listObservable(DaoStarredQuotes daoQuotes){
-            return Observable.fromCallable(new Callable<List<QuoteData>>() {
+    public Observable<List<QuoteModel>> listObservable(DaoStarredQuotes daoQuotes){
+            return Observable.fromCallable(new Callable<List<QuoteModel>>() {
                 @Override
-                public List<QuoteData> call() throws Exception {
+                public List<QuoteModel> call() throws Exception {
                     return daoQuotes.getLikedQuotes();
                 }
             });
@@ -44,7 +44,7 @@ public class StarredModule {
 
     @StarredScope
     @Provides
-    public StarredPresenterImpl likedPresenter(StarredFragmentView view, @LikedQuotes Observable<List<QuoteData>> listObservable){
+    public StarredPresenterImpl likedPresenter(StarredFragmentView view, @LikedQuotes Observable<List<QuoteModel>> listObservable){
         return new StarredPresenterImpl(view, listObservable);
     }
 

@@ -1,7 +1,7 @@
 package com.ulan.app.quotes.di.modules.filter;
 
-import com.ulan.app.quotes.data.network.PhotosApi;
-import com.ulan.app.quotes.data.network.pojo.PhotosResponse;
+import com.ulan.app.quotes.data.network.api.PhotosApi;
+import com.ulan.app.quotes.data.network.PhotosResponse;
 import com.ulan.app.quotes.di.modules.source.PhotosModule;
 import com.ulan.app.quotes.di.qualifires.filters.FilterFunny;
 import com.ulan.app.quotes.di.qualifires.filters.FilterHappy;

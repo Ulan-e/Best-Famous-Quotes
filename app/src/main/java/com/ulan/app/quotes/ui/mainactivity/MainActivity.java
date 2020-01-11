@@ -1,7 +1,6 @@
 package com.ulan.app.quotes.ui.mainactivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +18,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.adapter.ViewPagerAdapter;
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.di.components.MainActivityComponent;
 import com.ulan.app.quotes.di.modules.uimodules.MainModule;
 import com.ulan.app.quotes.ui.CustomViewPager;
@@ -30,19 +29,11 @@ import com.ulan.app.quotes.ui.starred.StarredFragment;
 import com.ulan.app.quotes.utils.listeners.FragmentLifecycle;
 import com.ulan.app.quotes.utils.listeners.ShareObservableListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-
-import static com.ulan.app.quotes.utils.notification.NotificationHelper.setNotification;
-import static com.ulan.app.quotes.utils.Constants.TAG_OTHER;
 
 
 public class MainActivity extends BaseActivity implements MainActivityView, View.OnClickListener {
@@ -75,7 +66,6 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
         initAppBar();
         initBottomNav();
         initFilterButtons();
-        setFutureNotification();
     }
 
     public void getMainComponent(){
@@ -121,9 +111,23 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
 
     private void initBottomNav(){
         mBottomNavigation = findViewById(R.id.bottom_navigation);
-        mBottomNavigation.setOnNavigationItemSelectedListener(itemSelectedListener);
+        mBottomNavigation.setOnNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()){
+                case R.id.star:
+                    mCustomViewPager.setCurrentItem(0);
+                    break;
+                case R.id.home:
+                    mCustomViewPager.setCurrentItem(1);
+                    break;
+                case R.id.one:
+                    mCustomViewPager.setCurrentItem(2);
+                    break;
+            }
+            return false;
+        });
         mBottomNavigation.setSelectedItemId(R.id.home);
         mBottomNavigation.setItemIconTintList(null);
+        mBottomNavigation.setOnNavigationItemSelectedListener(itemSelectedListener);
     }
 
     public void setOnSendListener(ShareObservableListener sendListener){
@@ -153,7 +157,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     }
 
     @Override
-    public void setListOfQuotes(Observable<List<QuoteData>> listOfQuotes) {
+    public void setListOfQuotes(Observable<List<QuoteModel>> listOfQuotes) {
         mShareObservableListener.passObservable(listOfQuotes);
     }
 
@@ -200,35 +204,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
         this.mUntouchedButton = touched;
     }
 
-    public void setFutureNotification(){
-        mActivityComponent.getObservableList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<QuoteData>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<QuoteData> quoteDataList) {
-                        List<QuoteData> list = new ArrayList<>();
-                        list.addAll(quoteDataList);
-                        setNotification(getApplicationContext(), list.get(0).getQuote());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG_OTHER, "onError: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
-
+    // Appbar Listener to change title of Toolbar
     private AppBarLayout.OnOffsetChangedListener appBarChangeListener =
             new AppBarLayout.OnOffsetChangedListener() {
                 @Override
@@ -243,6 +219,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
                 }
             };
 
+    //
     private BottomNavigationView.OnNavigationItemSelectedListener itemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -263,6 +240,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
                 }
             };
 
+    // OnPageChange Listener pass data between fragments in ViewPager
     private ViewPager.OnPageChangeListener pageChangeListener =
             new ViewPager.OnPageChangeListener() {
                 int currentPosition = 0;

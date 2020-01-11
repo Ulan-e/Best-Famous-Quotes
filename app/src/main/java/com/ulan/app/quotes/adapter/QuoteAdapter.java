@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ulan.app.quotes.R;
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.utils.listeners.OnPositionClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -27,9 +27,9 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
 
     private OnPositionClickListener mOnPositionClickListener;
     private Context mContext;
-    private List<QuoteData> mQuotesList;
+    private List<QuoteModel> mQuotesList;
 
-    public QuoteAdapter(Context context, List<QuoteData> quotesList,
+    public QuoteAdapter(Context context, List<QuoteModel> quotesList,
                         OnPositionClickListener clickListener) {
         this.mContext = context;
         this.mOnPositionClickListener = clickListener;
@@ -46,7 +46,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull QuoteViewHolder holder, int position){
-        QuoteData quote = mQuotesList.get(position);
+        QuoteModel quote = mQuotesList.get(position);
         holder.mBodyText.setText(quote.getQuote());
         holder.mAuthorText.setText(quote.getAuthor());
         String copiedText = quote.getQuote() + "\n" + quote.getAuthor();
@@ -79,7 +79,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
     }
 
     // Add quote to StarredFragment List
-    public void addQuote(QuoteData quoteData){
+    public void addQuote(QuoteModel quoteData){
         mQuotesList.add(quoteData);
         notifyItemInserted(mQuotesList.size() - 1);
     }

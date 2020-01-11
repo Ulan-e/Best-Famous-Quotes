@@ -2,7 +2,7 @@ package com.ulan.app.quotes.di.modules.source;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ulan.app.quotes.data.network.FavQsApi;
+import com.ulan.app.quotes.data.network.api.FavQsApi;
 import com.ulan.app.quotes.di.qualifires.QuoteGson;
 import com.ulan.app.quotes.di.qualifires.Quotes;
 import com.ulan.app.quotes.di.qualifires.TokenInterceptor;

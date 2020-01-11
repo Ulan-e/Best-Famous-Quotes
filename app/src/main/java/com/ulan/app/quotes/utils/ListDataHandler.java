@@ -2,9 +2,9 @@ package com.ulan.app.quotes.utils;
 
 import android.util.Log;
 
-import com.ulan.app.quotes.data.QuoteData;
-import com.ulan.app.quotes.data.network.pojo.Photo;
-import com.ulan.app.quotes.data.network.pojo.Quote;
+import com.ulan.app.quotes.data.QuoteModel;
+import com.ulan.app.quotes.data.network.model.Photo;
+import com.ulan.app.quotes.data.network.model.Quote;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +33,9 @@ public class ListDataHandler {
     }
 
     // merge quotes text with photos url
-    public static List<QuoteData> mergeQuotesPhotos(List<Photo> photos, List<QuoteData> quotes){
+    public static List<QuoteModel> mergeQuotesPhotos(List<Photo> photos, List<QuoteModel> quotes){
         for(int i =0; i < photos.size(); i++){
-            QuoteData quoteData = quotes.get(i);
+            QuoteModel quoteData = quotes.get(i);
             quoteData.setUrlImage(photos.get(i).getWebformatURL());
         }
         Log.d(TAG_OTHER, "mergeQuotesPhotos quotes " + String.valueOf(quotes.size()));
@@ -44,11 +44,11 @@ public class ListDataHandler {
     }
 
     // populate new list of quotedata
-    public static List<QuoteData> populateQuotes(List<Quote> listOfQuotes){
+    public static List<QuoteModel> populateQuotes(List<Quote> listOfQuotes){
         int size = 25;
-        List<QuoteData> resultList = new ArrayList<>();
+        List<QuoteModel> resultList = new ArrayList<>();
         for(int i=0; i < size; i++){
-            QuoteData quoteData = new QuoteData();
+            QuoteModel quoteData = new QuoteModel();
             quoteData.setId(i);
             quoteData.setQuote(listOfQuotes.get(i).getBody());
             quoteData.setAuthor(listOfQuotes.get(i).getAuthor());

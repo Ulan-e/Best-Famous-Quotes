@@ -1,6 +1,6 @@
 package com.ulan.app.quotes.utils.listeners;
 
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ import io.reactivex.Observable;
 
 public interface ShareObservableListener {
 
-    void passObservable(Observable<List<QuoteData>> listObservable);
+    void passObservable(Observable<List<QuoteModel>> listObservable);
 }

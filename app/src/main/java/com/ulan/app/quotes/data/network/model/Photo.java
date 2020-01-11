@@ -1,4 +1,4 @@
-package com.ulan.app.quotes.data.network.pojo;
+package com.ulan.app.quotes.data.network.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

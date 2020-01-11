@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "liked_quotes")
-public class QuoteData {
+public class QuoteModel {
 
     @PrimaryKey
     @ColumnInfo(name = "id")

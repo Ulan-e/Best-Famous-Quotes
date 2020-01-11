@@ -1,7 +1,8 @@
-package com.ulan.app.quotes.data.network.pojo;
+package com.ulan.app.quotes.data.network;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ulan.app.quotes.data.network.model.Photo;
 
 import java.util.List;
 

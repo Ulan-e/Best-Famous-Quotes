@@ -2,7 +2,7 @@ package com.ulan.app.quotes.ui.home;
 
 import android.util.Log;
 
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 
 import java.util.List;
 
@@ -25,14 +25,14 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
     }
 
     @Override
-    public void loadQuotes(Observable<List<QuoteData>> listObservable) {
+    public void attachRxData(Observable<List<QuoteModel>> listObservable) {
         compositeDisposable.add(listObservable
                     .retry(1)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableObserver<List<QuoteData>>() {
+                    .subscribeWith(new DisposableObserver<List<QuoteModel>>() {
                         @Override
-                        public void onNext(List<QuoteData> quoteData) {
+                        public void onNext(List<QuoteModel> quoteData) {
                             Log.d(TAG_OTHER, "onNext: Main Fragment " + quoteData.size());
                             mView.showQuotes(quoteData);
                         }
@@ -50,8 +50,14 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
                     }));
     }
 
-    public void disposeObservable(){
+    @Override
+    public void detachRxData(){
         compositeDisposable.dispose();
+    }
+
+    @Override
+    public void detachView() {
+        this.mView = null;
     }
 
 }

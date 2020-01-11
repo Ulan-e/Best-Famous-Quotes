@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.adapter.QuoteAdapter;
-import com.ulan.app.quotes.data.QuoteData;
+import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.di.components.HomeComponent;
 import com.ulan.app.quotes.di.modules.source.SharedPrefModule;
 import com.ulan.app.quotes.di.modules.uimodules.HomeModule;
@@ -53,7 +53,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     private Animation mAnimationBottomShow;
     private LinearLayout mLinearLayout;
 
-    private Observable<List<QuoteData>> mListObservable;
+    private Observable<List<QuoteModel>> mListObservable;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
         ((MainActivity) getActivity()).setOnSendListener(this);
 
         initListComponent();
-        mPresenter.loadQuotes(mListObservable);
+        mPresenter.attachRxData(mListObservable);
     }
 
     private void initListComponent() {
@@ -88,7 +88,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
             @Override
             public void onClick(View view) {
                 if(mListObservable != null) {
-                    mPresenter.loadQuotes(mListObservable);
+                    mPresenter.attachRxData(mListObservable);
                 }
                 mLinearLayout.setVisibility(GONE);
             }
@@ -127,7 +127,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
                 }
             };
 
-    private void sendData(QuoteData quoteData) {
+    private void sendData(QuoteModel quoteData) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString("image", quoteData.getUrlImage());
         editor.putString("quote", quoteData.getQuote());
@@ -138,9 +138,9 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     }
 
     @Override
-    public void showQuotes(List<QuoteData> listQuotes) {
+    public void showQuotes(List<QuoteModel> listQuotes) {
         mAdapter = new QuoteAdapter(getActivity(), listQuotes, position -> {
-            QuoteData quoteData = listQuotes.get(position);
+            QuoteModel quoteData = listQuotes.get(position);
             sendData(quoteData);
             if (mStarredFragment != null) {
                 mStarredFragment.setDataShared();
@@ -156,6 +156,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     @Override
     public void showQuotesError(Throwable e) {
         Log.d(TAG_OTHER, "showQuotesError: " + e.getMessage());
+        mRecyclerView.setVisibility(GONE);
         mLinearLayout.setVisibility(View.VISIBLE);
     }
 
@@ -178,14 +179,16 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPresenter.disposeObservable();
+        mPresenter.detachRxData();
+        mPresenter.detachView();
     }
 
     @Override
-    public void passObservable(Observable<List<QuoteData>> listObservable) {
+    public void passObservable(Observable<List<QuoteModel>> listObservable) {
         if (listObservable == null) {
-            Log.d(TAG_OTHER, "passObservable: Observable<List<QuoteData>> is null object");
+            Log.d(TAG_OTHER, "passObservable: Observable<List<QuoteModel>> is null object");
         }
-        mPresenter.loadQuotes(listObservable);
+        mPresenter.attachRxData(listObservable);
     }
+
 }
