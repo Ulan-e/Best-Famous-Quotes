@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ulan.app.quotes.R;
-import com.ulan.app.quotes.utils.listeners.OnPositionClickListener;
+import com.ulan.app.quotes.ui.listeners.OnPositionClickListener;
 
 import java.lang.ref.WeakReference;
 

@@ -1,4 +1,4 @@
-package com.ulan.app.quotes.ui.mainactivity;
+package com.ulan.app.quotes.ui.main;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,68 +19,82 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.adapter.ViewPagerAdapter;
 import com.ulan.app.quotes.data.QuoteModel;
-import com.ulan.app.quotes.di.components.MainActivityComponent;
-import com.ulan.app.quotes.di.modules.uimodules.MainModule;
+import com.ulan.app.quotes.di.qualifires.filters.FilterFunny;
+import com.ulan.app.quotes.di.qualifires.filters.FilterHappy;
+import com.ulan.app.quotes.di.qualifires.filters.FilterLive;
+import com.ulan.app.quotes.di.qualifires.filters.FilterLove;
+import com.ulan.app.quotes.di.qualifires.filters.FilterMotif;
 import com.ulan.app.quotes.ui.CustomViewPager;
 import com.ulan.app.quotes.ui.base.BaseActivity;
 import com.ulan.app.quotes.ui.home.HomeFragment;
 import com.ulan.app.quotes.ui.onequote.OneQuoteFragment;
 import com.ulan.app.quotes.ui.starred.StarredFragment;
-import com.ulan.app.quotes.utils.listeners.FragmentLifecycle;
-import com.ulan.app.quotes.utils.listeners.ShareObservableListener;
+import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
+import com.ulan.app.quotes.ui.listeners.ShareObservableListener;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjection;
 import io.reactivex.Observable;
 
 
-public class MainActivity extends BaseActivity implements MainActivityView, View.OnClickListener {
+public class MainActivity extends BaseActivity implements MainView, View.OnClickListener{
 
-    private MainActivityComponent mActivityComponent;
-    private ShareObservableListener mShareObservableListener;
-    private CustomViewPager mCustomViewPager;
-    private ViewPagerAdapter mViewPagerAdapter;
 
+    private ShareObservableListener mShareQuotesListener;
+
+    private CustomViewPager mViewPager;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private AppBarLayout mAppBarLayout;
     private LinearLayout mLinearLayout;
     private BottomNavigationView mBottomNavigation;
     private MenuItem mBottomMenuItem;
-
-    private Button[] mListButtons = new Button[5];
+    private Button[] mButtons = new Button[5];
     private Button mUntouchedButton;
-    private int[] mButtonResources = {R.id.love, R.id.funny, R.id.life, R.id.motivation, R.id.wisdom};
+    private int[] mButtonResources = {R.id.love, R.id.funny, R.id.life, R.id.motivation, R.id.happy};
 
     @Inject
-    public MainActivityPresenterImpl mPresenter;
+    public ViewPagerAdapter mViewPagerAdapter;
+
+    @Inject
+    public MainPresenter mPresenter;
+
+    @Inject
+    @FilterFunny
+    public Observable<List<QuoteModel>> funnyQuotes;
+    @Inject
+    @FilterHappy
+    public Observable<List<QuoteModel>> happyQuotes;
+    @Inject
+    @FilterLive
+    public Observable<List<QuoteModel>> liveQuotes;
+    @Inject
+    @FilterLove
+    public Observable<List<QuoteModel>> loveQuotes;
+    @Inject
+    @FilterMotif
+    public Observable<List<QuoteModel>> motivQuotes;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState){
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getMainComponent();
         initViewPager();
         initAppBar();
-        initBottomNav();
+        initBottomNavView();
         initFilterButtons();
     }
 
-    public void getMainComponent(){
-        mActivityComponent = getAppComponent().activityBuilder()
-                .mainModule(new MainModule(this))
-                .build();
-        mActivityComponent.inject(this);
-    }
-
     private void initFilterButtons() {
-        for(int i = 0; i < mListButtons.length; i++){
-            mListButtons[i] = findViewById(mButtonResources[i]);
-            mListButtons[i].setOnClickListener(this);
+        for(int i = 0; i < mButtons.length; i++){
+            mButtons[i] = findViewById(mButtonResources[i]);
+            mButtons[i].setOnClickListener(this);
         }
-        mUntouchedButton = mListButtons[0];
+        mUntouchedButton = mButtons[0];
     }
 
     private void initAppBar(){
@@ -99,28 +113,27 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     }
 
     private void initViewPager() {
-        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mCustomViewPager = findViewById(R.id.containerPager);
+        mViewPager = findViewById(R.id.containerPager);
         mViewPagerAdapter.addFragment(new StarredFragment(), "title");
         mViewPagerAdapter.addFragment(new HomeFragment(), "title");
         mViewPagerAdapter.addFragment(new OneQuoteFragment(), "title");
-        mCustomViewPager.setOffscreenPageLimit(2);
-        mCustomViewPager.setAdapter(mViewPagerAdapter);
-        mCustomViewPager.setOnPageChangeListener(pageChangeListener);
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setOnPageChangeListener(pageChangeListener);
     }
 
-    private void initBottomNav(){
+    private void initBottomNavView(){
         mBottomNavigation = findViewById(R.id.bottom_navigation);
         mBottomNavigation.setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()){
                 case R.id.star:
-                    mCustomViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(0);
                     break;
                 case R.id.home:
-                    mCustomViewPager.setCurrentItem(1);
+                    mViewPager.setCurrentItem(1);
                     break;
                 case R.id.one:
-                    mCustomViewPager.setCurrentItem(2);
+                    mViewPager.setCurrentItem(2);
                     break;
             }
             return false;
@@ -131,7 +144,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
     }
 
     public void setOnSendListener(ShareObservableListener sendListener){
-        this.mShareObservableListener = sendListener;
+        this.mShareQuotesListener = sendListener;
     }
 
     @Override
@@ -158,41 +171,40 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
 
     @Override
     public void setListOfQuotes(Observable<List<QuoteModel>> listOfQuotes) {
-        mShareObservableListener.passObservable(listOfQuotes);
+        mShareQuotesListener.passObservable(listOfQuotes);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.love:
-                clickHandle(mUntouchedButton, mListButtons[0]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListLove());
-                mPresenter.loadObservable();
+                clickHandle(mUntouchedButton, mButtons[0]);
+                mPresenter.setQuotes(loveQuotes);
+                mPresenter.loadQuotes();
                 break;
             case R.id.funny:
-                clickHandle(mUntouchedButton, mListButtons[1]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListFunny());
-                mPresenter.loadObservable();
+                clickHandle(mUntouchedButton, mButtons[1]);
+                mPresenter.setQuotes(funnyQuotes);
+                mPresenter.loadQuotes();
                 break;
             case R.id.life:
-                clickHandle(mUntouchedButton, mListButtons[2]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListLive());
-                mPresenter.loadObservable();
+                clickHandle(mUntouchedButton, mButtons[2]);
+                mPresenter.setQuotes(liveQuotes);
+                mPresenter.loadQuotes();
                 break;
             case R.id.motivation:
-                clickHandle(mUntouchedButton, mListButtons[3]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListMotif());
-                mPresenter.loadObservable();
+                clickHandle(mUntouchedButton, mButtons[3]);
+                mPresenter.setQuotes(motivQuotes);
+                mPresenter.loadQuotes();
 
                 break;
-            case R.id.wisdom:
-                clickHandle(mUntouchedButton, mListButtons[4]);
-                mPresenter.setListObservable(mActivityComponent.getObservableListHappy());
-                mPresenter.loadObservable();
+            case R.id.happy:
+                clickHandle(mUntouchedButton, mButtons[4]);
+                mPresenter.setQuotes(happyQuotes);
+                mPresenter.loadQuotes();
 
                 break;
             default:
-
                 break;
         }
     }
@@ -227,13 +239,13 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
 
                     switch (menuItem.getItemId()){
                         case R.id.star:
-                            mCustomViewPager.setCurrentItem(0);
+                            mViewPager.setCurrentItem(0);
                             break;
                         case R.id.home:
-                            mCustomViewPager.setCurrentItem(1);
+                            mViewPager.setCurrentItem(1);
                             break;
                         case R.id.one:
-                            mCustomViewPager.setCurrentItem(2);
+                            mViewPager.setCurrentItem(2);
                             break;
                     }
                     return false;
@@ -265,7 +277,7 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
                     fragmentToShow.onResumeFragment();
 
                     FragmentLifecycle fragmentToHide = (FragmentLifecycle) mViewPagerAdapter.getItem(currentPosition);
-                    Fragment fragment = mViewPagerAdapter.getItem(mCustomViewPager.getCurrentItem());
+                    Fragment fragment = mViewPagerAdapter.getItem(mViewPager.getCurrentItem());
                     fragmentToHide.onPauseFragment(fragment);
 
                     currentPosition = position;
@@ -276,5 +288,4 @@ public class MainActivity extends BaseActivity implements MainActivityView, View
 
                 }
             };
-
 }

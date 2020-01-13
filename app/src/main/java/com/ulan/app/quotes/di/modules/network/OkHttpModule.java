@@ -1,14 +1,13 @@
-package com.ulan.app.quotes.di.modules.source;
+package com.ulan.app.quotes.di.modules.network;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.ulan.app.quotes.di.modules.AppModule;
 import com.ulan.app.quotes.di.qualifires.HttpInterceptor;
 import com.ulan.app.quotes.di.qualifires.PhotosOkHttp;
 import com.ulan.app.quotes.di.qualifires.TokenInterceptor;
 import com.ulan.app.quotes.di.scopes.AppScope;
-import com.ulan.app.quotes.utils.Constants;
+import com.ulan.app.quotes.helpers.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,11 +26,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-import static com.ulan.app.quotes.utils.Constants.FAVQS_API_KEY;
-import static com.ulan.app.quotes.utils.Constants.TAG_HTTP;
+import static com.ulan.app.quotes.helpers.Constants.FAVQS_API_KEY;
+import static com.ulan.app.quotes.helpers.Constants.TAG_HTTP;
 
 @AppScope
-@Module(includes = {AppModule.class})
+@Module
 public class OkHttpModule {
 
     @AppScope
@@ -67,7 +66,7 @@ public class OkHttpModule {
 
     @AppScope
     @Provides
-    public File file( Context context){
+    public File file(Context context){
         File file = new File(context.getCacheDir(), Constants.CACHE_FILES);
         file.mkdirs();
         return file;

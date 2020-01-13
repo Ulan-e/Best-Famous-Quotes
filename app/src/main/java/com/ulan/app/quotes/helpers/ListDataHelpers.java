@@ -1,4 +1,4 @@
-package com.ulan.app.quotes.utils;
+package com.ulan.app.quotes.helpers;
 
 import android.util.Log;
 
@@ -9,7 +9,7 @@ import com.ulan.app.quotes.data.network.model.Quote;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ulan.app.quotes.utils.Constants.TAG_OTHER;
+import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
 
 /**
  * Class handle list of requesting data from network:
@@ -18,7 +18,7 @@ import static com.ulan.app.quotes.utils.Constants.TAG_OTHER;
  * 3) generate author name
  */
 
-public class ListDataHandler {
+public class ListDataHelpers {
 
     // generate author name ('Gates, Bill' -> 'Bill Gates')
     public static String generateAuthorName(String data){

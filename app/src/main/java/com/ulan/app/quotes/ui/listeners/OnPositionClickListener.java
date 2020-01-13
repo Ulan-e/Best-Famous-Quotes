@@ -1,4 +1,4 @@
-package com.ulan.app.quotes.utils.listeners;
+package com.ulan.app.quotes.ui.listeners;
 
 /**
  * Class handle click specific position on QuoteAdapter

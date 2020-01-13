@@ -1,4 +1,4 @@
-package com.ulan.app.quotes.utils;
+package com.ulan.app.quotes.helpers;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
  * Class can check internet connection
  */
 
-public class CheckInternetConnection {
+public class InternetConnectionHelpers {
 
     // get internet connection status
     public static String getConnectionStatusString(Context context){

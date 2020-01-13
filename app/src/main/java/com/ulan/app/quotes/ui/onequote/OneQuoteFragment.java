@@ -1,5 +1,6 @@
 package com.ulan.app.quotes.ui.onequote;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,24 +16,40 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ulan.app.quotes.R;
-import com.ulan.app.quotes.di.components.OneQuoteComponent;
-import com.ulan.app.quotes.di.modules.uimodules.OneQuoteModule;
+import com.ulan.app.quotes.data.database.DaoQuotes;
+import com.ulan.app.quotes.di.scopes.AppScope;
 import com.ulan.app.quotes.ui.base.BaseFragment;
-import com.ulan.app.quotes.utils.listeners.FragmentLifecycle;
+import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
 
-import static com.ulan.app.quotes.utils.Constants.TAG_STATE;
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
+
+import static com.ulan.app.quotes.helpers.Constants.TAG_STATE;
 
 public class OneQuoteFragment extends BaseFragment implements OneQuoteView, FragmentLifecycle{
 
     private TextView mQuoteText;
     private TextView mAuthorText;
-    private OneQuotePresenterImpl mPresenter;
+
+    @Inject
+    public OneQuotePresenterImpl mPresenter;
+
+    @AppScope
+    @Inject
+    public DaoQuotes mDaoQuote;
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getDayComponent();
+        Log.d("onecorona", mDaoQuote.toString());
     }
 
     @Override
@@ -54,21 +71,13 @@ public class OneQuoteFragment extends BaseFragment implements OneQuoteView, Frag
         return false;
     }
 
-    private OneQuoteComponent getDayComponent(){
-        OneQuoteComponent component = getAppComponent().dayBuilder()
-                .quoteDayModule(new OneQuoteModule(this))
-                .build();
-        component.inject(this);
-        mPresenter = component.getPresenter();
-        return component;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.quote_day_fragment, container, false);
         mQuoteText = view.findViewById(R.id.quote_day);
         mAuthorText = view.findViewById(R.id.quote_author);
+        mPresenter.setDao(mDaoQuote);
         mPresenter.getQuote();
         return view;
     }

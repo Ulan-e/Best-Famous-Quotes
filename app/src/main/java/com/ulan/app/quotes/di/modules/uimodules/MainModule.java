@@ -1,31 +1,30 @@
 package com.ulan.app.quotes.di.modules.uimodules;
 
+import com.ulan.app.quotes.adapter.ViewPagerAdapter;
 import com.ulan.app.quotes.di.scopes.MainScope;
-import com.ulan.app.quotes.ui.mainactivity.MainActivityPresenterImpl;
-import com.ulan.app.quotes.ui.mainactivity.MainActivityView;
+import com.ulan.app.quotes.ui.main.MainActivity;
+import com.ulan.app.quotes.ui.main.MainPresenter;
+import com.ulan.app.quotes.ui.main.MainPresenterImpl;
+import com.ulan.app.quotes.ui.main.MainView;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-@MainScope
 @Module
-public class MainModule {
+public abstract class MainModule {
 
-    public MainActivityView mView;
+    @MainScope
+    @Binds
+    abstract MainView provideView(MainActivity activity);
 
-    public MainModule(MainActivityView view) {
-        this.mView = view;
-    }
+    @MainScope
+    @Binds
+    abstract MainPresenter providePresenter(MainPresenterImpl presenter);
 
     @MainScope
     @Provides
-    public MainActivityView provideView(){
-        return mView;
-    }
-
-    @MainScope
-    @Provides
-    public MainActivityPresenterImpl providePresenter(){
-        return new MainActivityPresenterImpl(mView);
+    static ViewPagerAdapter provideViewPagerAdapter(MainActivity activity){
+        return new ViewPagerAdapter(activity.getSupportFragmentManager());
     }
 }

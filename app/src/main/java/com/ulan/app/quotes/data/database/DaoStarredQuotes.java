@@ -11,11 +11,13 @@ import com.ulan.app.quotes.data.QuoteModel;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 @Dao
 public interface DaoStarredQuotes {
 
-    @Query("SELECT * FROM QuoteModel")
-    List<QuoteModel> getLikedQuotes();
+    @Query("SELECT * FROM liked_quotes")
+    Flowable<List<QuoteModel>> getLikedQuotes();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void setToTable(QuoteModel quoteData);
@@ -23,6 +25,6 @@ public interface DaoStarredQuotes {
     @Delete
     void deleteQuote(QuoteModel quoteData);
 
-    @Query("DELETE FROM QuoteModel")
+    @Query("DELETE FROM liked_quotes")
     void deleteAll();
 }

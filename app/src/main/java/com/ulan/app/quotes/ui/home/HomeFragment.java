@@ -1,5 +1,6 @@
 package com.ulan.app.quotes.ui.home;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,28 +23,26 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.adapter.QuoteAdapter;
 import com.ulan.app.quotes.data.QuoteModel;
-import com.ulan.app.quotes.di.components.HomeComponent;
-import com.ulan.app.quotes.di.modules.source.SharedPrefModule;
-import com.ulan.app.quotes.di.modules.uimodules.HomeModule;
+import com.ulan.app.quotes.di.qualifires.filters.FilterRandom;
 import com.ulan.app.quotes.ui.base.BaseFragment;
-import com.ulan.app.quotes.ui.mainactivity.MainActivity;
+import com.ulan.app.quotes.ui.main.MainActivity;
 import com.ulan.app.quotes.ui.starred.StarredFragment;
-import com.ulan.app.quotes.utils.listeners.FragmentLifecycle;
-import com.ulan.app.quotes.utils.listeners.ShareObservableListener;
+import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
+import com.ulan.app.quotes.ui.listeners.ShareObservableListener;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.Observable;
 
 import static android.view.View.GONE;
-import static com.ulan.app.quotes.utils.Constants.TAG_OTHER;
-import static com.ulan.app.quotes.utils.Constants.TAG_STATE;
+import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
+import static com.ulan.app.quotes.helpers.Constants.TAG_STATE;
 
-public class HomeFragment extends BaseFragment implements HomeFragmentView, FragmentLifecycle, ShareObservableListener {
+public class HomeFragment extends BaseFragment implements HomeView, FragmentLifecycle, ShareObservableListener {
 
-    private HomeComponent mHomeComponent;
-    private HomeFragmentPresenterImpl mPresenter;
-    private SharedPreferences mPreferences;
     private StarredFragment mStarredFragment;
     private RecyclerView mRecyclerView;
     private QuoteAdapter mAdapter;
@@ -53,7 +52,21 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     private Animation mAnimationBottomShow;
     private LinearLayout mLinearLayout;
 
-    private Observable<List<QuoteModel>> mListObservable;
+    @FilterRandom
+    @Inject
+    public Observable<List<QuoteModel>> mQuotes;
+
+    @Inject
+    public HomePresenterImpl mPresenter;
+
+    @Inject
+    public SharedPreferences mPreferences;
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,20 +74,10 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
         setHasOptionsMenu(true);
         ((MainActivity) getActivity()).setOnSendListener(this);
 
-        initListComponent();
-        mPresenter.attachRxData(mListObservable);
-    }
-
-    private void initListComponent() {
-        mHomeComponent = getAppComponent().listBuilder()
-                .mainModule(new HomeModule(this))
-                .sharedModule(new SharedPrefModule(getActivity()))
-                .build();
-        mHomeComponent.inject(this);
-
-        mPresenter = mHomeComponent.getPresenter();
-        mPreferences = mHomeComponent.getSharedPreference();
-        mListObservable = mHomeComponent.getObservableList();
+        Log.d("carona", "mQuotes " + mQuotes.toString());
+        Log.d("carona", " mPresenter " + mPresenter.toString());
+        Log.d("carona", " mPreferences " + mPreferences.toString());
+        mPresenter.setQuotes(mQuotes);
     }
 
     @Nullable
@@ -87,8 +90,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mListObservable != null) {
-                    mPresenter.attachRxData(mListObservable);
+                if(mQuotes != null) {
+                    mPresenter.setQuotes(mQuotes);
                 }
                 mLinearLayout.setVisibility(GONE);
             }
@@ -179,7 +182,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPresenter.detachRxData();
+        mPresenter.resetQuotes();
         mPresenter.detachView();
     }
 
@@ -188,7 +191,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentView, Frag
         if (listObservable == null) {
             Log.d(TAG_OTHER, "passObservable: Observable<List<QuoteModel>> is null object");
         }
-        mPresenter.attachRxData(listObservable);
+        mPresenter.setQuotes(listObservable);
     }
 
 }

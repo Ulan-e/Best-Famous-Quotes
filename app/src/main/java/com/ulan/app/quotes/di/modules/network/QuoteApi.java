@@ -1,8 +1,8 @@
-package com.ulan.app.quotes.di.modules.filter;
+package com.ulan.app.quotes.di.modules.network;
 
 import com.ulan.app.quotes.data.network.api.FavQsApi;
 import com.ulan.app.quotes.data.network.QuotesResponse;
-import com.ulan.app.quotes.di.modules.source.QuotesModule;
+import com.ulan.app.quotes.di.modules.network.QuotesModule;
 import com.ulan.app.quotes.di.qualifires.filters.FilterFunny;
 import com.ulan.app.quotes.di.qualifires.filters.FilterHappy;
 import com.ulan.app.quotes.di.qualifires.filters.FilterLive;
@@ -22,7 +22,7 @@ import io.reactivex.Observable;
 
 @AppScope
 @Module(includes = {QuotesModule.class})
-public class QuoteCalls {
+public class QuoteApi {
 
     @FilterRandom
     @AppScope

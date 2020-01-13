@@ -5,8 +5,8 @@ import com.ulan.app.quotes.data.network.model.Photo;
 import com.ulan.app.quotes.data.network.PhotosResponse;
 import com.ulan.app.quotes.data.network.model.Quote;
 import com.ulan.app.quotes.data.network.QuotesResponse;
-import com.ulan.app.quotes.di.modules.filter.PhotoCalls;
-import com.ulan.app.quotes.di.modules.filter.QuoteCalls;
+import com.ulan.app.quotes.di.modules.network.PhotoApi;
+import com.ulan.app.quotes.di.modules.network.QuoteApi;
 import com.ulan.app.quotes.di.qualifires.filters.FilterFunny;
 import com.ulan.app.quotes.di.qualifires.filters.FilterHappy;
 import com.ulan.app.quotes.di.qualifires.filters.FilterLive;
@@ -21,17 +21,17 @@ import dagger.Provides;
 import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
 
-import static com.ulan.app.quotes.utils.ListDataHandler.mergeQuotesPhotos;
-import static com.ulan.app.quotes.utils.ListDataHandler.populateQuotes;
+import static com.ulan.app.quotes.helpers.ListDataHelpers.mergeQuotesPhotos;
+import static com.ulan.app.quotes.helpers.ListDataHelpers.populateQuotes;
 
 /**
- * Module RxModule zip observable of quotes with
+ * Module ObservablesModule zip observable of quotes with
  * observable of photos then return new type
  * observable if quotedata
  */
 
-@Module(includes = {QuoteCalls.class, PhotoCalls.class})
-public class RxModule {
+@Module(includes = {QuoteApi.class, PhotoApi.class})
+public class ObservablesModule {
 
     @FilterRandom
     @Provides
@@ -128,7 +128,4 @@ public class RxModule {
             }
         });
     }
-
-
-
 }

@@ -1,24 +1,34 @@
 package com.ulan.app.quotes.di.components;
 
-import android.app.Application;
-
+import com.ulan.app.quotes.MainApplication;
+import com.ulan.app.quotes.di.modules.ActivityBuilderModule;
 import com.ulan.app.quotes.di.modules.AppModule;
-import com.ulan.app.quotes.di.modules.RxModule;
-import com.ulan.app.quotes.di.modules.source.RoomModule;
+import com.ulan.app.quotes.di.modules.FragmentBuilderModule;
+import com.ulan.app.quotes.di.modules.ObservablesModule;
+import com.ulan.app.quotes.di.modules.RoomModule;
 import com.ulan.app.quotes.di.scopes.AppScope;
 
+import dagger.BindsInstance;
 import dagger.Component;
+import dagger.android.AndroidInjector;
+import dagger.android.support.AndroidSupportInjectionModule;
 
 
 @AppScope
-@Component(modules = {AppModule.class, RoomModule.class, RxModule.class})
-public interface AppComponent {
+@Component(modules = {
+        AppModule.class,
+        AndroidSupportInjectionModule.class,
+        ActivityBuilderModule.class,
+        FragmentBuilderModule.class,
+        RoomModule.class,
+        ObservablesModule.class})
+public interface AppComponent extends AndroidInjector<MainApplication> {
 
-    void inject(Application application);
-
-    MainActivityComponent.ActivityBuilder activityBuilder();
-    HomeComponent.ListBuilder listBuilder();
-    OneQuoteComponent.DayBuilder dayBuilder();
-    StarredComponent.LikedBuilder likedBuilder();
+    @Component.Builder
+    interface Builder{
+        @BindsInstance
+        AppComponent.Builder application(MainApplication application);
+        AppComponent build();
+    }
 }
 

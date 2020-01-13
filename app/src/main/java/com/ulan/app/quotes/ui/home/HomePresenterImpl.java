@@ -12,21 +12,21 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.ulan.app.quotes.utils.Constants.TAG_OTHER;
+import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
 
-public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
+public class HomePresenterImpl implements HomePresenter {
 
-    private HomeFragmentView mView;
-    private CompositeDisposable compositeDisposable;
+    private HomeView mView;
+    private CompositeDisposable mCompositeDisposable;
 
-    public HomeFragmentPresenterImpl(HomeFragmentView mView) {
+    public HomePresenterImpl(HomeView mView) {
         this.mView = mView;
-        compositeDisposable = new CompositeDisposable();
+        mCompositeDisposable = new CompositeDisposable();
     }
 
     @Override
-    public void attachRxData(Observable<List<QuoteModel>> listObservable) {
-        compositeDisposable.add(listObservable
+    public void setQuotes(Observable<List<QuoteModel>> quotes) {
+        mCompositeDisposable.add(quotes
                     .retry(1)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -51,8 +51,8 @@ public class HomeFragmentPresenterImpl implements HomeFragmentPresenter {
     }
 
     @Override
-    public void detachRxData(){
-        compositeDisposable.dispose();
+    public void resetQuotes(){
+        mCompositeDisposable.dispose();
     }
 
     @Override

@@ -1,35 +1,22 @@
 package com.ulan.app.quotes;
 
-import android.app.Application;
-
 import com.ulan.app.quotes.di.components.AppComponent;
 import com.ulan.app.quotes.di.components.DaggerAppComponent;
-import com.ulan.app.quotes.di.modules.AppModule;
-import com.ulan.app.quotes.di.modules.RxModule;
-import com.ulan.app.quotes.di.modules.source.RoomModule;
 
-public class MainApplication extends Application {
+import dagger.android.AndroidInjector;
+import dagger.android.support.DaggerApplication;
 
-    private static MainApplication instance;
+public class MainApplication extends DaggerApplication {
+
     private AppComponent mAppComponent;
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        instance = this;
-        mAppComponent = DaggerAppComponent.builder()
-                .roomModule(new RoomModule())
-                .appModule(new AppModule(this))
-                .rxModule(new RxModule())
-                .build();
-    }
-
-    public static MainApplication getInstance(){
-        return instance;
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        mAppComponent = DaggerAppComponent.builder().application(this).build();
+        return mAppComponent;
     }
 
     public AppComponent getAppComponent(){
         return mAppComponent;
     }
-
 }

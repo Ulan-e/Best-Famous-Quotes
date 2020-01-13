@@ -1,6 +1,7 @@
 package com.ulan.app.quotes.ui.starred;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,50 +29,51 @@ import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.adapter.QuoteAdapter;
 import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.data.database.DaoStarredQuotes;
-import com.ulan.app.quotes.di.components.StarredComponent;
-import com.ulan.app.quotes.di.modules.source.SharedPrefModule;
-import com.ulan.app.quotes.di.modules.uimodules.StarredModule;
+import com.ulan.app.quotes.di.scopes.AppScope;
 import com.ulan.app.quotes.ui.base.BaseFragment;
 import com.ulan.app.quotes.ui.home.HomeFragment;
-import com.ulan.app.quotes.utils.listeners.FragmentLifecycle;
+import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
+
 import static android.view.View.GONE;
-import static com.ulan.app.quotes.utils.Constants.TAG_OTHER;
-import static com.ulan.app.quotes.utils.Constants.TAG_STATE;
+import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
+import static com.ulan.app.quotes.helpers.Constants.TAG_STATE;
 
 
-public class StarredFragment extends BaseFragment implements StarredFragmentView, FragmentLifecycle {
+public class StarredFragment extends BaseFragment implements StarredView, FragmentLifecycle {
 
     private RecyclerView mRecyclerView;
     private TextView mTextNoQuotes;
-    private StarredComponent mStarredComponent;
     private QuoteAdapter mAdapter;
 
-    private DaoStarredQuotes mDaoStarredQuotes;
-    private StarredPresenterImpl mPresenter;
-    private SharedPreferences mSharedPreferences;
+    @AppScope
+    @Inject
+    public DaoStarredQuotes mDaoStarredQuotes;
+
+    @Inject
+    public StarredPresenterImpl mPresenter;
+
+    @Inject
+    public SharedPreferences mSharedPreferences;
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        getMainComponent();
-        mPresenter.loadLikedQuotes();
-    }
-
-    private void getMainComponent() {
-        mStarredComponent = getAppComponent().likedBuilder()
-                .likedModule(new StarredModule(this))
-                .sharedModule(new SharedPrefModule(getActivity()))
-                .build();
-        mStarredComponent.inject(this);
-
-        mDaoStarredQuotes = mStarredComponent.getDaoQuotes();
-        mPresenter = mStarredComponent.getPresenter();
-        mSharedPreferences = mStarredComponent.getSharedPreferences();
+        mPresenter.setStarredQuotes(mDaoStarredQuotes.getLikedQuotes());
+        mPresenter.loadStarredQuotes();
     }
 
     public void setDataShared() {
@@ -100,7 +102,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.clear_list:
-                int size = mDaoStarredQuotes.getLikedQuotes().size();
+                int size = 2;
                 if (size > 0) {
                     showDialog();
                 } else {
@@ -192,7 +194,7 @@ public class StarredFragment extends BaseFragment implements StarredFragmentView
         dialogBtn_okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getInfoClearList(mAdapter, mDaoStarredQuotes);
+                mPresenter.clearStarredQuotes(mAdapter, mDaoStarredQuotes);
                 dialog.cancel();
             }
         });

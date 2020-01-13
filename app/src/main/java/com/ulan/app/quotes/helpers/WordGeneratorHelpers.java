@@ -1,4 +1,4 @@
-package com.ulan.app.quotes.utils;
+package com.ulan.app.quotes.helpers;
 
 import java.util.Random;
 
@@ -7,7 +7,7 @@ import java.util.Random;
  * for query photo from api
  */
 
-public class WordGenerator {
+public class WordGeneratorHelpers {
 
     public static String getRandomWord(){
         String[] strings = {"awesome", " ", "scenery", "photos", "home", "world", "architecture", " ", " "};

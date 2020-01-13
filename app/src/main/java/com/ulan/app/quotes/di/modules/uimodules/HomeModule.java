@@ -1,32 +1,26 @@
 package com.ulan.app.quotes.di.modules.uimodules;
 
 import com.ulan.app.quotes.di.scopes.HomeScope;
-import com.ulan.app.quotes.ui.home.HomeFragmentPresenterImpl;
-import com.ulan.app.quotes.ui.home.HomeFragmentView;
+import com.ulan.app.quotes.ui.home.HomeFragment;
+import com.ulan.app.quotes.ui.home.HomePresenterImpl;
+import com.ulan.app.quotes.ui.home.HomeView;
 
 import dagger.Module;
 import dagger.Provides;
 
-@HomeScope
 @Module
 public class HomeModule {
 
-    HomeFragmentView view;
-
-    public HomeModule(HomeFragmentView view) {
-        this.view = view;
+    @HomeScope
+    @Provides
+    public HomeView homeView(HomeFragment homeFragment){
+        return homeFragment;
     }
 
     @HomeScope
     @Provides
-    public HomeFragmentView view(){
-        return view;
-    }
-
-    @HomeScope
-    @Provides
-    public HomeFragmentPresenterImpl presenter(HomeFragmentView view){
-        return new HomeFragmentPresenterImpl(view);
+    public HomePresenterImpl homePresenter(HomeView homeView){
+        return new HomePresenterImpl(homeView);
     }
 
 }

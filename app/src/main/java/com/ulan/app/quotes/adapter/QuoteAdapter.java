@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.data.QuoteModel;
-import com.ulan.app.quotes.utils.listeners.OnPositionClickListener;
+import com.ulan.app.quotes.ui.listeners.OnPositionClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

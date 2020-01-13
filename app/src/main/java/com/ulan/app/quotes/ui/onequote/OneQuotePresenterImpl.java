@@ -2,16 +2,20 @@ package com.ulan.app.quotes.ui.onequote;
 
 import com.ulan.app.quotes.data.database.DaoQuotes;
 
-import static com.ulan.app.quotes.utils.ListDataHandler.generateAuthorName;
+import static com.ulan.app.quotes.helpers.ListDataHelpers.generateAuthorName;
 
 public class OneQuotePresenterImpl implements OneQuotePresenter {
 
     private OneQuoteView mView;
     private DaoQuotes mDaoQuotes;
 
-    public OneQuotePresenterImpl(OneQuoteView mView, DaoQuotes mDaoQuotes) {
+    public OneQuotePresenterImpl(OneQuoteView mView) {
         this.mView = mView;
-        this.mDaoQuotes = mDaoQuotes;
+    }
+
+    @Override
+    public void setDao(DaoQuotes daoQuotes) {
+        this.mDaoQuotes = daoQuotes;
     }
 
     @Override

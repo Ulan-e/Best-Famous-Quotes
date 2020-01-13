@@ -4,7 +4,7 @@ import com.ulan.app.quotes.data.QuoteModel;
 
 import java.util.List;
 
-public interface StarredFragmentView {
+public interface StarredView {
 
     void showLikedQuotes(List<QuoteModel> quoteList);
     void showNoLikedQuotes();

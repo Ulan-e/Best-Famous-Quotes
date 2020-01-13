@@ -1,23 +1,17 @@
-package com.ulan.app.quotes.di.modules.source;
+package com.ulan.app.quotes.di.modules;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.ulan.app.quotes.di.scopes.AppScope;
-import com.ulan.app.quotes.utils.Constants;
+import com.ulan.app.quotes.helpers.Constants;
 
 import dagger.Module;
 import dagger.Provides;
 
-@AppScope
+
 @Module
 public class SharedPrefModule {
-
-    public Context application;
-
-    public SharedPrefModule(Context application) {
-        this.application = application;
-    }
 
     @AppScope
     @Provides

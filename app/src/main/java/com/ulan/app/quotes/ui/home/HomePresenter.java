@@ -6,9 +6,9 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-public interface HomeFragmentPresenter {
+public interface HomePresenter {
 
-    void attachRxData(Observable<List<QuoteModel>> quoteDatObser);
-    void detachRxData();
+    void setQuotes(Observable<List<QuoteModel>> quoteDatObser);
+    void resetQuotes();
     void detachView();
 }

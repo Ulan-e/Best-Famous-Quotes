@@ -1,13 +1,13 @@
-package com.ulan.app.quotes.di.modules.source;
+package com.ulan.app.quotes.di.modules.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ulan.app.quotes.data.network.api.PhotosApi;
-import com.ulan.app.quotes.di.qualifires.Photos;
-import com.ulan.app.quotes.di.qualifires.PhotosGson;
-import com.ulan.app.quotes.di.qualifires.PhotosOkHttp;
+import com.ulan.app.quotes.data.network.api.FavQsApi;
+import com.ulan.app.quotes.di.qualifires.QuoteGson;
+import com.ulan.app.quotes.di.qualifires.Quotes;
+import com.ulan.app.quotes.di.qualifires.TokenInterceptor;
 import com.ulan.app.quotes.di.scopes.AppScope;
-import com.ulan.app.quotes.utils.Constants;
+import com.ulan.app.quotes.helpers.Constants;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,21 +18,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @AppScope
 @Module(includes = {OkHttpModule.class})
-public class PhotosModule {
+public class QuotesModule {
 
     @AppScope
     @Provides
-    public PhotosApi photoApi(@Photos Retrofit retrofit){
-        return retrofit.create(PhotosApi.class);
+    public FavQsApi favQsApi(@Quotes Retrofit retrofit){
+        return retrofit.create(FavQsApi.class);
     }
 
     @AppScope
-    @Photos
+    @Quotes
     @Provides
-    public Retrofit retrofit(@PhotosOkHttp OkHttpClient client,
-                             @PhotosGson Gson gson){
+    public Retrofit retrofit(@TokenInterceptor OkHttpClient client,
+                             @QuoteGson Gson gson){
         return new Retrofit.Builder()
-                .baseUrl(Constants.PIXABAY_URL)
+                .baseUrl(Constants.FAVQS_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(client)
@@ -40,7 +40,7 @@ public class PhotosModule {
     }
 
     @AppScope
-    @PhotosGson
+    @QuoteGson
     @Provides
     public Gson gson(){
         GsonBuilder gsonBuilder = new GsonBuilder();

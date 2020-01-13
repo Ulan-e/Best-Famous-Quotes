@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         android:name="com.ulan.app.quotes.MainApplication">
 
-        <activity android:name ="com.ulan.app.quotes.ui.mainactivity.MainActivity"
+        <activity android:name ="com.ulan.app.quotes.ui.main.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.ulan.app.quotes.utils.notification.AlarmReceiver"/>
+        <receiver android:name="com.ulan.app.quotes.helpers.notification.AlarmReceiver"/>
     </application>
 
 </manifest>
