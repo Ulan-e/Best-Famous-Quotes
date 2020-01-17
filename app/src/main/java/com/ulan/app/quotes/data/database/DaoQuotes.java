@@ -8,9 +8,6 @@ import java.util.List;
 @Dao
 public interface DaoQuotes {
 
-    @Query("SELECT * FROM quotes1 ORDER BY RANDOM() LIMIT 25")
-    List<QuoteEntity> getAllQuotes();
-
     @Query("SELECT * FROM quotes1 ORDER BY RANDOM() LIMIT 1")
     QuoteEntity getQuote();
 

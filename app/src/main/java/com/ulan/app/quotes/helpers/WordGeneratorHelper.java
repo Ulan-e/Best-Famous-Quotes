@@ -7,7 +7,7 @@ import java.util.Random;
  * for query photo from api
  */
 
-public class WordGeneratorHelpers {
+public class WordGeneratorHelper {
 
     public static String getRandomWord(){
         String[] strings = {"awesome", " ", "scenery", "photos", "home", "world", "architecture", " ", " "};

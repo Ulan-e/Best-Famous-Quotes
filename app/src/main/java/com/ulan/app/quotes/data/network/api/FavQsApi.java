@@ -1,6 +1,6 @@
 package com.ulan.app.quotes.data.network.api;
 
-import com.ulan.app.quotes.data.network.QuotesResponse;
+import com.ulan.app.quotes.data.network.responce.QuotesResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

@@ -10,4 +10,6 @@
     <string name="wisdom">wisdom</string>
     <string name="motivation">motivation</string>
     <string name="funny">funny</string>
+
+    <string name="copyClipboard">Added to Starred</string>
 </resources>

@@ -18,7 +18,7 @@ import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
  * 3) generate author name
  */
 
-public class ListDataHelpers {
+public class ListHandlerHelper {
 
     // generate author name ('Gates, Bill' -> 'Bill Gates')
     public static String generateAuthorName(String data){
@@ -33,13 +33,13 @@ public class ListDataHelpers {
     }
 
     // merge quotes text with photos url
-    public static List<QuoteModel> mergeQuotesPhotos(List<Photo> photos, List<QuoteModel> quotes){
+    public static List<QuoteModel> mergeQuotesWithPhotos(List<Photo> photos, List<QuoteModel> quotes){
         for(int i =0; i < photos.size(); i++){
             QuoteModel quoteData = quotes.get(i);
             quoteData.setUrlImage(photos.get(i).getWebformatURL());
         }
-        Log.d(TAG_OTHER, "mergeQuotesPhotos quotes " + String.valueOf(quotes.size()));
-        Log.d(TAG_OTHER, "mergeQuotesPhotos photos " + String.valueOf(photos.size()));
+        Log.d(TAG_OTHER, "mergeQuotesWithPhotos quotes " + String.valueOf(quotes.size()));
+        Log.d(TAG_OTHER, "mergeQuotesWithPhotos photos " + String.valueOf(photos.size()));
         return  quotes;
     }
 

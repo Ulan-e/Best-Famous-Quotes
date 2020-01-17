@@ -9,37 +9,37 @@ public class Quote {
 
     @SerializedName("tags")
     @Expose
-    public List<String> tags = null;
+    private List<String> tags = null;
     @SerializedName("favorite")
     @Expose
-    public Boolean favorite;
+    private Boolean favorite;
     @SerializedName("author_permalink")
     @Expose
-    public String authorPermalink;
+    private String authorPermalink;
     @SerializedName("body")
     @Expose
-    public String body;
+    private String body;
     @SerializedName("id")
     @Expose
-    public Integer id;
+    private Integer id;
     @SerializedName("favorites_count")
     @Expose
-    public Integer favoritesCount;
+    private Integer favoritesCount;
     @SerializedName("upvotes_count")
     @Expose
-    public Integer upvotesCount;
+    private Integer upvotesCount;
     @SerializedName("downvotes_count")
     @Expose
-    public Integer downvotesCount;
+    private Integer downvotesCount;
     @SerializedName("dialogue")
     @Expose
-    public Boolean dialogue;
+    private Boolean dialogue;
     @SerializedName("author")
     @Expose
-    public String author;
+    private String author;
     @SerializedName("url")
     @Expose
-    public String url;
+    private String url;
 
     public List<String> getTags() {
         return tags;

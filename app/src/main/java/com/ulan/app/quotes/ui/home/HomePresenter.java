@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 
 public interface HomePresenter {
 
-    void setQuotes(Observable<List<QuoteModel>> quoteDatObser);
+    void setQuotes(Observable<List<QuoteModel>> quotes);
     void resetQuotes();
     void detachView();
 }

@@ -1,6 +1,5 @@
 package com.ulan.app.quotes.ui.home;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,23 +24,22 @@ import com.ulan.app.quotes.adapter.QuoteAdapter;
 import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.di.qualifires.filters.FilterRandom;
 import com.ulan.app.quotes.ui.base.BaseFragment;
+import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
+import com.ulan.app.quotes.ui.listeners.ShareQuotesListener;
 import com.ulan.app.quotes.ui.main.MainActivity;
 import com.ulan.app.quotes.ui.starred.StarredFragment;
-import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
-import com.ulan.app.quotes.ui.listeners.ShareObservableListener;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.Observable;
 
 import static android.view.View.GONE;
 import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
 import static com.ulan.app.quotes.helpers.Constants.TAG_STATE;
 
-public class HomeFragment extends BaseFragment implements HomeView, FragmentLifecycle, ShareObservableListener {
+public class HomeFragment extends BaseFragment implements HomeView, FragmentLifecycle, ShareQuotesListener {
 
     private StarredFragment mStarredFragment;
     private RecyclerView mRecyclerView;
@@ -63,20 +61,9 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
     public SharedPreferences mPreferences;
 
     @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         ((MainActivity) getActivity()).setOnSendListener(this);
-
-        Log.d("carona", "mQuotes " + mQuotes.toString());
-        Log.d("carona", " mPresenter " + mPresenter.toString());
-        Log.d("carona", " mPreferences " + mPreferences.toString());
         mPresenter.setQuotes(mQuotes);
     }
 
@@ -87,24 +74,25 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         mLinearLayout = view.findViewById(R.id.error_layout);
         Button retryButton = view.findViewById(R.id.retry_button);
+        mRecyclerView = view.findViewById(R.id.recycler_view_quotes);
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mQuotes != null) {
+                if (mQuotes != null) {
                     mPresenter.setQuotes(mQuotes);
                 }
                 mLinearLayout.setVisibility(GONE);
             }
         });
+        initAnimationsBottomNav();
+        mRecyclerView.addOnScrollListener(recyclerScrollListener);
+        return view;
+    }
 
-
+    private void initAnimationsBottomNav(){
         mBottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
         mAnimationBottomHide = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_hide_anim);
         mAnimationBottomShow = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_show_anim);
-
-        mRecyclerView = view.findViewById(R.id.recycler_view_quotes);
-        mRecyclerView.addOnScrollListener(recyclerScrollListener);
-        return view;
     }
 
     private RecyclerView.OnScrollListener recyclerScrollListener =
@@ -130,7 +118,7 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
                 }
             };
 
-    private void sendData(QuoteModel quoteData) {
+    private void sendQuoteWithSharedPref(QuoteModel quoteData) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString("image", quoteData.getUrlImage());
         editor.putString("quote", quoteData.getQuote());
@@ -144,10 +132,10 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
     public void showQuotes(List<QuoteModel> listQuotes) {
         mAdapter = new QuoteAdapter(getActivity(), listQuotes, position -> {
             QuoteModel quoteData = listQuotes.get(position);
-            sendData(quoteData);
+            sendQuoteWithSharedPref(quoteData);
             if (mStarredFragment != null) {
-                mStarredFragment.setDataShared();
-               Toast.makeText(getActivity(), "Quote added to Starred", Toast.LENGTH_SHORT).show();
+                mStarredFragment.setSharedQuote();
+                Toast.makeText(getActivity(), "Quote added to Starred", Toast.LENGTH_SHORT).show();
             }
             mLinearLayout.setVisibility(GONE);
         });
@@ -157,10 +145,17 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
     }
 
     @Override
-    public void showQuotesError(Throwable e) {
-        Log.d(TAG_OTHER, "showQuotesError: " + e.getMessage());
+    public void showNoQuotes(Throwable e) {
+        Log.d(TAG_OTHER, "showNoQuotes: " + e.getMessage());
         mRecyclerView.setVisibility(GONE);
         mLinearLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.resetQuotes();
+        mPresenter.detachView();
     }
 
     @Override
@@ -180,18 +175,11 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mPresenter.resetQuotes();
-        mPresenter.detachView();
-    }
-
-    @Override
-    public void passObservable(Observable<List<QuoteModel>> listObservable) {
-        if (listObservable == null) {
-            Log.d(TAG_OTHER, "passObservable: Observable<List<QuoteModel>> is null object");
+    public void passQuotes(Observable<List<QuoteModel>> quotes) {
+        if (quotes == null) {
+            throw new IllegalArgumentException("Quotes should not be null");
         }
-        mPresenter.setQuotes(listObservable);
+        mPresenter.setQuotes(quotes);
     }
 
 }

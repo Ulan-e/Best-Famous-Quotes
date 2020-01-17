@@ -2,9 +2,9 @@ package com.ulan.app.quotes.di.modules;
 
 import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.data.network.model.Photo;
-import com.ulan.app.quotes.data.network.PhotosResponse;
+import com.ulan.app.quotes.data.network.responce.PhotosResponse;
 import com.ulan.app.quotes.data.network.model.Quote;
-import com.ulan.app.quotes.data.network.QuotesResponse;
+import com.ulan.app.quotes.data.network.responce.QuotesResponse;
 import com.ulan.app.quotes.di.modules.network.PhotoApi;
 import com.ulan.app.quotes.di.modules.network.QuoteApi;
 import com.ulan.app.quotes.di.qualifires.filters.FilterFunny;
@@ -21,13 +21,13 @@ import dagger.Provides;
 import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
 
-import static com.ulan.app.quotes.helpers.ListDataHelpers.mergeQuotesPhotos;
-import static com.ulan.app.quotes.helpers.ListDataHelpers.populateQuotes;
+import static com.ulan.app.quotes.helpers.ListHandlerHelper.mergeQuotesWithPhotos;
+import static com.ulan.app.quotes.helpers.ListHandlerHelper.populateQuotes;
 
 /**
  * Module ObservablesModule zip observable of quotes with
  * observable of photos then return new type
- * observable if quotedata
+ * observable if Quotedata
  */
 
 @Module(includes = {QuoteApi.class, PhotoApi.class})
@@ -36,15 +36,15 @@ public class ObservablesModule {
     @FilterRandom
     @Provides
     public Observable<List<QuoteModel>> zipObservables(
-            @FilterRandom Observable<PhotosResponse> photosObservable,
-            @FilterRandom Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
+            @FilterRandom Observable<PhotosResponse> photos,
+            @FilterRandom Observable<QuotesResponse> quotes){
+        return Observable.zip(photos, quotes, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
             public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
                 List<QuoteModel> quoteDataList = populateQuotes(quoteList);
-                return mergeQuotesPhotos(photosList, quoteDataList);
+                return mergeQuotesWithPhotos(photosList, quoteDataList);
             }
         });
     }
@@ -52,15 +52,15 @@ public class ObservablesModule {
     @FilterHappy
     @Provides
     public Observable<List<QuoteModel>> zipObservablesWisdom(
-            @FilterHappy Observable<PhotosResponse> photosObservable,
-            @FilterHappy Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
+            @FilterHappy Observable<PhotosResponse> photos,
+            @FilterHappy Observable<QuotesResponse> quotes){
+        return Observable.zip(photos, quotes, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
             public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
                 List<QuoteModel> quoteDataList = populateQuotes(quoteList);
-                return mergeQuotesPhotos(photosList, quoteDataList);
+                return mergeQuotesWithPhotos(photosList, quoteDataList);
             }
         });
     }
@@ -68,15 +68,15 @@ public class ObservablesModule {
     @FilterLove
     @Provides
     public Observable<List<QuoteModel>> zipObservablesLove(
-            @FilterLove Observable<PhotosResponse> photosObservable,
-            @FilterLove Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
+            @FilterLove Observable<PhotosResponse> photos,
+            @FilterLove Observable<QuotesResponse> quotes){
+        return Observable.zip(photos, quotes, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
             public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
                 List<QuoteModel> quoteDataList = populateQuotes(quoteList);
-                return mergeQuotesPhotos(photosList, quoteDataList);
+                return mergeQuotesWithPhotos(photosList, quoteDataList);
             }
         });
     }
@@ -84,15 +84,15 @@ public class ObservablesModule {
     @FilterLive
     @Provides
     public Observable<List<QuoteModel>> zipObservablesLife(
-            @FilterLive Observable<PhotosResponse> photosObservable,
-            @FilterLive Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
+            @FilterLive Observable<PhotosResponse> photos,
+            @FilterLive Observable<QuotesResponse> quotes){
+        return Observable.zip(photos, quotes, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
             public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
                 List<QuoteModel> quoteDataList = populateQuotes(quoteList);
-                return mergeQuotesPhotos(photosList, quoteDataList);
+                return mergeQuotesWithPhotos(photosList, quoteDataList);
             }
         });
     }
@@ -100,15 +100,15 @@ public class ObservablesModule {
     @FilterMotif
     @Provides
     public Observable<List<QuoteModel>> zipObservablesMotif(
-            @FilterMotif Observable<PhotosResponse> photosObservable,
-            @FilterMotif Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
+            @FilterMotif Observable<PhotosResponse> photos,
+            @FilterMotif Observable<QuotesResponse> quotes){
+        return Observable.zip(photos, quotes, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
             public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
                 List<Quote> quoteList = quotesResponse.getQuotes();
                 List<Photo> photosList = photosResponse.getHits();
                 List<QuoteModel> quoteDataList = populateQuotes(quoteList);
-                return mergeQuotesPhotos(photosList, quoteDataList);
+                return mergeQuotesWithPhotos(photosList, quoteDataList);
             }
         });
     }
@@ -116,15 +116,15 @@ public class ObservablesModule {
     @FilterFunny
     @Provides
     public Observable<List<QuoteModel>> zipObservablesFunny(
-            @FilterFunny Observable<PhotosResponse> photosObservable,
-            @FilterFunny Observable<QuotesResponse> quotesObservable){
-        return Observable.zip(photosObservable, quotesObservable, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
+            @FilterFunny Observable<PhotosResponse> photos,
+            @FilterFunny Observable<QuotesResponse> quotes){
+        return Observable.zip(photos, quotes, new BiFunction<PhotosResponse, QuotesResponse, List<QuoteModel>>() {
             @Override
             public List<QuoteModel> apply(PhotosResponse photosResponse, QuotesResponse quotesResponse) throws Exception {
-                List<Quote> quoteList = quotesResponse.getQuotes();
-                List<Photo> photosList = photosResponse.getHits();
-                List<QuoteModel> quoteDataList = populateQuotes(quoteList);
-                return mergeQuotesPhotos(photosList, quoteDataList);
+                List<Quote> quotes = quotesResponse.getQuotes();
+                List<Photo> photos = photosResponse.getHits();
+                List<QuoteModel> quoteDataList = populateQuotes(quotes);
+                return mergeQuotesWithPhotos(photos, quoteDataList);
             }
         });
     }

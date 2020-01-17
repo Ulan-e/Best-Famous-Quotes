@@ -22,29 +22,29 @@ import java.util.List;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private final SparseArray<WeakReference<Fragment>> mInstantiatedFragments;
-    private final List<Fragment> mFragmentList;
-    private final List<String> mTitleList;
+    private final List<Fragment> mFragments;
+    private final List<String> mTitles;
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
         mInstantiatedFragments = new SparseArray<>();
-        mTitleList =  new ArrayList();
-        mFragmentList = new ArrayList<>();
+        mTitles =  new ArrayList();
+        mFragments = new ArrayList<>();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return mFragmentList.get(position);
+        return mFragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return mFragmentList.size();
+        return mFragments.size();
     }
 
     public void addFragment(BaseFragment fragment, String title){
-        mFragmentList.add(fragment);
-        mTitleList.add(title);
+        mFragments.add(fragment);
+        mTitles.add(title);
     }
 
     @NonNull
@@ -61,19 +61,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         super.destroyItem(container, position, object);
     }
 
-    // Get fragment by position
-    public Fragment getFragment(final int position){
-        final WeakReference<Fragment> weakReference = mInstantiatedFragments.get(position);
-        if(weakReference != null){
-            return weakReference.get();
-        } else {
-            return null;
-        }
-    }
-
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTitleList.get(position);
+        return mTitles.get(position);
     }
 }

@@ -1,4 +1,4 @@
-package com.ulan.app.quotes.di.modules;
+package com.ulan.app.quotes.di.modules.builders;
 
 import com.ulan.app.quotes.di.modules.uimodules.MainModule;
 import com.ulan.app.quotes.di.scopes.MainScope;

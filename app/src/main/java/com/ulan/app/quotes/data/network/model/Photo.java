@@ -7,76 +7,76 @@ public class Photo {
 
     @SerializedName("id")
     @Expose
-    public Integer id;
+    private Integer id;
     @SerializedName("pageURL")
     @Expose
-    public String pageURL;
+    private String pageURL;
     @SerializedName("type")
     @Expose
-    public String type;
+    private String type;
     @SerializedName("tags")
     @Expose
-    public String tags;
+    private String tags;
     @SerializedName("previewURL")
     @Expose
-    public Object previewURL;
+    private Object previewURL;
     @SerializedName("previewWidth")
     @Expose
-    public Integer previewWidth;
+    private Integer previewWidth;
     @SerializedName("previewHeight")
     @Expose
-    public Integer previewHeight;
+    private Integer previewHeight;
     @SerializedName("webformatURL")
     @Expose
-    public String webformatURL;
+    private String webformatURL;
     @SerializedName("webformatWidth")
     @Expose
-    public Integer webformatWidth;
+    private Integer webformatWidth;
     @SerializedName("webformatHeight")
     @Expose
-    public Integer webformatHeight;
+    private Integer webformatHeight;
     @SerializedName("largeImageURL")
     @Expose
-    public String largeImageURL;
+    private String largeImageURL;
     @SerializedName("fullHDURL")
     @Expose
-    public String fullHDURL;
+    private String fullHDURL;
     @SerializedName("imageURL")
     @Expose
-    public String imageURL;
+    private String imageURL;
     @SerializedName("imageWidth")
     @Expose
-    public Integer imageWidth;
+    private Integer imageWidth;
     @SerializedName("imageHeight")
     @Expose
-    public Integer imageHeight;
+    private Integer imageHeight;
     @SerializedName("imageSize")
     @Expose
-    public Integer imageSize;
+    private Integer imageSize;
     @SerializedName("views")
     @Expose
-    public Integer views;
+    private Integer views;
     @SerializedName("downloads")
     @Expose
-    public Integer downloads;
+    private Integer downloads;
     @SerializedName("favorites")
     @Expose
-    public Integer favorites;
+    private Integer favorites;
     @SerializedName("likes")
     @Expose
-    public Integer likes;
+    private Integer likes;
     @SerializedName("comments")
     @Expose
-    public Integer comments;
+    private Integer comments;
     @SerializedName("user_id")
     @Expose
-    public Integer userId;
+    private Integer userId;
     @SerializedName("user")
     @Expose
-    public String user;
+    private String user;
     @SerializedName("userImageURL")
     @Expose
-    public Object userImageURL;
+    private Object userImageURL;
 
 
     public Integer getId() {

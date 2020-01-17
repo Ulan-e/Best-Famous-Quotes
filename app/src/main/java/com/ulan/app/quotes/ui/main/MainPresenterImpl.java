@@ -29,7 +29,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void loadQuotes() {
-        mView.setListOfQuotes(mQuotes);
+        mView.setQuotesToShare(mQuotes);
     }
 
     @Override

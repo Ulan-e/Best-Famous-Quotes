@@ -10,6 +10,6 @@ import io.reactivex.Observable;
 
 public interface MainView {
 
-    void setListOfQuotes(Observable<List<QuoteModel>> listOfQuotes);
+    void setQuotesToShare(Observable<List<QuoteModel>> listOfQuotes);
 
 }

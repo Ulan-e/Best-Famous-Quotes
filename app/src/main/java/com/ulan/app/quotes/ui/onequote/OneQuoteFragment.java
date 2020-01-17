@@ -1,6 +1,5 @@
 package com.ulan.app.quotes.ui.onequote;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,8 +22,6 @@ import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
 
 import javax.inject.Inject;
 
-import dagger.android.support.AndroidSupportInjection;
-
 import static com.ulan.app.quotes.helpers.Constants.TAG_STATE;
 
 public class OneQuoteFragment extends BaseFragment implements OneQuoteView, FragmentLifecycle{
@@ -39,17 +36,21 @@ public class OneQuoteFragment extends BaseFragment implements OneQuoteView, Frag
     @Inject
     public DaoQuotes mDaoQuote;
 
+    @Nullable
     @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.quote_day_fragment, container, false);
+        mQuoteText = view.findViewById(R.id.quote_day);
+        mAuthorText = view.findViewById(R.id.quote_author);
+        mPresenter.setDao(mDaoQuote);
+        mPresenter.getQuote();
+        return view;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        Log.d("onecorona", mDaoQuote.toString());
+    public void showQuote(String quote, String author) {
+        mQuoteText.setText(quote);
+        mAuthorText.setText(author);
     }
 
     @Override
@@ -65,21 +66,10 @@ public class OneQuoteFragment extends BaseFragment implements OneQuoteView, Frag
             case R.id.refresh:
                 mPresenter.getQuote();
                 return true;
-                default:
-                    break;
+            default:
+                break;
         }
         return false;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.quote_day_fragment, container, false);
-        mQuoteText = view.findViewById(R.id.quote_day);
-        mAuthorText = view.findViewById(R.id.quote_author);
-        mPresenter.setDao(mDaoQuote);
-        mPresenter.getQuote();
-        return view;
     }
 
     @Override
@@ -92,9 +82,4 @@ public class OneQuoteFragment extends BaseFragment implements OneQuoteView, Frag
         Log.d(TAG_STATE, "onResumeFragment: OneQuoteFragment ");
     }
 
-    @Override
-    public void showQuote(String quote, String author) {
-        mQuoteText.setText(quote);
-        mAuthorText.setText(author);
-    }
 }

@@ -1,5 +1,8 @@
-package com.ulan.app.quotes.di.modules;
+package com.ulan.app.quotes.di.modules.builders;
 
+import com.ulan.app.quotes.di.modules.ObservablesModule;
+import com.ulan.app.quotes.di.modules.RoomModule;
+import com.ulan.app.quotes.di.modules.SharedPrefModule;
 import com.ulan.app.quotes.di.modules.uimodules.HomeModule;
 import com.ulan.app.quotes.di.modules.uimodules.OneQuoteModule;
 import com.ulan.app.quotes.di.modules.uimodules.StarredModule;

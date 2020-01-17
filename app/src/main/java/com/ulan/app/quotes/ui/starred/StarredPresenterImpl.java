@@ -7,10 +7,8 @@ import com.ulan.app.quotes.data.database.DaoStarredQuotes;
 import java.util.List;
 
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
@@ -39,7 +37,7 @@ public class StarredPresenterImpl implements StarredPresenter {
                 .subscribeWith(new DisposableSubscriber<List<QuoteModel>>() {
                     @Override
                     public void onNext(List<QuoteModel> quoteModels) {
-                        mView.showLikedQuotes(quoteModels);
+                        mView.showStarredQuotes(quoteModels);
                     }
 
                     @Override
@@ -61,7 +59,7 @@ public class StarredPresenterImpl implements StarredPresenter {
 
                     @Override
                     public void onError(Throwable error) {
-                        mView.showNoLikedQuotes();
+                        mView.showNoStarredQuotes();
                     }
 
                     @Override
@@ -78,7 +76,7 @@ public class StarredPresenterImpl implements StarredPresenter {
     @Override
     public void clearStarredQuotes(QuoteAdapter adapter, DaoStarredQuotes daoLikedQuotes) {
         if (adapter != null && daoLikedQuotes != null) {
-            mView.clearAllQuotes();
+            mView.removeAllQuotes();
         }
     }
 }

@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface StarredView {
 
-    void showLikedQuotes(List<QuoteModel> quoteList);
-    void showNoLikedQuotes();
-    void clearAllQuotes();
+    void showStarredQuotes(List<QuoteModel> quoteList);
+    void showNoStarredQuotes();
+    void removeAllQuotes();
 
 }

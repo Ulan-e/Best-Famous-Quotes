@@ -40,7 +40,7 @@ public class HomePresenterImpl implements HomePresenter {
                         @Override
                         public void onError(Throwable error) {
                             Log.d(TAG_OTHER, "onError: Main Fragment " + error.getMessage());
-                            mView.showQuotesError(error);
+                            mView.showNoQuotes(error);
                         }
 
                         @Override

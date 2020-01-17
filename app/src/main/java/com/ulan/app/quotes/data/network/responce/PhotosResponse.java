@@ -1,4 +1,4 @@
-package com.ulan.app.quotes.data.network;
+package com.ulan.app.quotes.data.network.responce;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -10,13 +10,13 @@ public class PhotosResponse {
 
     @SerializedName("total")
     @Expose
-    public Integer total;
+    private Integer total;
     @SerializedName("totalHits")
     @Expose
-    public Integer totalHits;
+    private Integer totalHits;
     @SerializedName("hits")
     @Expose
-    public List<Photo> hits = null;
+    private List<Photo> hits = null;
 
     public Integer getTotal() {
         return total;

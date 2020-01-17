@@ -1,7 +1,7 @@
 package com.ulan.app.quotes.di.modules.network;
 
 import com.ulan.app.quotes.data.network.api.PhotosApi;
-import com.ulan.app.quotes.data.network.PhotosResponse;
+import com.ulan.app.quotes.data.network.responce.PhotosResponse;
 import com.ulan.app.quotes.di.qualifires.filters.FilterFunny;
 import com.ulan.app.quotes.di.qualifires.filters.FilterHappy;
 import com.ulan.app.quotes.di.qualifires.filters.FilterLive;
@@ -9,7 +9,7 @@ import com.ulan.app.quotes.di.qualifires.filters.FilterLove;
 import com.ulan.app.quotes.di.qualifires.filters.FilterMotif;
 import com.ulan.app.quotes.di.qualifires.filters.FilterRandom;
 import com.ulan.app.quotes.di.scopes.AppScope;
-import com.ulan.app.quotes.helpers.WordGeneratorHelpers;
+import com.ulan.app.quotes.helpers.WordGeneratorHelper;
 
 import dagger.Module;
 import dagger.Provides;
@@ -31,7 +31,7 @@ public class PhotoApi {
     @Provides
     public Observable<PhotosResponse> popularPhotos(PhotosApi pixabayApi){
         return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
-                "nature+" + WordGeneratorHelpers.getRandomWord(), WordGeneratorHelpers.getRandomBoolean());
+                "nature+" + WordGeneratorHelper.getRandomWord(), WordGeneratorHelper.getRandomBoolean());
     }
 
     @FilterLive
@@ -39,7 +39,7 @@ public class PhotoApi {
     @Provides
     public Observable<PhotosResponse> lifePhotos(PhotosApi pixabayApi){
         return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
-                "life+"+ WordGeneratorHelpers.getLifeWord(), WordGeneratorHelpers.getRandomBoolean());
+                "life+"+ WordGeneratorHelper.getLifeWord(), WordGeneratorHelper.getRandomBoolean());
     }
 
     @FilterHappy
@@ -47,7 +47,7 @@ public class PhotoApi {
     @Provides
     public Observable<PhotosResponse> wisdomPhotos(PhotosApi pixabayApi){
         return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
-                "wisdom+"+ WordGeneratorHelpers.getWisdomWord(), WordGeneratorHelpers.getRandomBoolean());
+                "wisdom+"+ WordGeneratorHelper.getWisdomWord(), WordGeneratorHelper.getRandomBoolean());
     }
 
     @FilterLove
@@ -55,7 +55,7 @@ public class PhotoApi {
     @Provides
     public Observable<PhotosResponse> lovePhotos(PhotosApi pixabayApi){
         return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
-                "love+"+ WordGeneratorHelpers.getLoveWord(), WordGeneratorHelpers.getRandomBoolean());
+                "love+"+ WordGeneratorHelper.getLoveWord(), WordGeneratorHelper.getRandomBoolean());
     }
 
     @FilterMotif
@@ -63,7 +63,7 @@ public class PhotoApi {
     @Provides
     public Observable<PhotosResponse> motivationPhotos(PhotosApi pixabayApi){
         return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
-                "motivation+"+ WordGeneratorHelpers.getMotivationalWord(), WordGeneratorHelpers.getRandomBoolean());
+                "motivation+"+ WordGeneratorHelper.getMotivationalWord(), WordGeneratorHelper.getRandomBoolean());
     }
 
     @FilterFunny
@@ -71,7 +71,7 @@ public class PhotoApi {
     @Provides
     public Observable<PhotosResponse> funnyPhotos(PhotosApi pixabayApi){
         return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
-                "funny+"+ WordGeneratorHelpers.getFunnyWord(), WordGeneratorHelpers.getRandomBoolean());
+                "funny+"+ WordGeneratorHelper.getFunnyWord(), WordGeneratorHelper.getRandomBoolean());
     }
 
 

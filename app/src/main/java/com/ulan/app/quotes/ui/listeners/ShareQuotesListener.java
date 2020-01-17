@@ -10,7 +10,7 @@ import io.reactivex.Observable;
  * Class can pass observable data between fragments
  */
 
-public interface ShareObservableListener {
+public interface ShareQuotesListener {
 
-    void passObservable(Observable<List<QuoteModel>> listObservable);
+    void passQuotes(Observable<List<QuoteModel>> listObservable);
 }

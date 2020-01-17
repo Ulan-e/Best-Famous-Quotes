@@ -30,30 +30,27 @@ import com.ulan.app.quotes.ui.home.HomeFragment;
 import com.ulan.app.quotes.ui.onequote.OneQuoteFragment;
 import com.ulan.app.quotes.ui.starred.StarredFragment;
 import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
-import com.ulan.app.quotes.ui.listeners.ShareObservableListener;
+import com.ulan.app.quotes.ui.listeners.ShareQuotesListener;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjection;
 import io.reactivex.Observable;
 
 
 public class MainActivity extends BaseActivity implements MainView, View.OnClickListener{
 
-
-    private ShareObservableListener mShareQuotesListener;
-
+    private ShareQuotesListener mShareQuotesListener;
     private CustomViewPager mViewPager;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private AppBarLayout mAppBarLayout;
     private LinearLayout mLinearLayout;
     private BottomNavigationView mBottomNavigation;
     private MenuItem mBottomMenuItem;
-    private Button[] mButtons = new Button[5];
+    private Button[] mButtons;
     private Button mUntouchedButton;
-    private int[] mButtonResources = {R.id.love, R.id.funny, R.id.life, R.id.motivation, R.id.happy};
+    private int[] mButtonResources;
 
     @Inject
     public ViewPagerAdapter mViewPagerAdapter;
@@ -79,22 +76,14 @@ public class MainActivity extends BaseActivity implements MainView, View.OnClick
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState){
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mPresenter.attachView(this);
 
-        initViewPager();
         initAppBar();
-        initBottomNavView();
         initFilterButtons();
-    }
-
-    private void initFilterButtons() {
-        for(int i = 0; i < mButtons.length; i++){
-            mButtons[i] = findViewById(mButtonResources[i]);
-            mButtons[i].setOnClickListener(this);
-        }
-        mUntouchedButton = mButtons[0];
+        initViewPager();
+        initBottomNavView();
     }
 
     private void initAppBar(){
@@ -112,111 +101,6 @@ public class MainActivity extends BaseActivity implements MainView, View.OnClick
         mAppBarLayout.addOnOffsetChangedListener(appBarChangeListener);
     }
 
-    private void initViewPager() {
-        mViewPager = findViewById(R.id.containerPager);
-        mViewPagerAdapter.addFragment(new StarredFragment(), "title");
-        mViewPagerAdapter.addFragment(new HomeFragment(), "title");
-        mViewPagerAdapter.addFragment(new OneQuoteFragment(), "title");
-        mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPager.setOnPageChangeListener(pageChangeListener);
-    }
-
-    private void initBottomNavView(){
-        mBottomNavigation = findViewById(R.id.bottom_navigation);
-        mBottomNavigation.setOnNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()){
-                case R.id.star:
-                    mViewPager.setCurrentItem(0);
-                    break;
-                case R.id.home:
-                    mViewPager.setCurrentItem(1);
-                    break;
-                case R.id.one:
-                    mViewPager.setCurrentItem(2);
-                    break;
-            }
-            return false;
-        });
-        mBottomNavigation.setSelectedItemId(R.id.home);
-        mBottomNavigation.setItemIconTintList(null);
-        mBottomNavigation.setOnNavigationItemSelectedListener(itemSelectedListener);
-    }
-
-    public void setOnSendListener(ShareObservableListener sendListener){
-        this.mShareQuotesListener = sendListener;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.list_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.filter:
-               if(mAppBarLayout.getTop() < 0) {
-                    mAppBarLayout.setExpanded(true);
-                }else{
-                    mAppBarLayout.setExpanded(false);
-                }
-                return true;
-            default:
-                break;
-        }
-        return false;
-    }
-
-    @Override
-    public void setListOfQuotes(Observable<List<QuoteModel>> listOfQuotes) {
-        mShareQuotesListener.passObservable(listOfQuotes);
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.love:
-                clickHandle(mUntouchedButton, mButtons[0]);
-                mPresenter.setQuotes(loveQuotes);
-                mPresenter.loadQuotes();
-                break;
-            case R.id.funny:
-                clickHandle(mUntouchedButton, mButtons[1]);
-                mPresenter.setQuotes(funnyQuotes);
-                mPresenter.loadQuotes();
-                break;
-            case R.id.life:
-                clickHandle(mUntouchedButton, mButtons[2]);
-                mPresenter.setQuotes(liveQuotes);
-                mPresenter.loadQuotes();
-                break;
-            case R.id.motivation:
-                clickHandle(mUntouchedButton, mButtons[3]);
-                mPresenter.setQuotes(motivQuotes);
-                mPresenter.loadQuotes();
-
-                break;
-            case R.id.happy:
-                clickHandle(mUntouchedButton, mButtons[4]);
-                mPresenter.setQuotes(happyQuotes);
-                mPresenter.loadQuotes();
-
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void clickHandle(Button untouched, Button touched){
-        untouched.setBackground(getResources().getDrawable(R.drawable.button_no_border));
-        touched.setBackground(getResources().getDrawable(R.drawable.buttun_with_border));
-        touched.setPressed(true);
-        this.mUntouchedButton = touched;
-    }
-
-    // Appbar Listener to change title of Toolbar
     private AppBarLayout.OnOffsetChangedListener appBarChangeListener =
             new AppBarLayout.OnOffsetChangedListener() {
                 @Override
@@ -231,28 +115,26 @@ public class MainActivity extends BaseActivity implements MainView, View.OnClick
                 }
             };
 
-    //
-    private BottomNavigationView.OnNavigationItemSelectedListener itemSelectedListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+    private void initFilterButtons() {
+        mButtonResources = new int[]{R.id.love, R.id.funny, R.id.life, R.id.motivation, R.id.happy};
+        mButtons = new Button[5];
+        for(int i = 0; i < mButtons.length; i++){
+            mButtons[i] = findViewById(mButtonResources[i]);
+            mButtons[i].setOnClickListener(this);
+        }
+        mUntouchedButton = mButtons[0];
+    }
 
-                    switch (menuItem.getItemId()){
-                        case R.id.star:
-                            mViewPager.setCurrentItem(0);
-                            break;
-                        case R.id.home:
-                            mViewPager.setCurrentItem(1);
-                            break;
-                        case R.id.one:
-                            mViewPager.setCurrentItem(2);
-                            break;
-                    }
-                    return false;
-                }
-            };
+    private void initViewPager() {
+        mViewPager = findViewById(R.id.containerPager);
+        mViewPagerAdapter.addFragment(new StarredFragment(), "title");
+        mViewPagerAdapter.addFragment(new HomeFragment(), "title");
+        mViewPagerAdapter.addFragment(new OneQuoteFragment(), "title");
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setOnPageChangeListener(pageChangeListener);
+    }
 
-    // OnPageChange Listener pass data between fragments in ViewPager
     private ViewPager.OnPageChangeListener pageChangeListener =
             new ViewPager.OnPageChangeListener() {
                 int currentPosition = 0;
@@ -288,4 +170,124 @@ public class MainActivity extends BaseActivity implements MainView, View.OnClick
 
                 }
             };
+
+    private void initBottomNavView(){
+        mBottomNavigation = findViewById(R.id.bottom_navigation);
+        mBottomNavigation.setOnNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()){
+                case R.id.star:
+                    mViewPager.setCurrentItem(0);
+                    break;
+                case R.id.home:
+                    mViewPager.setCurrentItem(1);
+                    break;
+                case R.id.one:
+                    mViewPager.setCurrentItem(2);
+                    break;
+            }
+            return false;
+        });
+        mBottomNavigation.setSelectedItemId(R.id.home);
+        mBottomNavigation.setItemIconTintList(null);
+        mBottomNavigation.setOnNavigationItemSelectedListener(itemSelectedListener);
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener itemSelectedListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                    switch (menuItem.getItemId()){
+                        case R.id.star:
+                            mViewPager.setCurrentItem(0);
+                            break;
+                        case R.id.home:
+                            mViewPager.setCurrentItem(1);
+                            break;
+                        case R.id.one:
+                            mViewPager.setCurrentItem(2);
+                            break;
+                    }
+                    return false;
+                }
+            };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.list_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.filter:
+               if(mAppBarLayout.getTop() < 0) {
+                    mAppBarLayout.setExpanded(true);
+                }else{
+                    mAppBarLayout.setExpanded(false);
+                }
+                return true;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public void setQuotesToShare(Observable<List<QuoteModel>> listOfQuotes) {
+        mShareQuotesListener.passQuotes(listOfQuotes);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.love:
+                clickFilterButton(mUntouchedButton, mButtons[0]);
+                mPresenter.setQuotes(loveQuotes);
+                mPresenter.loadQuotes();
+                break;
+            case R.id.funny:
+                clickFilterButton(mUntouchedButton, mButtons[1]);
+                mPresenter.setQuotes(funnyQuotes);
+                mPresenter.loadQuotes();
+                break;
+            case R.id.life:
+                clickFilterButton(mUntouchedButton, mButtons[2]);
+                mPresenter.setQuotes(liveQuotes);
+                mPresenter.loadQuotes();
+                break;
+            case R.id.motivation:
+                clickFilterButton(mUntouchedButton, mButtons[3]);
+                mPresenter.setQuotes(motivQuotes);
+                mPresenter.loadQuotes();
+
+                break;
+            case R.id.happy:
+                clickFilterButton(mUntouchedButton, mButtons[4]);
+                mPresenter.setQuotes(happyQuotes);
+                mPresenter.loadQuotes();
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void clickFilterButton(Button untouched, Button touched){
+        untouched.setBackground(getResources().getDrawable(R.drawable.button_no_border));
+        touched.setBackground(getResources().getDrawable(R.drawable.buttun_with_border));
+        touched.setPressed(true);
+        this.mUntouchedButton = touched;
+    }
+
+    public void setOnSendListener(ShareQuotesListener sendListener){
+        this.mShareQuotesListener = sendListener;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
+    }
 }

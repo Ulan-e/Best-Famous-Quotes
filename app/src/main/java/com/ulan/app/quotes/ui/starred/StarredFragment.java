@@ -33,6 +33,7 @@ import com.ulan.app.quotes.di.scopes.AppScope;
 import com.ulan.app.quotes.ui.base.BaseFragment;
 import com.ulan.app.quotes.ui.home.HomeFragment;
 import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
+import com.ulan.app.quotes.ui.listeners.OnPositionClickListener;
 
 import java.util.List;
 
@@ -50,6 +51,9 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
     private RecyclerView mRecyclerView;
     private TextView mTextNoQuotes;
     private QuoteAdapter mAdapter;
+    private BottomNavigationView mBottomNavigationView;
+    private Animation mAnimationHide;
+    private Animation mAnimationShow;
 
     @AppScope
     @Inject
@@ -62,21 +66,14 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
     public SharedPreferences mSharedPreferences;
 
     @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         mPresenter.setStarredQuotes(mDaoStarredQuotes.getLikedQuotes());
         mPresenter.loadStarredQuotes();
     }
 
-    public void setDataShared() {
+    public void setSharedQuote() {
         if (mAdapter != null) {
             QuoteModel quoteData = new QuoteModel();
             quoteData.setQuote(mSharedPreferences.getString("quote", "q"));
@@ -86,33 +83,9 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
             quoteData.setIsLiked(mSharedPreferences.getInt("liked", -1));
             quoteData.setIsLiked(1);
             mDaoStarredQuotes.setToTable(quoteData);
-            mAdapter.addQuote(quoteData);
+            mAdapter.addToStarred(quoteData);
             mAdapter.notifyDataSetChanged();
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        inflater.inflate(R.menu.liked_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.clear_list:
-                int size = 2;
-                if (size > 0) {
-                    showDialog();
-                } else {
-                    Toast.makeText(getActivity(), "List is Empty", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            default:
-                break;
-        }
-        return false;
     }
 
     @Nullable
@@ -130,7 +103,8 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
     }
 
     @Override
-    public void showLikedQuotes(List<QuoteModel> quoteList) {
+    public void showStarredQuotes(List<QuoteModel> quoteList) {
+        initBottomNavAnimation();
         mAdapter = new QuoteAdapter(getActivity(), quoteList, position -> {
             QuoteModel quoteData = quoteList.get(position);
             quoteList.remove(position);
@@ -142,38 +116,72 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
             Toast.makeText(getActivity(), "Item is Removed", Toast.LENGTH_SHORT).show();
         });
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(onScrollListener);
 
-        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
-        Animation animationHide = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_hide_anim);
-        Animation animationShow = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_show_anim);
-
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                }
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 && bottomNavigationView.isShown()) {
-                    bottomNavigationView.setVisibility(GONE);
-                    bottomNavigationView.startAnimation(animationHide);
-                } else if (dy < 0 && bottomNavigationView.getVisibility() != View.VISIBLE) {
-                    bottomNavigationView.setVisibility(View.VISIBLE);
-                    bottomNavigationView.startAnimation(animationShow);
-                }
-            }
-        });
     }
 
+    private void initBottomNavAnimation(){
+        mBottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+        mAnimationHide = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_hide_anim);
+        mAnimationShow = AnimationUtils.loadAnimation(getActivity(), R.anim.bottom_show_anim);
+    }
+
+    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+            }
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (dy > 0 && mBottomNavigationView.isShown()) {
+                mBottomNavigationView.setVisibility(GONE);
+                mBottomNavigationView.startAnimation(mAnimationHide);
+            } else if (dy < 0 && mBottomNavigationView.getVisibility() != View.VISIBLE) {
+                mBottomNavigationView.setVisibility(View.VISIBLE);
+                mBottomNavigationView.startAnimation(mAnimationShow);
+            }
+        }
+    };
+
     @Override
-    public void showNoLikedQuotes() {
+    public void showNoStarredQuotes() {
         mRecyclerView.setVisibility(GONE);
         mTextNoQuotes.setVisibility(View.VISIBLE);
         mTextNoQuotes.setText(" Starred list is empty ");
+    }
+
+    @Override
+    public void removeAllQuotes() {
+        mDaoStarredQuotes.deleteAll();
+        mAdapter.removeFromStarred();
+        Toast.makeText(getActivity(), " List is Cleared ", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.liked_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.clear_list:
+                if (mAdapter.getItemCount() > 0) {
+                    showDialog();
+                } else {
+                    Toast.makeText(getActivity(), "List is Empty", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            default:
+                break;
+        }
+        return false;
     }
 
     private void showDialog(){
@@ -202,18 +210,9 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
     }
 
     @Override
-    public void clearAllQuotes() {
-        mDaoStarredQuotes.deleteAll();
-        mAdapter.deleteLikedQuotes();
-        Toast.makeText(getActivity(), " List is Cleared ", Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
     public void onPauseFragment(Fragment fragment) {
         if (fragment instanceof HomeFragment) {
             Log.d(TAG_STATE, "onPauseFragment: StarredFragment " + fragment);
-            HomeFragment homeFragment = (HomeFragment) fragment;
         }
     }
 

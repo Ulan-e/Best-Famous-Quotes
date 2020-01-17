@@ -1,4 +1,4 @@
-package com.ulan.app.quotes.data.network;
+package com.ulan.app.quotes.data.network.responce;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,13 +11,13 @@ public class QuotesResponse {
 
     @SerializedName("page")
     @Expose
-    public Integer page;
+    private Integer page;
     @SerializedName("last_page")
     @Expose
-    public Boolean lastPage;
+    private Boolean lastPage;
     @SerializedName("quotes")
     @Expose
-    public List<Quote> quotes = null;
+    private List<Quote> quotes = null;
 
     public Integer getPage() {
         return page;

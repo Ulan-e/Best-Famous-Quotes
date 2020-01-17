@@ -27,13 +27,13 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
 
     private OnPositionClickListener mOnPositionClickListener;
     private Context mContext;
-    private List<QuoteModel> mQuotesList;
+    private List<QuoteModel> mQuotes;
 
-    public QuoteAdapter(Context context, List<QuoteModel> quotesList,
+    public QuoteAdapter(Context context, List<QuoteModel> quotes,
                         OnPositionClickListener clickListener) {
         this.mContext = context;
         this.mOnPositionClickListener = clickListener;
-        this.mQuotesList = quotesList;
+        this.mQuotes = quotes;
     }
 
     @NonNull
@@ -45,8 +45,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull QuoteViewHolder holder, int position){
-        QuoteModel quote = mQuotesList.get(position);
+    public void onBindViewHolder(@NonNull QuoteViewHolder holder, int position) {
+        QuoteModel quote = mQuotes.get(position);
         holder.mBodyText.setText(quote.getQuote());
         holder.mAuthorText.setText(quote.getAuthor());
         String copiedText = quote.getQuote() + "\n" + quote.getAuthor();
@@ -54,41 +54,38 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
             @Override
             public void onClick(View view) {
                 copyToClipBoard(mContext, copiedText);
-                Toast.makeText(mContext, "Quote copied to Clipboard", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mContext.getResources().getText(R.string.copyClipboard), Toast.LENGTH_SHORT).show();
             }
         });
-        if(quote.getIsLiked() == 1){
+        if (quote.getIsLiked() == 1) {
             holder.misLiked.setEnabled(true);
-           holder.misLiked.setImageResource(R.drawable.ic_delete_black_24dp);
+            holder.misLiked.setImageResource(R.drawable.ic_delete_black_24dp);
         }
         Picasso.get()
                 .load(quote.getUrlImage())
                 .into(holder.mImageQuote);
     }
 
-    @Override
-    public int getItemCount() {
-        return mQuotesList.size();
-    }
-
-    // Delete all quotes from StarredFragment List
-    public void deleteLikedQuotes(){
-        mQuotesList.clear();
-        notifyItemRangeChanged(0, mQuotesList.size());
-        notifyDataSetChanged();
-    }
-
-    // Add quote to StarredFragment List
-    public void addQuote(QuoteModel quoteData){
-        mQuotesList.add(quoteData);
-        notifyItemInserted(mQuotesList.size() - 1);
-    }
-
-    // Copy quote text to ClipBoard
-    public void copyToClipBoard(Context context, String text){
+    private void copyToClipBoard(Context context, String text) {
         ClipboardManager manager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText("copyText", text);
         manager.setPrimaryClip(clipData);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mQuotes.size();
+    }
+
+    public void removeFromStarred() {
+        mQuotes.clear();
+        notifyItemRangeChanged(0, mQuotes.size());
+        notifyDataSetChanged();
+    }
+
+    public void addToStarred(QuoteModel quoteData) {
+        mQuotes.add(quoteData);
+        notifyItemInserted(mQuotes.size() - 1);
     }
 
 }

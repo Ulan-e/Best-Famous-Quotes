@@ -1,18 +1,20 @@
 package com.ulan.app.quotes.ui.base;
 
-import com.ulan.app.quotes.MainApplication;
-import com.ulan.app.quotes.di.components.AppComponent;
+import android.os.Bundle;
 
-import dagger.android.DaggerActivity;
+import androidx.annotation.Nullable;
+
+import com.ulan.app.quotes.MainApplication;
+import com.ulan.app.quotes.di.component.AppComponent;
+
+import dagger.android.AndroidInjection;
 import dagger.android.support.DaggerAppCompatActivity;
 
 public abstract class BaseActivity extends DaggerAppCompatActivity {
 
-    private MainApplication getMainApplication(){
-        return (MainApplication) getApplication();
-    }
-
-    protected AppComponent getAppComponent(){
-        return  getMainApplication().getAppComponent();
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
+        super.onCreate(savedInstanceState);
     }
 }

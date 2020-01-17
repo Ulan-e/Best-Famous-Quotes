@@ -1,9 +1,9 @@
-package com.ulan.app.quotes.di.components;
+package com.ulan.app.quotes.di.component;
 
 import com.ulan.app.quotes.MainApplication;
-import com.ulan.app.quotes.di.modules.ActivityBuilderModule;
+import com.ulan.app.quotes.di.modules.builders.ActivityBuilderModule;
 import com.ulan.app.quotes.di.modules.AppModule;
-import com.ulan.app.quotes.di.modules.FragmentBuilderModule;
+import com.ulan.app.quotes.di.modules.builders.FragmentBuilderModule;
 import com.ulan.app.quotes.di.modules.ObservablesModule;
 import com.ulan.app.quotes.di.modules.RoomModule;
 import com.ulan.app.quotes.di.scopes.AppScope;
