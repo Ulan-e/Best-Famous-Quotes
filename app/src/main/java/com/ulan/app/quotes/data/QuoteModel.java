@@ -23,6 +23,17 @@ public class QuoteModel {
     @ColumnInfo(name = "is_liked")
     private int isLiked;
 
+    public QuoteModel() {
+    }
+
+    public QuoteModel(int id, String urlImage, String quote, String author, int isLiked) {
+        this.id = id;
+        this.urlImage = urlImage;
+        this.quote = quote;
+        this.author = author;
+        this.isLiked = isLiked;
+    }
+
     public int getId() {
         return id;
     }

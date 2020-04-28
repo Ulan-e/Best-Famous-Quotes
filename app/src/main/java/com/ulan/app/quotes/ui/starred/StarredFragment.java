@@ -1,7 +1,6 @@
 package com.ulan.app.quotes.ui.starred;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,13 +32,10 @@ import com.ulan.app.quotes.di.scopes.AppScope;
 import com.ulan.app.quotes.ui.base.BaseFragment;
 import com.ulan.app.quotes.ui.home.HomeFragment;
 import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
-import com.ulan.app.quotes.ui.listeners.OnPositionClickListener;
 
 import java.util.List;
 
 import javax.inject.Inject;
-
-import dagger.android.support.AndroidSupportInjection;
 
 import static android.view.View.GONE;
 import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
@@ -69,7 +65,7 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mPresenter.setStarredQuotes(mDaoStarredQuotes.getLikedQuotes());
+        mPresenter.setStarredQuotes(mDaoStarredQuotes.getAll());
         mPresenter.loadStarredQuotes();
     }
 
@@ -82,7 +78,7 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
             quoteData.setId(mSharedPreferences.getInt("id", -1));
             quoteData.setIsLiked(mSharedPreferences.getInt("liked", -1));
             quoteData.setIsLiked(1);
-            mDaoStarredQuotes.setToTable(quoteData);
+            mDaoStarredQuotes.insert(quoteData);
             mAdapter.addToStarred(quoteData);
             mAdapter.notifyDataSetChanged();
         }
@@ -111,7 +107,7 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
             mAdapter.notifyItemRemoved(position);
             mAdapter.notifyDataSetChanged();
             mAdapter.notifyItemRangeChanged(position, quoteList.size());
-            mDaoStarredQuotes.deleteQuote(quoteData);
+            mDaoStarredQuotes.delete(quoteData);
 
             Toast.makeText(getActivity(), "Item is Removed", Toast.LENGTH_SHORT).show();
         });

@@ -16,14 +16,14 @@ import io.reactivex.Flowable;
 @Dao
 public interface DaoStarredQuotes {
 
-    @Query("SELECT * FROM liked_quotes")
-    Flowable<List<QuoteModel>> getLikedQuotes();
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void setToTable(QuoteModel quoteData);
+    void insert(QuoteModel quoteData);
+
+    @Query("SELECT * FROM liked_quotes")
+    Flowable<List<QuoteModel>> getAll();
 
     @Delete
-    void deleteQuote(QuoteModel quoteData);
+    void delete(QuoteModel quoteData);
 
     @Query("DELETE FROM liked_quotes")
     void deleteAll();

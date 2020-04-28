@@ -9,6 +9,6 @@ import com.ulan.app.quotes.data.QuoteModel;
 public abstract class QuotesDatabase extends RoomDatabase {
 
     public abstract DaoQuotes getQuotesDao();
-    public abstract DaoStarredQuotes getLikedQuotes();
+    public abstract DaoStarredQuotes getLikedQuotesDao();
 
 }

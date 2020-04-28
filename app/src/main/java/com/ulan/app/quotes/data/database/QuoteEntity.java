@@ -20,6 +20,13 @@ public class QuoteEntity {
     @ColumnInfo(name = "quote")
     public String quote;
 
+    public QuoteEntity(int quoteId, String author, String category, String quote) {
+        this.quoteId = quoteId;
+        this.author = author;
+        this.category = category;
+        this.quote = quote;
+    }
+
     public int getQuoteId() {
         return quoteId;
     }

@@ -4,12 +4,9 @@ import android.content.Context;
 
 import androidx.room.Room;
 
-import com.ulan.app.quotes.MainApplication;
 import com.ulan.app.quotes.data.database.DaoStarredQuotes;
 import com.ulan.app.quotes.data.database.DaoQuotes;
-import com.ulan.app.quotes.data.database.QuoteEntity;
 import com.ulan.app.quotes.data.database.QuotesDatabase;
-import com.ulan.app.quotes.di.modules.AppModule;
 import com.ulan.app.quotes.di.scopes.AppScope;
 
 import dagger.Module;
@@ -38,7 +35,7 @@ public class RoomModule {
     @AppScope
     @Provides
     public DaoStarredQuotes daoQuotesLiked(QuotesDatabase database){
-        return database.getLikedQuotes();
+        return database.getLikedQuotesDao();
     }
 }
 
