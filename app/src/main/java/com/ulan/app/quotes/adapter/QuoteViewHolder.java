@@ -4,18 +4,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.ui.listeners.OnPositionClickListener;
-
 import java.lang.ref.WeakReference;
 
-/**
- * View Holder for QuoteAdapter
- */
 public class QuoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     ImageView mImageQuote;
@@ -35,7 +29,6 @@ public class QuoteViewHolder extends RecyclerView.ViewHolder implements View.OnC
         misLiked = itemView.findViewById(R.id.id_liked_clicker);
         mCopyText = itemView.findViewById(R.id.id_copy_content);
         misLiked.setOnClickListener(this);
-
     }
 
     @Override

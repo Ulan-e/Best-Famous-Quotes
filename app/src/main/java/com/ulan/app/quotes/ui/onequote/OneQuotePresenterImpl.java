@@ -1,7 +1,6 @@
 package com.ulan.app.quotes.ui.onequote;
 
 import com.ulan.app.quotes.data.database.DaoQuotes;
-
 import static com.ulan.app.quotes.helpers.ListHandlerHelper.generateAuthorName;
 
 public class OneQuotePresenterImpl implements OneQuotePresenter {

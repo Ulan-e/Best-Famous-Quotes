@@ -6,7 +6,6 @@ import com.ulan.app.quotes.ui.main.MainActivity;
 import com.ulan.app.quotes.ui.main.MainPresenter;
 import com.ulan.app.quotes.ui.main.MainPresenterImpl;
 import com.ulan.app.quotes.ui.main.MainView;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;

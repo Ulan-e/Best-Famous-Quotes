@@ -1,24 +1,17 @@
 package com.ulan.app.quotes.data.database;
 
-import android.util.Log;
-
 import androidx.room.Room;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
-
 import com.ulan.app.quotes.data.QuoteModel;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.reactivex.Flowable;
 import io.reactivex.subscribers.TestSubscriber;
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -87,5 +80,4 @@ public class DaoQuotesTest {
         starredQuotes.deleteAll();
         starredQuotes.getAll().test().assertNotComplete();
     }
-
 }

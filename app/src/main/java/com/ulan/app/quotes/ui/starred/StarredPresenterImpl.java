@@ -3,15 +3,12 @@ package com.ulan.app.quotes.ui.starred;
 import com.ulan.app.quotes.adapter.QuoteAdapter;
 import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.data.database.DaoStarredQuotes;
-
 import java.util.List;
-
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
-
 
 public class StarredPresenterImpl implements StarredPresenter {
 
@@ -50,23 +47,6 @@ public class StarredPresenterImpl implements StarredPresenter {
 
                     }
                 }));
-                /*.subscribeWith(new DisposableObserver<List<QuoteModel>>() {
-                    @Override
-                    public void onNext(List<QuoteModel> quoteDatas) {
-
-
-                    }
-
-                    @Override
-                    public void onError(Throwable error) {
-                        mView.showNoStarredQuotes();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                }));*/
     }
 
     public void disposeObservable(){

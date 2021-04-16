@@ -2,20 +2,16 @@ package com.ulan.app.quotes.di.modules.network;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.ulan.app.quotes.di.qualifires.HttpInterceptor;
 import com.ulan.app.quotes.di.qualifires.PhotosOkHttp;
 import com.ulan.app.quotes.di.qualifires.TokenInterceptor;
 import com.ulan.app.quotes.di.scopes.AppScope;
 import com.ulan.app.quotes.helpers.Constants;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -25,7 +21,6 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
-
 import static com.ulan.app.quotes.helpers.Constants.FAVQS_API_KEY;
 import static com.ulan.app.quotes.helpers.Constants.TAG_HTTP;
 
@@ -102,5 +97,4 @@ public class OkHttpModule {
         };
         return interceptor;
     }
-
 }

@@ -1,13 +1,9 @@
 package com.ulan.app.quotes.ui.main;
 
 import com.ulan.app.quotes.data.QuoteModel;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import io.reactivex.Observable;
-
 
 public class MainPresenterImpl implements MainPresenter {
 
@@ -29,7 +25,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void loadQuotes() {
-        mView.setQuotesToShare(mQuotes);
+        mView.saveQuotesInPref(mQuotes);
     }
 
     @Override

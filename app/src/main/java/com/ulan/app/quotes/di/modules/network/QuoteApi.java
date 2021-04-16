@@ -9,15 +9,9 @@ import com.ulan.app.quotes.di.qualifires.filters.FilterLove;
 import com.ulan.app.quotes.di.qualifires.filters.FilterMotif;
 import com.ulan.app.quotes.di.qualifires.filters.FilterRandom;
 import com.ulan.app.quotes.di.scopes.AppScope;
-
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Observable;
-
-/**
- * Module QuotesCalls return different type of quotes
- * Types: popular, life, wisdom, love, motivation, funny
- */
 
 @AppScope
 @Module(includes = {QuotesModule.class})

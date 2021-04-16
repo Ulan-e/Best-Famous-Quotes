@@ -2,7 +2,6 @@ package com.ulan.app.quotes.ui.home;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +9,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.adapter.QuoteAdapter;
@@ -28,18 +24,19 @@ import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
 import com.ulan.app.quotes.ui.listeners.ShareQuotesListener;
 import com.ulan.app.quotes.ui.main.MainActivity;
 import com.ulan.app.quotes.ui.starred.StarredFragment;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import io.reactivex.Observable;
-
 import static android.view.View.GONE;
-import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
-import static com.ulan.app.quotes.helpers.Constants.TAG_STATE;
+import static com.ulan.app.quotes.helpers.Constants.AUTHOR;
+import static com.ulan.app.quotes.helpers.Constants.ID;
+import static com.ulan.app.quotes.helpers.Constants.IMAGE;
+import static com.ulan.app.quotes.helpers.Constants.LIKED;
+import static com.ulan.app.quotes.helpers.Constants.QUOTE;
 
-public class HomeFragment extends BaseFragment implements HomeView, FragmentLifecycle, ShareQuotesListener {
+public class HomeFragment
+        extends BaseFragment
+        implements HomeView, FragmentLifecycle, ShareQuotesListener {
 
     private StarredFragment mStarredFragment;
     private RecyclerView mRecyclerView;
@@ -118,13 +115,13 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
                 }
             };
 
-    private void sendQuoteWithSharedPref(QuoteModel quoteData) {
+    private void saveQuoteInSharedPref(QuoteModel quoteData) {
         SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putString("image", quoteData.getUrlImage());
-        editor.putString("quote", quoteData.getQuote());
-        editor.putString("author", quoteData.getAuthor());
-        editor.putInt("id", quoteData.getId());
-        editor.putInt("liked", quoteData.getIsLiked());
+        editor.putString(IMAGE, quoteData.getUrlImage());
+        editor.putString(QUOTE, quoteData.getQuote());
+        editor.putString(AUTHOR, quoteData.getAuthor());
+        editor.putInt(ID, quoteData.getId());
+        editor.putInt(LIKED, quoteData.getIsLiked());
         editor.apply();
     }
 
@@ -132,10 +129,9 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
     public void showQuotes(List<QuoteModel> listQuotes) {
         mAdapter = new QuoteAdapter(getActivity(), listQuotes, position -> {
             QuoteModel quoteData = listQuotes.get(position);
-            sendQuoteWithSharedPref(quoteData);
+            saveQuoteInSharedPref(quoteData);
             if (mStarredFragment != null) {
                 mStarredFragment.setSharedQuote();
-                Toast.makeText(getActivity(), "Quote added to Starred", Toast.LENGTH_SHORT).show();
             }
             mLinearLayout.setVisibility(GONE);
         });
@@ -146,7 +142,6 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
 
     @Override
     public void showNoQuotes(Throwable e) {
-        Log.d(TAG_OTHER, "showNoQuotes: " + e.getMessage());
         mRecyclerView.setVisibility(GONE);
         mLinearLayout.setVisibility(View.VISIBLE);
     }
@@ -162,7 +157,6 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
     public void onPauseFragment(Fragment fragment) {
         if (fragment instanceof StarredFragment) {
             mStarredFragment = (StarredFragment) fragment;
-            Log.d(TAG_STATE, "onPauseFragment: HomeFragment " + fragment);
         }
     }
 
@@ -171,15 +165,13 @@ public class HomeFragment extends BaseFragment implements HomeView, FragmentLife
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
-        Log.d(TAG_STATE, "onResumeFragment: HomeFragment ");
     }
 
     @Override
     public void passQuotes(Observable<List<QuoteModel>> quotes) {
         if (quotes == null) {
-            throw new IllegalArgumentException("Quotes should not be null");
+            throw new IllegalArgumentException();
         }
         mPresenter.setQuotes(quotes);
     }
-
 }

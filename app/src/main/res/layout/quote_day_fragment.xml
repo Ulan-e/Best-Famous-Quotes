@@ -40,9 +40,6 @@
                 android:layout_marginBottom="15dp"
                 android:textSize="15sp"
                 android:textColor="@color/colorAuthor" />
-
         </LinearLayout>
-
     </androidx.cardview.widget.CardView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

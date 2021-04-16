@@ -4,7 +4,6 @@ import com.ulan.app.quotes.di.scopes.OneQuoteScope;
 import com.ulan.app.quotes.ui.onequote.OneQuoteFragment;
 import com.ulan.app.quotes.ui.onequote.OneQuotePresenterImpl;
 import com.ulan.app.quotes.ui.onequote.OneQuoteView;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -22,5 +21,4 @@ public class OneQuoteModule {
     public OneQuotePresenterImpl oneQuotePresenter(OneQuoteView view){
         return new OneQuotePresenterImpl(view);
     }
-
 }

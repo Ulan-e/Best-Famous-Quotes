@@ -1,14 +1,11 @@
 package com.ulan.app.quotes.helpers;
 
 import android.util.Log;
-
 import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.data.network.model.Photo;
 import com.ulan.app.quotes.data.network.model.Quote;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
 
 /**
@@ -17,7 +14,6 @@ import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
  * 2) return new List of quote data
  * 3) generate author name
  */
-
 public class ListHandlerHelper {
 
     // generate author name ('Gates, Bill' -> 'Bill Gates')

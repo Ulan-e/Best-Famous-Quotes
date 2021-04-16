@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface HomeView {
 
+    // показать цитату
     void showQuotes(List<QuoteModel> listQuotes);
-    void showNoQuotes(Throwable e);
 
+    // показать ошибку
+    void showNoQuotes(Throwable e);
 }

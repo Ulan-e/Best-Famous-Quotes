@@ -1,10 +1,8 @@
 package com.ulan.app.quotes.data.database;
 
 import com.ulan.app.quotes.data.QuoteModel;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.ulan.app.quotes.data.database.DaoDataHelper.randomInt;
 import static com.ulan.app.quotes.data.database.DaoDataHelper.randomUuid;
 

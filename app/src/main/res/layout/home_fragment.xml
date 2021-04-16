@@ -33,5 +33,4 @@
             android:text="retry"
             android:background="@color/greyy"/>
     </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

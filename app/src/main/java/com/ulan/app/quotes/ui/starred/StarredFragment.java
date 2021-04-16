@@ -16,13 +16,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.adapter.QuoteAdapter;
@@ -32,15 +30,11 @@ import com.ulan.app.quotes.di.scopes.AppScope;
 import com.ulan.app.quotes.ui.base.BaseFragment;
 import com.ulan.app.quotes.ui.home.HomeFragment;
 import com.ulan.app.quotes.ui.listeners.FragmentLifecycle;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import static android.view.View.GONE;
 import static com.ulan.app.quotes.helpers.Constants.TAG_OTHER;
 import static com.ulan.app.quotes.helpers.Constants.TAG_STATE;
-
 
 public class StarredFragment extends BaseFragment implements StarredView, FragmentLifecycle {
 
@@ -48,6 +42,7 @@ public class StarredFragment extends BaseFragment implements StarredView, Fragme
     private TextView mTextNoQuotes;
     private QuoteAdapter mAdapter;
     private BottomNavigationView mBottomNavigationView;
+
     private Animation mAnimationHide;
     private Animation mAnimationShow;
 

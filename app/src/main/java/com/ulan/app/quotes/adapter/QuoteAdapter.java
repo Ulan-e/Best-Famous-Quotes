@@ -7,21 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.ulan.app.quotes.R;
 import com.ulan.app.quotes.data.QuoteModel;
 import com.ulan.app.quotes.ui.listeners.OnPositionClickListener;
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
-
-/**
- * Class is main adapter to show
- * quotes with photos
- */
 
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
 
@@ -66,26 +58,28 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteViewHolder> {
                 .into(holder.mImageQuote);
     }
 
+    @Override
+    public int getItemCount() {
+        return mQuotes.size();
+    }
+
+    // копировать текст
     private void copyToClipBoard(Context context, String text) {
         ClipboardManager manager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText("copyText", text);
         manager.setPrimaryClip(clipData);
     }
 
-    @Override
-    public int getItemCount() {
-        return mQuotes.size();
-    }
-
-    public void removeFromStarred() {
-        mQuotes.clear();
-        notifyItemRangeChanged(0, mQuotes.size());
-        notifyDataSetChanged();
-    }
-
+    // добавить в избранные
     public void addToStarred(QuoteModel quoteData) {
         mQuotes.add(quoteData);
         notifyItemInserted(mQuotes.size() - 1);
     }
 
+    // удалить из избранных
+    public void removeFromStarred() {
+        mQuotes.clear();
+        notifyItemRangeChanged(0, mQuotes.size());
+        notifyDataSetChanged();
+    }
 }

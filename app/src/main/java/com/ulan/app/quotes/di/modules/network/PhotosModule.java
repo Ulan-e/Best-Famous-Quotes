@@ -8,7 +8,6 @@ import com.ulan.app.quotes.di.qualifires.PhotosGson;
 import com.ulan.app.quotes.di.qualifires.PhotosOkHttp;
 import com.ulan.app.quotes.di.scopes.AppScope;
 import com.ulan.app.quotes.helpers.Constants;
-
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;

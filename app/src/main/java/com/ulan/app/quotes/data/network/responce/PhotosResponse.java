@@ -3,7 +3,6 @@ package com.ulan.app.quotes.data.network.responce;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.ulan.app.quotes.data.network.model.Photo;
-
 import java.util.List;
 
 public class PhotosResponse {

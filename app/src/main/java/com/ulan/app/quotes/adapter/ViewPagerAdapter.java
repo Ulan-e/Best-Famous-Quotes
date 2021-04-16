@@ -2,22 +2,15 @@ package com.ulan.app.quotes.adapter;
 
 import android.util.SparseArray;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
 import com.ulan.app.quotes.ui.base.BaseFragment;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Fragment View Pager
- */
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -42,11 +35,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return mFragments.size();
     }
 
-    public void addFragment(BaseFragment fragment, String title){
-        mFragments.add(fragment);
-        mTitles.add(title);
-    }
-
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
@@ -65,5 +53,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return mTitles.get(position);
+    }
+
+    // добавить фрагмент
+    public void addFragment(BaseFragment fragment, String title){
+        mFragments.add(fragment);
+        mTitles.add(title);
     }
 }

@@ -2,10 +2,8 @@ package com.ulan.app.quotes.di.modules.uimodules;
 
 import com.ulan.app.quotes.di.scopes.StarredScope;
 import com.ulan.app.quotes.ui.starred.StarredFragment;
-import com.ulan.app.quotes.ui.starred.StarredPresenter;
 import com.ulan.app.quotes.ui.starred.StarredPresenterImpl;
 import com.ulan.app.quotes.ui.starred.StarredView;
-
 import dagger.Module;
 import dagger.Provides;
 

@@ -13,22 +13,13 @@ import com.ulan.app.quotes.di.qualifires.filters.FilterLive;
 import com.ulan.app.quotes.di.qualifires.filters.FilterLove;
 import com.ulan.app.quotes.di.qualifires.filters.FilterMotif;
 import com.ulan.app.quotes.di.qualifires.filters.FilterRandom;
-
 import java.util.List;
-
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
-
 import static com.ulan.app.quotes.helpers.ListHandlerHelper.mergeQuotesWithPhotos;
 import static com.ulan.app.quotes.helpers.ListHandlerHelper.populateQuotes;
-
-/**
- * Module ObservablesModule zip observable of quotes with
- * observable of photos then return new type
- * observable if Quotedata
- */
 
 @Module(includes = {QuoteApi.class, PhotoApi.class})
 public class ObservablesModule {

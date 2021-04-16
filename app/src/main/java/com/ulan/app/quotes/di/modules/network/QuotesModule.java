@@ -8,7 +8,6 @@ import com.ulan.app.quotes.di.qualifires.Quotes;
 import com.ulan.app.quotes.di.qualifires.TokenInterceptor;
 import com.ulan.app.quotes.di.scopes.AppScope;
 import com.ulan.app.quotes.helpers.Constants;
-
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;

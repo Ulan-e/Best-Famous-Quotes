@@ -2,11 +2,6 @@ package com.ulan.app.quotes.helpers;
 
 import java.util.Random;
 
-/**
- * Class generates random word
- * for query photo from api
- */
-
 public class WordGeneratorHelper {
 
     public static String getRandomWord(){

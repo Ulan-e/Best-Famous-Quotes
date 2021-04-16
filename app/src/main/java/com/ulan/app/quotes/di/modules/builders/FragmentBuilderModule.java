@@ -12,7 +12,6 @@ import com.ulan.app.quotes.di.scopes.StarredScope;
 import com.ulan.app.quotes.ui.home.HomeFragment;
 import com.ulan.app.quotes.ui.onequote.OneQuoteFragment;
 import com.ulan.app.quotes.ui.starred.StarredFragment;
-
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 

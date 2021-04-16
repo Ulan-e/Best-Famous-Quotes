@@ -10,17 +10,10 @@ import com.ulan.app.quotes.di.qualifires.filters.FilterMotif;
 import com.ulan.app.quotes.di.qualifires.filters.FilterRandom;
 import com.ulan.app.quotes.di.scopes.AppScope;
 import com.ulan.app.quotes.helpers.WordGeneratorHelper;
-
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Observable;
-
 import static com.ulan.app.quotes.helpers.Constants.PIXABAY_API_KEY;
-
-/**
- * Module PhotosCalls return different type of photos
- * Types: popular, life, wisdom, love, motivation, funny
- */
 
 @AppScope
 @Module(includes = {PhotosModule.class})
@@ -73,8 +66,4 @@ public class PhotoApi {
         return pixabayApi.getPhotos(PIXABAY_API_KEY, "photo", 25,
                 "funny+"+ WordGeneratorHelper.getFunnyWord(), WordGeneratorHelper.getRandomBoolean());
     }
-
-
-
-
 }

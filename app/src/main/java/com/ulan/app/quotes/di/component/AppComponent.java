@@ -7,12 +7,10 @@ import com.ulan.app.quotes.di.modules.builders.FragmentBuilderModule;
 import com.ulan.app.quotes.di.modules.ObservablesModule;
 import com.ulan.app.quotes.di.modules.RoomModule;
 import com.ulan.app.quotes.di.scopes.AppScope;
-
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
-
 
 @AppScope
 @Component(modules = {
@@ -31,4 +29,3 @@ public interface AppComponent extends AndroidInjector<MainApplication> {
         AppComponent build();
     }
 }
-

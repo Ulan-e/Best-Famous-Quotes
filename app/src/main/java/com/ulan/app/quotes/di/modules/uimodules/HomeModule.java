@@ -4,7 +4,6 @@ import com.ulan.app.quotes.di.scopes.HomeScope;
 import com.ulan.app.quotes.ui.home.HomeFragment;
 import com.ulan.app.quotes.ui.home.HomePresenterImpl;
 import com.ulan.app.quotes.ui.home.HomeView;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -22,5 +21,4 @@ public class HomeModule {
     public HomePresenterImpl homePresenter(HomeView homeView){
         return new HomePresenterImpl(homeView);
     }
-
 }

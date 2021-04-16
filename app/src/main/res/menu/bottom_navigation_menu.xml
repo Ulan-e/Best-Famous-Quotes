@@ -19,7 +19,4 @@
         android:icon="@drawable/ic_looks_one_24dp"
         android:title="@string/quote"
         app:showAsAction="always"/>
-
-
-
 </menu>

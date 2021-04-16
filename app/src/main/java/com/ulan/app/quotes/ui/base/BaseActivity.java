@@ -1,12 +1,7 @@
 package com.ulan.app.quotes.ui.base;
 
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
-
-import com.ulan.app.quotes.MainApplication;
-import com.ulan.app.quotes.di.component.AppComponent;
-
 import dagger.android.AndroidInjection;
 import dagger.android.support.DaggerAppCompatActivity;
 
